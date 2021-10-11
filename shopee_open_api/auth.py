@@ -1,33 +1,26 @@
 import frappe
 import json
 import hmac, time, requests, hashlib
+from .python_shopee import pyshopee2
 
 
 PARTNER_ID = frappe.db.get_single_value("Shopee API Settings", "partner_id")
 PARTNER_KEY = frappe.db.get_single_value("Shopee API Settings", "partner_key")
+REDIRECT_URL = "http://localhost:8000/api/method/shopee_open_api.auth.authenticate_after_authorization"
+
+client = pyshopee2.Client(
+    shop_id=0,
+    partner_id=PARTNER_ID,
+    partner_key=PARTNER_KEY,
+    redirect_url=REDIRECT_URL,
+    test_env=True,
+)
 
 
 @frappe.whitelist()
 def authorize():
 
-    timest = int(time.time())
-    host = "https://partner.test-stable.shopeemobile.com"
-    path = "/api/v2/shop/auth_partner"
-
-    redirect_url = "http://localhost:8000/api/method/shopee_open_api.auth.authenticate_after_authorization"
-
-    base_string = "%s%s%s" % (PARTNER_ID, path, timest)
-
-    sign = hmac.new(
-        PARTNER_KEY.encode("utf-8"), base_string.encode("utf-8"), hashlib.sha256
-    ).hexdigest()
-
-    url = (
-        host
-        + path
-        + "?partner_id=%s&timestamp=%s&sign=%s&redirect=%s"
-        % (PARTNER_ID, timest, sign, redirect_url)
-    )
+    url = client.shop_authorization(redirect_url=REDIRECT_URL)
 
     frappe.local.response["type"] = "redirect"
     frappe.local.response["location"] = url
