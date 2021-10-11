@@ -13,18 +13,22 @@
   {
    "fieldname": "partner_id",
    "fieldtype": "Int",
-   "label": "Partner Id"
+   "in_list_view": 1,
+   "label": "Partner Id",
+   "reqd": 1
   },
   {
    "fieldname": "partner_key",
    "fieldtype": "Data",
-   "label": "Partner Key"
+   "in_list_view": 1,
+   "label": "Partner Key",
+   "reqd": 1
   }
  ],
  "index_web_pages_for_search": 1,
  "issingle": 1,
  "links": [],
- "modified": "2021-10-09 12:20:22.933640",
+ "modified": "2021-10-10 08:40:09.528126",
  "modified_by": "Administrator",
  "module": "Shopee Open API",
  "name": "Shopee API Settings",
