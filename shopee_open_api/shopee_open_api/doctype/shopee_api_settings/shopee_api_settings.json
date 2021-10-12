@@ -7,7 +7,8 @@
  "engine": "InnoDB",
  "field_order": [
   "partner_id",
-  "partner_key"
+  "partner_key",
+  "live_mode"
  ],
  "fields": [
   {
@@ -23,12 +24,19 @@
    "in_list_view": 1,
    "label": "Partner Key",
    "reqd": 1
+  },
+  {
+   "default": "0",
+   "fieldname": "live_mode",
+   "fieldtype": "Check",
+   "label": "Live Mode",
+   "reqd": 1
   }
  ],
  "index_web_pages_for_search": 1,
  "issingle": 1,
  "links": [],
- "modified": "2021-10-10 08:40:09.528126",
+ "modified": "2021-10-12 21:10:04.219005",
  "modified_by": "Administrator",
  "module": "Shopee Open API",
  "name": "Shopee API Settings",
