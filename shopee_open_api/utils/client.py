@@ -1,0 +1,48 @@
+import time
+from shopee_open_api.python_shopee.pyshopee2 import Client
+from erpnext.hr.doctype.branch.branch import Branch
+import frappe
+
+PARTNER_ID = frappe.db.get_single_value("Shopee API Settings", "partner_id")
+PARTNER_KEY = frappe.db.get_single_value("Shopee API Settings", "partner_key")
+TEST_MODE = frappe.db.get_single_value("Shopee API Settings", "live_mode") == 0
+
+### These need to be change dynamically later
+### Both for live mode and development mode
+### Maybe set the redirect url as a single doctype?
+
+AUTHORIZE_REDIRECT_URL = (
+    f"{frappe.utils.get_url()}/api/method/shopee_open_api.auth.authorize_callback"
+)
+
+
+def get_shopless_client() -> Client:
+
+    client = Client(
+        shop_id=0,
+        partner_id=PARTNER_ID,
+        partner_key=PARTNER_KEY,
+        redirect_url=AUTHORIZE_REDIRECT_URL,
+        test_env=TEST_MODE,
+    )
+
+    return client
+
+
+def get_client_from_branch(branch: Branch) -> Client:
+
+    client = get_shopless_client()
+    client.shop_id = int(branch.shopee_shop_id)
+    client.access_token = branch.shopee_access_token
+    client.refresh_token = branch.shopee_refresh_token
+
+    # client.refresh_current_token()
+
+    # branch.shopee_access_token = client.access_token
+    # branch.shopee_refresh_token = client.refresh_token
+    # branch.shopee_token_expiration_unix = int(time.time()) + client.timeout
+
+    # branch.save()
+    # frappe.db.commit()
+
+    return client
