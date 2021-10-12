@@ -1,29 +1,22 @@
 import frappe
+import time
 from datetime import datetime
-from .python_shopee import pyshopee2
+from shopee_open_api.utils.client import get_shopless_client
 
 PARTNER_ID = frappe.db.get_single_value("Shopee API Settings", "partner_id")
 PARTNER_KEY = frappe.db.get_single_value("Shopee API Settings", "partner_key")
-AUTHORIZE_REDIRECT_URL = (
-    "http://localhost:8000/api/method/shopee_open_api.auth.authorize_callback"
-)
+
 UNAUTHORIZE_REDIRECT_URL = (
-    "http://localhost:8000/api/method/shopee_open_api.auth.unauthorize_callback"
+    f"{frappe.utils.get_url()}/api/method/shopee_open_api.auth.unauthorize_callback"
 )
 
-client = pyshopee2.Client(
-    shop_id=0,
-    partner_id=PARTNER_ID,
-    partner_key=PARTNER_KEY,
-    redirect_url=AUTHORIZE_REDIRECT_URL,
-    test_env=True,
-)
+client = get_shopless_client()
 
 
 @frappe.whitelist()
 def authorize():
 
-    url = client.shop_authorization(redirect_url=AUTHORIZE_REDIRECT_URL)
+    url = client.shop_authorization(redirect_url=client.redirect_url)
 
     frappe.local.response["type"] = "redirect"
     frappe.local.response["location"] = url
@@ -54,6 +47,9 @@ def authorize_callback():
         doc.shopee_shop_logo = shop_profile["shop_logo"]
         doc.shopee_shop_status = shop_profile["status"]
         doc.shopee_shop_description = shop_profile["description"]
+        doc.shopee_access_token = client.access_token
+        doc.shopee_refresh_token = client.refresh_token
+        doc.shopee_token_expiration_unix = int(time.time()) + client.timeout
 
         doc.shopee_shop_authorize_time = datetime.utcfromtimestamp(
             shop_profile["auth_time"],
@@ -66,7 +62,10 @@ def authorize_callback():
         doc.insert()
         frappe.db.commit()
 
-    return {"message": "ok"}
+    url = frappe.utils.get_url("app/branch")
+
+    frappe.local.response["type"] = "redirect"
+    frappe.local.response["location"] = url
 
 
 @frappe.whitelist()
@@ -103,4 +102,7 @@ def unauthorize_callback():
         shop.delete()
         frappe.db.commit()
 
-    return {"message": "ok"}
+    url = frappe.utils.get_url("app/branch")
+
+    frappe.local.response["type"] = "redirect"
+    frappe.local.response["location"] = url
