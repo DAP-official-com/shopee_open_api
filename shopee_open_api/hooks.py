@@ -3,7 +3,9 @@ from . import __version__ as app_version
 app_name = "shopee_open_api"
 app_title = "Shopee Open API"
 app_publisher = "Dap Official"
-app_description = "Connect to your Shopee Open API and manage your shops from your website"
+app_description = (
+    "Connect to your Shopee Open API and manage your shops from your website"
+)
 app_icon = "octicon octicon-file-directory"
 app_color = "grey"
 app_email = "siwatjames@gmail.com"
@@ -14,7 +16,7 @@ app_license = "MIT"
 
 # include js, css files in header of desk.html
 # app_include_css = "/assets/shopee_open_api/css/shopee_open_api.css"
-# app_include_js = "/assets/shopee_open_api/js/shopee_open_api.js"
+app_include_js = "/assets/shopee_open_api/js/branch_list.js"
 
 # include js, css files in header of web template
 # web_include_css = "/assets/shopee_open_api/css/shopee_open_api.css"
@@ -44,7 +46,7 @@ app_license = "MIT"
 
 # website user home page (by Role)
 # role_home_page = {
-#	"Role": "home_page"
+# 	"Role": "home_page"
 # }
 
 # Generators
@@ -89,13 +91,14 @@ app_license = "MIT"
 # ---------------
 # Hook on document methods and events
 
-# doc_events = {
-# 	"*": {
-# 		"on_update": "method",
-# 		"on_cancel": "method",
-# 		"on_trash": "method"
-#	}
-# }
+doc_events = {
+    # "*": {
+    # 	"on_update": "method",
+    # 	"on_cancel": "method",
+    # 	"on_trash": "method"
+    # }
+    "Branch": {"before_save": "shopee_open_api.controllers.shop.update_profile"}
+}
 
 # Scheduled Tasks
 # ---------------
@@ -146,24 +149,22 @@ app_license = "MIT"
 # --------------------
 
 user_data_fields = [
-	{
-		"doctype": "{doctype_1}",
-		"filter_by": "{filter_by}",
-		"redact_fields": ["{field_1}", "{field_2}"],
-		"partial": 1,
-	},
-	{
-		"doctype": "{doctype_2}",
-		"filter_by": "{filter_by}",
-		"partial": 1,
-	},
-	{
-		"doctype": "{doctype_3}",
-		"strict": False,
-	},
-	{
-		"doctype": "{doctype_4}"
-	}
+    {
+        "doctype": "{doctype_1}",
+        "filter_by": "{filter_by}",
+        "redact_fields": ["{field_1}", "{field_2}"],
+        "partial": 1,
+    },
+    {
+        "doctype": "{doctype_2}",
+        "filter_by": "{filter_by}",
+        "partial": 1,
+    },
+    {
+        "doctype": "{doctype_3}",
+        "strict": False,
+    },
+    {"doctype": "{doctype_4}"},
 ]
 
 # Authentication and authorization
@@ -172,4 +173,3 @@ user_data_fields = [
 # auth_hooks = [
 # 	"shopee_open_api.auth.validate"
 # ]
-
