@@ -43,6 +43,7 @@ def authorize_callback():
 
         doc = frappe.new_doc("Branch")
         doc.branch = shop_profile["shop_name"]
+        doc.shopee_shop_name = shop_profile["shop_name"][:30]
         doc.shopee_shop_id = shop_id
         doc.shopee_shop_logo = shop_profile["shop_logo"]
         doc.shopee_shop_status = shop_profile["status"]

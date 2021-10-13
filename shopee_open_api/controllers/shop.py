@@ -29,7 +29,7 @@ def update_profile(branch, _):
     new_logo_url = branch.shopee_shop_logo
 
     updated_fields = {
-        "shop_name": branch.name,
+        "shop_name": branch.shopee_shop_name,
         "shop_logo": branch.shopee_shop_logo,
         "description": branch.shopee_shop_description,
     }
