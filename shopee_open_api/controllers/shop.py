@@ -52,3 +52,12 @@ def update_profile(branch, _):
 
     if r.get("error"):
         frappe.throw(f'Shopee values update failed: {r.get("message")}')
+
+
+def retrieve_all_products(branch, event_type):
+
+    client = get_client_from_branch(branch)
+
+    r = client.product.get_item_list(offset=0, page_size=100, item_status="NORMAL")
+
+    print(r)

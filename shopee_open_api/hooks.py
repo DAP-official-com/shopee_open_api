@@ -97,7 +97,10 @@ doc_events = {
     # 	"on_cancel": "method",
     # 	"on_trash": "method"
     # }
-    "Branch": {"before_save": "shopee_open_api.controllers.shop.update_profile"}
+    "Branch": {
+        "before_save": "shopee_open_api.controllers.shop.update_profile",
+        "after_insert": "shopee_open_api.controllers.shop.retrieve_all_products",
+    }
 }
 
 # Scheduled Tasks
