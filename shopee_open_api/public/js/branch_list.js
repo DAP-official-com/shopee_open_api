@@ -7,7 +7,7 @@ frappe.listview_settings["Branch"] = {
 				method: "shopee_open_api.auth.get_authorize_url",
 				callback: function(r) {
 					let authorizeUrl = r['message'];
-					window.open(authorizeUrl, "_blank");
+					window.open(authorizeUrl, "_self");
 				}
 			})
 		})
