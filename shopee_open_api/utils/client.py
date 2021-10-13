@@ -32,6 +32,7 @@ def get_client_from_branch(branch: Branch) -> Client:
     client.shop_id = int(branch.shopee_shop_id)
     client.access_token = branch.shopee_access_token
     client.refresh_token = branch.shopee_refresh_token
+    client.expiration_unix = branch.shopee_token_expiration_unix
 
     # client.refresh_current_token()
 
