@@ -25,8 +25,19 @@ def update_profile(branch, _):
 
     client = get_client_from_branch(branch)
 
-    client.shop.update_profile(
-        shop_name=branch.name,
-        shop_logo=branch.shopee_shop_logo,
-        description=branch.shopee_shop_description,
-    )
+    old_logo_url = branch.get_doc_before_save().shopee_shop_logo
+    new_logo_url = branch.shopee_shop_logo
+
+    updated_fields = {
+        "shop_name": branch.name,
+        "shop_logo": branch.shopee_shop_logo,
+        "description": branch.shopee_shop_description,
+    }
+
+    if old_logo_url == new_logo_url:
+        updated_fields.pop("shop_logo", None)
+
+    r = client.shop.update_profile(**updated_fields)
+
+    if r.get("error"):
+        frappe.throw(f'Shopee values update failed: {r.get("message")}')
