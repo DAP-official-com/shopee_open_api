@@ -106,3 +106,20 @@ def unauthorize_callback():
 
     frappe.local.response["type"] = "redirect"
     frappe.local.response["location"] = url
+
+
+@frappe.whitelist()
+def get_authorize_url():
+
+    url = client.shop_authorization(redirect_url=client.redirect_url)
+
+    return url
+
+
+@frappe.whitelist()
+def get_unauthorize_url():
+
+    sign, unauth_url = client.auth_url("/api/v2/shop/cancel_auth_partner")
+    unauth_url += f"&redirect={UNAUTHORIZE_REDIRECT_URL}"
+
+    return unauth_url
