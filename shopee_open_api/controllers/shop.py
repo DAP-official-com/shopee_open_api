@@ -1,3 +1,4 @@
+import time
 from shopee_open_api.python_shopee import pyshopee2
 from shopee_open_api.utils.client import get_client_from_branch
 import frappe
@@ -25,17 +26,27 @@ def update_profile(branch, _):
 
     client = get_client_from_branch(branch)
 
-    old_logo_url = branch.get_doc_before_save().shopee_shop_logo
-    new_logo_url = branch.shopee_shop_logo
+    if client.is_token_expired:
+
+        client.refresh_current_token()
+
+        branch.shopee_access_token = client.access_token
+        branch.shopee_refresh_token = client.refresh_token
+        branch.shopee_token_expiration_unix = int(time.time()) + client.timeout
 
     updated_fields = {
         "shop_name": branch.shopee_shop_name,
-        "shop_logo": branch.shopee_shop_logo,
         "description": branch.shopee_shop_description,
     }
 
-    if old_logo_url == new_logo_url:
-        updated_fields.pop("shop_logo", None)
+    version_before_save = branch.get_doc_before_save()
+
+    if version_before_save:
+        old_logo_url = version_before_save.shopee_shop_logo
+        new_logo_url = branch.shopee_shop_logo
+
+        if old_logo_url != new_logo_url:
+            updated_fields["shop_logo"] = branch.shopee_shop_logo
 
     r = client.shop.update_profile(**updated_fields)
 
