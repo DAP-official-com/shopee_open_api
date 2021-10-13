@@ -40,50 +40,33 @@ def authorize_callback():
     )
 
     if not shopee_branch_exists:
-
         doc = frappe.new_doc("Branch")
         doc.branch = shop_profile["shop_name"]
-        doc.shopee_shop_name = shop_profile["shop_name"][:30]
         doc.shopee_shop_id = shop_id
-        doc.shopee_shop_logo = shop_profile["shop_logo"]
-        doc.shopee_shop_status = shop_profile["status"]
-        doc.shopee_shop_description = shop_profile["description"]
-        doc.shopee_access_token = client.access_token
-        doc.shopee_refresh_token = client.refresh_token
-        doc.shopee_token_expiration_unix = int(time.time()) + client.timeout
-
-        doc.shopee_shop_authorize_time = datetime.utcfromtimestamp(
-            shop_profile["auth_time"],
-        ).strftime("%Y-%m-%d %H:%M:%S")
-
-        doc.shopee_shop_expire_time = datetime.utcfromtimestamp(
-            shop_profile["expire_time"],
-        ).strftime("%Y-%m-%d %H:%M:%S")
-
-        doc.insert()
-        frappe.db.commit()
-
     else:
-
         doc = frappe.get_doc("Branch", shopee_branch_exists[0][0])
-        doc.shopee_shop_name = shop_profile["shop_name"][:30]
-        doc.shopee_shop_logo = shop_profile["shop_logo"]
-        doc.shopee_shop_status = shop_profile["status"]
-        doc.shopee_shop_description = shop_profile["description"]
-        doc.shopee_access_token = client.access_token
-        doc.shopee_refresh_token = client.refresh_token
-        doc.shopee_token_expiration_unix = int(time.time()) + client.timeout
 
-        doc.shopee_shop_authorize_time = datetime.utcfromtimestamp(
-            shop_profile["auth_time"],
-        ).strftime("%Y-%m-%d %H:%M:%S")
+    doc.shopee_shop_name = shop_profile["shop_name"][:30]
 
-        doc.shopee_shop_expire_time = datetime.utcfromtimestamp(
-            shop_profile["expire_time"],
-        ).strftime("%Y-%m-%d %H:%M:%S")
+    doc.shopee_shop_logo = shop_profile["shop_logo"]
+    doc.shopee_shop_status = shop_profile["status"]
+    doc.shopee_shop_description = shop_profile["description"]
 
-        doc.save()
-        frappe.db.commit()
+    doc.shopee_access_token = client.access_token
+    doc.shopee_refresh_token = client.refresh_token
+    doc.shopee_token_expiration_unix = int(time.time()) + client.timeout
+
+    doc.shopee_shop_authorize_time = datetime.utcfromtimestamp(
+        shop_profile["auth_time"],
+    ).strftime("%Y-%m-%d %H:%M:%S")
+
+    doc.shopee_shop_expire_time = datetime.utcfromtimestamp(
+        shop_profile["expire_time"],
+    ).strftime("%Y-%m-%d %H:%M:%S")
+
+    doc.save() if shopee_branch_exists else doc.insert()
+
+    frappe.db.commit()
 
     url = frappe.utils.get_url("app/branch")
 
