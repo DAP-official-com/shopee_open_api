@@ -7,9 +7,6 @@ PARTNER_ID = frappe.db.get_single_value("Shopee API Settings", "partner_id")
 PARTNER_KEY = frappe.db.get_single_value("Shopee API Settings", "partner_key")
 TEST_MODE = frappe.db.get_single_value("Shopee API Settings", "live_mode") == 0
 
-### These need to be change dynamically later
-### Both for live mode and development mode
-### Maybe set the redirect url as a single doctype?
 
 AUTHORIZE_REDIRECT_URL = (
     f"{frappe.utils.get_url()}/api/method/shopee_open_api.auth.authorize_callback"
