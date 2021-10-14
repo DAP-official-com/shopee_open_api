@@ -22,6 +22,4 @@ def reload_shop_details_from_shopee(branch_name):
 
     frappe.db.commit()
 
-    branch.reload()
-
-    return branch
+    return {"message": "ok"}
