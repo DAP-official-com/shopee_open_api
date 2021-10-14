@@ -24,15 +24,16 @@ def update_profile(branch, _):
     if not branch.shopee_shop_id:
         return
 
-    client = get_client_from_branch(branch)
+    ## Need latest branch in database as an argument for get_client_from_branch
+    ## As sometimes the branch in the form does not have the latest access token
+    branch_in_db = frappe.get_doc("Branch", branch.name)
+    client = get_client_from_branch(branch_in_db)
 
-    if client.is_token_expired:
-
-        client.refresh_current_token()
-
-        branch.shopee_access_token = client.access_token
-        branch.shopee_refresh_token = client.refresh_token
-        branch.shopee_token_expiration_unix = int(time.time()) + client.timeout
+    ## Manually manipuate the token values in the branch being saved
+    ## As sometimes the branch in the form does not have the latest access token
+    branch.shopee_access_token = client.access_token
+    branch.shopee_refresh_token = client.refresh_token
+    branch.shopee_token_expiration_unix = client.expiration_unix
 
     updated_fields = {
         "shop_name": branch.shopee_shop_name,

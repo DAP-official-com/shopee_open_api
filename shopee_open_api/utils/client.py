@@ -34,4 +34,21 @@ def get_client_from_branch(branch: Branch) -> Client:
     client.refresh_token = branch.shopee_refresh_token
     client.expiration_unix = branch.shopee_token_expiration_unix
 
+    if client.is_token_almost_expired:
+
+        client.refresh_current_token()
+
+        frappe.db.set_value(
+            "Branch",
+            branch.name,
+            {
+                "shopee_access_token": client.access_token,
+                "shopee_refresh_token": client.refresh_token,
+                "shopee_token_expiration_unix": client.expiration_unix,
+            },
+            update_modified=False,
+        )
+
+        frappe.db.commit()
+
     return client
