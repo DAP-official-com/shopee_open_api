@@ -49,7 +49,7 @@ print(authorize_url)
 
 ## Quick Start
 
-#### Import pyshopee & get order by status
+#### Import pyshopee & get products under this shop
 
 ```python
 from shopee_open_api.utils.client import get_client_from_branch
