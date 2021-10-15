@@ -1,7 +1,166 @@
-## Shopee Open API
+## Shopee Open API Integration with ERPNext
 
-Connect to your Shopee Open API and manage your shops from your website
+This application contains submodule [DAP's Python-Shopee](https://github.com/DAP-official-com/python-shopee) to connect to Shopee Open Api. The submodule is forked from [original repository](https://github.com/JimCurryWang/python-shopee) and changes have been made to fix bugs and customize to our use.
 
-#### License
+## Installation
 
-MIT
+```shell
+$ bench get-app shopee_open_api git@github.com:DAP-official-com/shopee_open_api.git
+```
+
+## Usage
+
+Make sure to have Shopee's App ID and App Key [(can be obtained here after logging in)](https://open.shopee.com/myconsole/management/app/detail?id=204203&bgIndex=0&name=DAP%20API) are set in the Shopee API Settings doctype before connecting to the client. Currently, authorization can be done from /app/branch.
+
+```python
+from shopee_open_api.utils.client import get_client_from_branch
+
+
+## Always use latest branch in database as an argument for get_client_from_branch
+## So that the access_token, refresh_token, and token_expiration is updated
+## See get_client_from_branch source code for more details
+branch = frappe.get_doc("Branch", branch.name)
+client = get_client_from_branch(branch)
+
+
+# get_order_by_status (UNPAID/READY_TO_SHIP/SHIPPED/COMPLETED/CANCELLED/ALL)
+resp = client.order.get_order_by_status(order_status="READY_TO_SHIP")
+print(resp)
+
+
+# shop authorize url
+authorize_url = client.shop_authorization(redirect_url=client.redirect_url)
+print(authorize_url)
+```
+
+## _6_ main parts of implementation
+
+#### 1. Shop Management Module : [Shop](https://open.shopee.com/documents?module=6&type=1&id=410) / [ShopCategory](https://open.shopee.com/documents?module=7&type=1&id=404)
+
+#### 2. Orders Management Module : [Orders](https://open.shopee.com/documents?module=4&type=1&id=394)
+
+#### 3. Logistics Management Module : [Logistics](https://open.shopee.com/documents?module=3&type=1&id=384)
+
+#### 4. Products Management Module : [Item](https://open.shopee.com/documents?module=2&type=1&id=365) / [Image](https://open.shopee.com/documents?module=65&type=1&id=412) / [Discount](https://open.shopee.com/documents?module=1&type=1&id=357)
+
+#### 5. RMA Management Module : [Returns](https://open.shopee.com/documents?module=5&type=1&id=401)
+
+#### 6. Collection Management Module: [toppicks](https://open.shopee.com/documents?module=67&type=1&id=435)
+
+## Quick Start
+
+#### Import pyshopee & get order by status
+
+```python
+from shopee_open_api.utils.client import get_client_from_branch
+
+branch = frappe.get_doc("Branch", branch.name)
+client = get_client_from_branch(branch)
+
+# get_order_by_status (UNPAID/READY_TO_SHIP/SHIPPED/COMPLETED/CANCELLED/ALL)
+resp = client.order.get_order_by_status(order_status="READY_TO_SHIP")
+print(resp)
+```
+
+#### Get order list
+
+```python
+# get_order_list
+resp = client.order.get_order_list(create_time_from = 1512117303, create_time_to=1512635703)
+print(resp)
+```
+
+#### Get order detail
+
+```python
+'''
+ordersn_list , type: String[]
+The set of order IDs. You can specify, at most, 100 OrderIDs in this call.
+'''
+# get_order_detail
+ordersn_list = [ '1712071633982A7','1712071632981JW','171207163097YCJ']
+resp = client.order.get_order_detail(ordersn_list = ordersn_list )
+print(resp)
+```
+
+#### Get order escrow detail
+
+```python
+'''
+ordersn , type:String []
+Shopee's unique identifier for an order.
+'''
+# get_order_escrow_detail
+ordersn = '1712071633982A7'
+resp = client.order.get_order_escrow_detail(ordersn = ordersn)
+print(resp)
+```
+
+## Advance Details for others functions
+
+```python
+# usage
+client.[type].[function name]
+
+[type]
+  - Shop
+  - ShopCategory
+  - Orders
+  - Logistics
+  - Item
+  - Image
+  - Discount
+  - Returns
+```
+
+## Advance parameters you must want to know
+
+### Timeout
+
+You can find the source code in client.py, and pyshopee have a timeout params in there.
+Hence, every execute funtion can add an extra timeout setting, depending on your choice.
+
+```python
+
+def execute(self, uri, method, body=None, files=None):
+    """defalut timeout value will be 10 seconds"""
+    # parameter = self._make_default_parameter()
+    if body.get("timeout"):
+        timeout = body.get("timeout")
+        body.pop("timeout")
+    else:
+        timeout = 10
+
+    # if body is not None:
+    # parameter.update(body)
+
+    req = self._build_request(uri, method, body, files)
+
+    if self.test_env:
+        print(f"req.params: {req.params}")
+        print(f"req.url: {req.url}")
+
+    prepped = req.prepare()
+
+    s = Session()
+    resp = s.send(prepped, timeout=timeout)
+    resp = self._build_response(resp)
+    return resp
+```
+
+For example, we can set the timeout as 20 seconds in the execute requests(default value is 10s).
+
+```python
+ordersn = '1712071633982A7'
+resp = client.order.get_order_escrow_detail(ordersn = ordersn, timeout=20)
+print(resp)
+
+```
+
+## Note
+
+_Original Package Source code_  
+ https://github.com/JimCurryWang/pyshopee
+
+_Shopee Open API Documentation_  
+ https://open.shopee.com/documents?module=87&type=2&id=64&version=2
