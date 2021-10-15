@@ -4,18 +4,20 @@ app_name = "shopee_open_api"
 app_title = "Shopee Open API"
 app_publisher = "Dap Official"
 app_description = (
-    "Connect to your Shopee Open API and manage your shops from your website"
+    "Connect to your Shopee Open API and manage your multi-branch shops from your erpnext"
 )
 app_icon = "octicon octicon-file-directory"
 app_color = "grey"
 app_email = "siwatjames@gmail.com"
 app_license = "MIT"
-
+required_apps = ['erpnext']
 # Includes in <head>
 # ------------------
 
 # include js, css files in header of desk.html
 # app_include_css = "/assets/shopee_open_api/css/shopee_open_api.css"
+
+# << include customize doctype js to desk>>
 app_include_js = "/assets/shopee_open_api/js/branch_modification.js"
 
 # include js, css files in header of web template
@@ -91,6 +93,7 @@ app_include_js = "/assets/shopee_open_api/js/branch_modification.js"
 # ---------------
 # Hook on document methods and events
 
+#<< custom tricker event in form for doctype (overide/extend)>>
 doc_events = {
     # "*": {
     # 	"on_update": "method",
@@ -102,7 +105,7 @@ doc_events = {
         "after_insert": "shopee_open_api.controllers.shop.retrieve_all_products",
     }
 }
-
+#<< Events for running tasks periodically in the background >>
 # Scheduled Tasks
 # ---------------
 
