@@ -1,3 +1,0 @@
-[submodule "shopee_open_api/python_shopee"]
-	path = shopee_open_api/python_shopee
-	url = git@github.com:DAP-official-com/python-shopee.git
