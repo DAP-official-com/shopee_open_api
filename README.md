@@ -57,10 +57,19 @@ from shopee_open_api.utils.client import get_client_from_branch
 branch = frappe.get_doc("Branch", branch.name)
 client = get_client_from_branch(branch)
 
-# get_order_by_status (UNPAID/READY_TO_SHIP/SHIPPED/COMPLETED/CANCELLED/ALL)
-resp = client.order.get_order_by_status(order_status="READY_TO_SHIP")
-print(resp)
+## get item list
+item_list = client.product.get_item_list(
+    item_status="NORMAL", offset=0, page_size=100
+)["response"]["item"]
+print(item_list)
+
+## get all categories
+categories = client.product.get_category(language="TH")["response"]
+print(categories)
+
 ```
+
+### <span style="font-color:red">The code below is from original repository and has not been tested.</span>
 
 #### Get order list
 
