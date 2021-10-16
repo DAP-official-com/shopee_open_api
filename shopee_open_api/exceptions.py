@@ -1,0 +1,2 @@
+class NotShopeeBranchError(Exception):
+    pass

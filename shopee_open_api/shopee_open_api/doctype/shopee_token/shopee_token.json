@@ -1,0 +1,89 @@
+{
+ "actions": [],
+ "autoname": "field:shop_id",
+ "creation": "2021-10-16 14:52:07.981795",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "shop_id",
+  "access_token",
+  "refresh_token",
+  "token_expiration_unix",
+  "authorization_time",
+  "expiration_time"
+ ],
+ "fields": [
+  {
+   "fieldname": "shop_id",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Shop Id",
+   "read_only": 1,
+   "reqd": 1,
+   "unique": 1
+  },
+  {
+   "fieldname": "access_token",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Access Token",
+   "read_only": 1,
+   "reqd": 1
+  },
+  {
+   "fieldname": "refresh_token",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Refresh Token",
+   "read_only": 1,
+   "reqd": 1
+  },
+  {
+   "fieldname": "token_expiration_unix",
+   "fieldtype": "Int",
+   "in_list_view": 1,
+   "label": "Token Expiration Unix",
+   "read_only": 1,
+   "reqd": 1
+  },
+  {
+   "fieldname": "authorization_time",
+   "fieldtype": "Datetime",
+   "label": "Authorization Time",
+   "read_only": 1,
+   "reqd": 1
+  },
+  {
+   "fieldname": "expiration_time",
+   "fieldtype": "Datetime",
+   "label": "Expiration Time",
+   "read_only": 1,
+   "reqd": 1
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2021-10-16 14:52:20.626378",
+ "modified_by": "Administrator",
+ "module": "Shopee Open API",
+ "name": "Shopee Token",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "track_changes": 1
+}
