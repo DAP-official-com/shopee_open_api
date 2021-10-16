@@ -13,12 +13,14 @@ $ bench get-app shopee_open_api git@github.com:DAP-official-com/shopee_open_api.
 Make sure to have Shopee's App ID and App Key [(can be obtained here after logging in)](https://open.shopee.com/myconsole/management/app/detail?id=204203&bgIndex=0&name=DAP%20API) are set in the Shopee API Settings doctype before connecting to the client. Currently, authorization can be done from /app/branch.
 
 ```python
-from shopee_open_api.utils.client import get_client_from_branch
+from shopee_open_api.utils.client import get_client_from_branch, get_client_from_shop
 
 
-## Always use latest branch in database as an argument for get_client_from_branch
-## So that the access_token, refresh_token, and token_expiration is updated
-## See get_client_from_branch source code for more details
+shop = frappe.get_doc("Shopee Shop", shop.name)
+client = get_client_from_shop(shop)
+
+## OR
+
 branch = frappe.get_doc("Branch", branch.name)
 client = get_client_from_branch(branch)
 
@@ -59,8 +61,8 @@ print(authorize_url)
 ```python
 from shopee_open_api.utils.client import get_client_from_branch
 
-branch = frappe.get_doc("Branch", branch.name)
-client = get_client_from_branch(branch)
+shop = frappe.get_doc("Shopee Shop", shop_id)
+client = get_client_from_shop(shop)
 
 ## get item list
 item_list = client.product.get_item_list(
