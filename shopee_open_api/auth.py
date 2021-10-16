@@ -42,16 +42,19 @@ def authorize_callback():
     else:
         shop = frappe.new_doc("Shopee Shop")
         shop.shop_id = shop_id
+        shop.token = shop_id
 
     shop.shop_name = shop_profile["shop_name"][:30]
     shop.logo = shop_profile["shop_logo"]
     shop.status = shop_profile["status"]
     shop.description = shop_profile["description"]
-    shop.token = shop_id
 
-    token = frappe.new_doc("Shopee Token")
+    if shop_exists:
+        token = frappe.get_doc("Shopee Token", shop_id)
+    else:
+        token = frappe.new_doc("Shopee Token")
+        token.shop_id = shop_id
 
-    token.shop_id = shop_id
     token.access_token = client.access_token
     token.refresh_token = client.refresh_token
     token.token_expiration_unix = int(time.time()) + client.timeout
@@ -65,13 +68,26 @@ def authorize_callback():
     ).strftime("%Y-%m-%d %H:%M:%S")
 
     token.save()
-    shop.save() if shop_exists else shop.insert()
+    shop.save()
 
-    branch = frappe.new_doc("Branch")
+    branch_exists = frappe.db.exists(
+        {
+            "doctype": "Branch",
+            "shopee_shop": shop_id,
+        }
+    )
+
+    print(branch_exists)
+
+    if branch_exists:
+        branch = frappe.get_doc("Branch", branch_exists[0][0])
+    else:
+        branch = frappe.new_doc("Branch")
+        branch.shopee_shop = shop_id
+
     branch.branch = f"Shopee {shop_profile['shop_name']}"
-    branch.shopee_shop = shop_id
 
-    branch.insert()
+    branch.save()
 
     frappe.db.commit()
 

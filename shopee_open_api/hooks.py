@@ -3,14 +3,12 @@ from . import __version__ as app_version
 app_name = "shopee_open_api"
 app_title = "Shopee Open API"
 app_publisher = "Dap Official"
-app_description = (
-    "Connect to your Shopee Open API and manage your multi-branch shops from your erpnext"
-)
+app_description = "Connect to your Shopee Open API and manage your multi-branch shops from your erpnext"
 app_icon = "octicon octicon-file-directory"
 app_color = "grey"
 app_email = "siwatjames@gmail.com"
 app_license = "MIT"
-required_apps = ['erpnext']
+required_apps = ["erpnext"]
 # Includes in <head>
 # ------------------
 
@@ -93,19 +91,18 @@ app_include_js = "/assets/shopee_open_api/js/branch_modification.js"
 # ---------------
 # Hook on document methods and events
 
-#<< custom tricker event in form for doctype (overide/extend)>>
+# << custom tricker event in form for doctype (overide/extend)>>
 doc_events = {
     # "*": {
     # 	"on_update": "method",
     # 	"on_cancel": "method",
     # 	"on_trash": "method"
     # }
-    "Branch": {
-        "before_save": "shopee_open_api.controllers.shop.update_profile",
-        "after_insert": "shopee_open_api.controllers.shop.retrieve_all_products",
+    "Shopee Shop": {
+        "before_save": "shopee_open_api.controllers.shopee_shop.update_profile",
     }
 }
-#<< Events for running tasks periodically in the background >>
+# << Events for running tasks periodically in the background >>
 # Scheduled Tasks
 # ---------------
 
