@@ -1,6 +1,5 @@
 {
 	"shopee_open_api/js/branch_modification.js": [
-		"public/js/branch.js",
 		"public/js/branch_list.js"
 	]
 }
