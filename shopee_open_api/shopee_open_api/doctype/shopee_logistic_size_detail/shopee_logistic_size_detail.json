@@ -1,0 +1,79 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2021-10-16 18:00:46.775361",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "size_name",
+  "size_id",
+  "shipping_fee",
+  "enabled",
+  "is_free"
+ ],
+ "fields": [
+  {
+   "fieldname": "size_name",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "in_preview": 1,
+   "label": "Size Name",
+   "options": "Shopee Logistic Size",
+   "reqd": 1,
+   "width": "3"
+  },
+  {
+   "columns": 2,
+   "fetch_from": "size_name.size_id",
+   "fetch_if_empty": 1,
+   "fieldname": "size_id",
+   "fieldtype": "Int",
+   "in_list_view": 1,
+   "label": "Size_Id",
+   "read_only": 1
+  },
+  {
+   "columns": 3,
+   "fetch_from": "size_name.shipping_fee",
+   "fetch_if_empty": 1,
+   "fieldname": "shipping_fee",
+   "fieldtype": "Float",
+   "in_list_view": 1,
+   "in_preview": 1,
+   "label": "Shipping Fee"
+  },
+  {
+   "columns": 1,
+   "default": "0",
+   "fetch_from": "size_name.enabled",
+   "fetch_if_empty": 1,
+   "fieldname": "enabled",
+   "fieldtype": "Check",
+   "in_list_view": 1,
+   "in_preview": 1,
+   "label": "Enable"
+  },
+  {
+   "default": "0",
+   "fetch_from": "size_name.is_free",
+   "fieldname": "is_free",
+   "fieldtype": "Check",
+   "in_list_view": 1,
+   "in_preview": 1,
+   "label": "Is Free"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "istable": 1,
+ "links": [],
+ "modified": "2021-10-16 18:06:10.519671",
+ "modified_by": "Administrator",
+ "module": "Shopee Open API",
+ "name": "Shopee Logistic Size Detail",
+ "owner": "Administrator",
+ "permissions": [],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "track_changes": 1
+}

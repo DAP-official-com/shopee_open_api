@@ -1,0 +1,70 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2021-10-16 18:22:45.549281",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "logistic_name",
+  "logistic_id",
+  "size_name",
+  "size_id",
+  "shipping_fee",
+  "enable",
+  "is_free"
+ ],
+ "fields": [
+  {
+   "fieldname": "logistic_name",
+   "fieldtype": "Link",
+   "label": "Logistic Name",
+   "options": "Shopee Logistic"
+  },
+  {
+   "fieldname": "logistic_id",
+   "fieldtype": "Int",
+   "label": "Logistic Id"
+  },
+  {
+   "fieldname": "size_name",
+   "fieldtype": "Link",
+   "label": "Size name",
+   "options": "Shopee Logistic Size Detail"
+  },
+  {
+   "fieldname": "size_id",
+   "fieldtype": "Int",
+   "label": "Size Id"
+  },
+  {
+   "fieldname": "shipping_fee",
+   "fieldtype": "Float",
+   "label": "Shipping Fee"
+  },
+  {
+   "default": "0",
+   "fieldname": "enable",
+   "fieldtype": "Check",
+   "label": "Enable"
+  },
+  {
+   "default": "0",
+   "fieldname": "is_free",
+   "fieldtype": "Check",
+   "label": "Is Free"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "istable": 1,
+ "links": [],
+ "modified": "2021-10-16 18:22:45.549281",
+ "modified_by": "Administrator",
+ "module": "Shopee Open API",
+ "name": "Shopee Logistic Detail",
+ "owner": "Administrator",
+ "permissions": [],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "track_changes": 1
+}

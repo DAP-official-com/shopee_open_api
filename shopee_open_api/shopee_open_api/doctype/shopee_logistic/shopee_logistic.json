@@ -1,0 +1,80 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2021-10-16 18:01:08.453594",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "logistic_channel_name",
+  "logistic_id",
+  "column_break_3",
+  "logo",
+  "section_break_3",
+  "logistic_size_table",
+  "logistic_detail_section"
+ ],
+ "fields": [
+  {
+   "fieldname": "logistic_id",
+   "fieldtype": "Int",
+   "in_list_view": 1,
+   "label": "Logistic Id",
+   "reqd": 1
+  },
+  {
+   "fieldname": "logistic_channel_name",
+   "fieldtype": "Data",
+   "label": "Logistic Channel Name",
+   "reqd": 1
+  },
+  {
+   "fieldname": "section_break_3",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "logistic_size_table",
+   "fieldtype": "Table",
+   "label": "Logistic Size Table",
+   "options": "Shopee Logistic Size Detail"
+  },
+  {
+   "fieldname": "column_break_3",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "logo",
+   "fieldtype": "Image",
+   "label": "Logo"
+  },
+  {
+   "fieldname": "logistic_detail_section",
+   "fieldtype": "Section Break",
+   "label": "Logistic Detail"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2021-10-16 18:14:24.640500",
+ "modified_by": "Administrator",
+ "module": "Shopee Open API",
+ "name": "Shopee Logistic",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "track_changes": 1
+}

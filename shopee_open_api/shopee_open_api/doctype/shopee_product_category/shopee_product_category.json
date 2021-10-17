@@ -1,0 +1,137 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "SPC-.#####",
+ "creation": "2021-10-16 15:47:40.882219",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "category",
+  "category_id",
+  "section_break_4",
+  "description",
+  "lft",
+  "rgt",
+  "is_group",
+  "old_parent",
+  "parent_catagory_id",
+  "parent_shopee_product_category"
+ ],
+ "fields": [
+  {
+   "fieldname": "category_id",
+   "fieldtype": "Int",
+   "in_list_view": 1,
+   "label": "Catagory Id",
+   "reqd": 1
+  },
+  {
+   "fieldname": "category",
+   "fieldtype": "Data",
+   "label": "Category",
+   "reqd": 1
+  },
+  {
+   "fieldname": "description",
+   "fieldtype": "Text",
+   "label": "Description"
+  },
+  {
+   "fieldname": "section_break_4",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "lft",
+   "fieldtype": "Int",
+   "hidden": 1,
+   "label": "Left",
+   "no_copy": 1,
+   "read_only": 1
+  },
+  {
+   "fieldname": "rgt",
+   "fieldtype": "Int",
+   "hidden": 1,
+   "label": "Right",
+   "no_copy": 1,
+   "read_only": 1
+  },
+  {
+   "default": "0",
+   "fieldname": "is_group",
+   "fieldtype": "Check",
+   "label": "Is Group"
+  },
+  {
+   "fieldname": "old_parent",
+   "fieldtype": "Link",
+   "label": "Old Parent",
+   "options": "Shopee Product Category"
+  },
+  {
+   "fieldname": "parent_shopee_product_category",
+   "fieldtype": "Link",
+   "label": "Parent Shopee Product Category",
+   "options": "Shopee Product Category"
+  },
+  {
+   "fetch_from": "parent_shopee_product_category.category_id",
+   "fieldname": "parent_catagory_id",
+   "fieldtype": "Data",
+   "label": "Parent Catagory Id"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "is_tree": 1,
+ "links": [],
+ "modified": "2021-10-16 16:14:15.381575",
+ "modified_by": "Administrator",
+ "module": "Shopee Open API",
+ "name": "Shopee Product Category",
+ "nsm_parent_field": "parent_shopee_product_category",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Sales Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Sales Master Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "quick_entry": 1,
+ "search_fields": "category",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "title_field": "category",
+ "track_changes": 1
+}
