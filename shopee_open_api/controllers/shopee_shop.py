@@ -1,6 +1,6 @@
 from shopee_open_api.utils.client import get_client_from_branch, get_client_from_shop
-import frappe
-
+import frappe, os
+from frappe.utils import get_site_base_path, get_site_name
 
 PARTNER_ID = frappe.db.get_single_value("Shopee API Settings", "partner_id")
 PARTNER_KEY = frappe.db.get_single_value("Shopee API Settings", "partner_key")
@@ -26,11 +26,32 @@ def update_profile(shopee_shop, _):
     version_before_save = shopee_shop.get_doc_before_save()
 
     if version_before_save:
-        old_logo_url = version_before_save.logo
-        new_logo_url = shopee_shop.logo
+        old_logo_url = version_before_save.shop_logo
+        new_logo_url = shopee_shop.shop_logo
 
         if old_logo_url != new_logo_url:
-            updated_fields["shop_logo"] = shopee_shop.shopee_shop_logo
+
+            if new_logo_url != "":
+
+                new_logo_url = (
+                    f"/public{new_logo_url}"
+                    if "private" not in new_logo_url
+                    else new_logo_url
+                )
+
+                base_path = os.path.abspath(os.getcwd())
+                site_dir = get_site_base_path()[2:]
+                full_image_path = os.path.join(base_path, site_dir, new_logo_url[1:])
+
+                image_response = client.mediaspace.upload_image(image=full_image_path)
+                if image_response.get("error"):
+                    frappe.throw(f"{image_response.get('message')}")
+                else:
+                    shopee_image_url = image_response["response"]["image_info"][
+                        "image_url_list"
+                    ][0]["image_url"]
+                    shopee_shop.shop_logo = shopee_image_url
+                    # updated_fields["shop_logo"] = shopee_image_url
 
     r = client.shop.update_profile(**updated_fields)
 
