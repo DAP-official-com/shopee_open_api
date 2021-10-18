@@ -33,8 +33,8 @@ app_include_js = "/assets/shopee_open_api/js/branch_modification.js"
 # page_js = {"page" : "public/js/file.js"}
 
 # include js in doctype views
-# doctype_js = {"doctype" : "public/js/doctype.js"}
-# doctype_list_js = {"doctype" : "public/js/doctype_list.js"}
+# doctype_js = {"branch" : "public/js/branch_modification.js"}
+# doctype_list_js = {"branch" : "public/js/branch_list.js"}
 # doctype_tree_js = {"doctype" : "public/js/doctype_tree.js"}
 # doctype_calendar_js = {"doctype" : "public/js/doctype_calendar.js"}
 
@@ -54,6 +54,13 @@ app_include_js = "/assets/shopee_open_api/js/branch_modification.js"
 
 # automatically create page for each record of this doctype
 # website_generators = ["Web Page"]
+
+# Fixture 
+# ------------
+fixture = [
+    "Shopee Logistic Status",
+    "Shopee Order Status"
+]
 
 # Installation
 # ------------
