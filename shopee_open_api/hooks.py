@@ -57,7 +57,7 @@ app_include_js = "/assets/shopee_open_api/js/branch_modification.js"
 
 # Fixture 
 # ------------
-fixture = [
+fixtures = [
     "Shopee Logistic Status",
     "Shopee Order Status"
 ]
