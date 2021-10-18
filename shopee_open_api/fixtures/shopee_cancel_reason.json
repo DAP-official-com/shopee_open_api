@@ -1,0 +1,222 @@
+[
+ {
+  "cancel_status": "Out of Stock",
+  "docstatus": 0,
+  "doctype": "Shopee Cancel Reason",
+  "modified": "2021-10-18 19:49:59.408434",
+  "name": "Out of Stock",
+  "parent": null,
+  "parentfield": null,
+  "parenttype": null
+ },
+ {
+  "cancel_status": "Buyer Request to Cancel",
+  "docstatus": 0,
+  "doctype": "Shopee Cancel Reason",
+  "modified": "2021-10-18 19:52:41.348004",
+  "name": "Buyer Request to Cancel",
+  "parent": null,
+  "parentfield": null,
+  "parenttype": null
+ },
+ {
+  "cancel_status": "Undeliverable Area",
+  "docstatus": 0,
+  "doctype": "Shopee Cancel Reason",
+  "modified": "2021-10-18 19:52:41.403442",
+  "name": "Undeliverable Area",
+  "parent": null,
+  "parentfield": null,
+  "parenttype": null
+ },
+ {
+  "cancel_status": "COD Unsupported",
+  "docstatus": 0,
+  "doctype": "Shopee Cancel Reason",
+  "modified": "2021-10-18 19:52:41.415866",
+  "name": "COD Unsupported",
+  "parent": null,
+  "parentfield": null,
+  "parenttype": null
+ },
+ {
+  "cancel_status": "Parcel is Lost",
+  "docstatus": 0,
+  "doctype": "Shopee Cancel Reason",
+  "modified": "2021-10-18 19:52:41.473496",
+  "name": "Parcel is Lost",
+  "parent": null,
+  "parentfield": null,
+  "parenttype": null
+ },
+ {
+  "cancel_status": "Game Completed",
+  "docstatus": 0,
+  "doctype": "Shopee Cancel Reason",
+  "modified": "2021-10-18 19:52:41.497318",
+  "name": "Game Completed",
+  "parent": null,
+  "parentfield": null,
+  "parenttype": null
+ },
+ {
+  "cancel_status": "Unpaid Order",
+  "docstatus": 0,
+  "doctype": "Shopee Cancel Reason",
+  "modified": "2021-10-18 19:52:41.571380",
+  "name": "Unpaid Order",
+  "parent": null,
+  "parentfield": null,
+  "parenttype": null
+ },
+ {
+  "cancel_status": "Underpaid Order",
+  "docstatus": 0,
+  "doctype": "Shopee Cancel Reason",
+  "modified": "2021-10-18 19:52:41.673941",
+  "name": "Underpaid Order",
+  "parent": null,
+  "parentfield": null,
+  "parenttype": null
+ },
+ {
+  "cancel_status": "Unsuccessful / Rejected Payment",
+  "docstatus": 0,
+  "doctype": "Shopee Cancel Reason",
+  "modified": "2021-10-18 19:52:41.809415",
+  "name": "Unsuccessful / Rejected Payment",
+  "parent": null,
+  "parentfield": null,
+  "parenttype": null
+ },
+ {
+  "cancel_status": "Logistics Request is Cancelled",
+  "docstatus": 0,
+  "doctype": "Shopee Cancel Reason",
+  "modified": "2021-10-18 19:52:41.907724",
+  "name": "Logistics Request is Cancelled",
+  "parent": null,
+  "parentfield": null,
+  "parenttype": null
+ },
+ {
+  "cancel_status": "3PL pickup Fail",
+  "docstatus": 0,
+  "doctype": "Shopee Cancel Reason",
+  "modified": "2021-10-18 19:52:42.009233",
+  "name": "3PL pickup Fail",
+  "parent": null,
+  "parentfield": null,
+  "parenttype": null
+ },
+ {
+  "cancel_status": "Failed Delivery",
+  "docstatus": 0,
+  "doctype": "Shopee Cancel Reason",
+  "modified": "2021-10-18 19:52:42.124095",
+  "name": "Failed Delivery",
+  "parent": null,
+  "parentfield": null,
+  "parenttype": null
+ },
+ {
+  "cancel_status": "COD Rejected",
+  "docstatus": 0,
+  "doctype": "Shopee Cancel Reason",
+  "modified": "2021-10-18 19:52:42.221929",
+  "name": "COD Rejected",
+  "parent": null,
+  "parentfield": null,
+  "parenttype": null
+ },
+ {
+  "cancel_status": "Seller did not Ship",
+  "docstatus": 0,
+  "doctype": "Shopee Cancel Reason",
+  "modified": "2021-10-18 19:52:42.309110",
+  "name": "Seller did not Ship",
+  "parent": null,
+  "parentfield": null,
+  "parenttype": null
+ },
+ {
+  "cancel_status": "Transit Warehouse Cancelled",
+  "docstatus": 0,
+  "doctype": "Shopee Cancel Reason",
+  "modified": "2021-10-18 19:52:42.403069",
+  "name": "Transit Warehouse Cancelled",
+  "parent": null,
+  "parentfield": null,
+  "parenttype": null
+ },
+ {
+  "cancel_status": "Other",
+  "docstatus": 0,
+  "doctype": "Shopee Cancel Reason",
+  "modified": "2021-10-18 19:52:42.486745",
+  "name": "Other",
+  "parent": null,
+  "parentfield": null,
+  "parenttype": null
+ },
+ {
+  "cancel_status": "Inactive Seller",
+  "docstatus": 0,
+  "doctype": "Shopee Cancel Reason",
+  "modified": "2021-10-18 19:52:42.576430",
+  "name": "Inactive Seller",
+  "parent": null,
+  "parentfield": null,
+  "parenttype": null
+ },
+ {
+  "cancel_status": "Auto Cancel",
+  "docstatus": 0,
+  "doctype": "Shopee Cancel Reason",
+  "modified": "2021-10-18 19:52:42.812771",
+  "name": "Auto Cancel",
+  "parent": null,
+  "parentfield": null,
+  "parenttype": null
+ },
+ {
+  "cancel_status": "Logistic Issue",
+  "docstatus": 0,
+  "doctype": "Shopee Cancel Reason",
+  "modified": "2021-10-18 19:52:42.839330",
+  "name": "Logistic Issue",
+  "parent": null,
+  "parentfield": null,
+  "parenttype": null
+ },
+ {
+  "cancel_status": "Your approver did not approve order on time.",
+  "docstatus": 0,
+  "doctype": "Shopee Cancel Reason",
+  "modified": "2021-10-18 19:52:42.860806",
+  "name": "Your approver did not approve order on time.",
+  "parent": null,
+  "parentfield": null,
+  "parenttype": null
+ },
+ {
+  "cancel_status": "You are unable to place order at the moment.",
+  "docstatus": 0,
+  "doctype": "Shopee Cancel Reason",
+  "modified": "2021-10-18 19:52:42.919464",
+  "name": "You are unable to place order at the moment.",
+  "parent": null,
+  "parentfield": null,
+  "parenttype": null
+ },
+ {
+  "cancel_status": "TBC",
+  "docstatus": 0,
+  "doctype": "Shopee Cancel Reason",
+  "modified": "2021-10-18 19:52:42.993591",
+  "name": "TBC",
+  "parent": null,
+  "parentfield": null,
+  "parenttype": null
+ }
+]
