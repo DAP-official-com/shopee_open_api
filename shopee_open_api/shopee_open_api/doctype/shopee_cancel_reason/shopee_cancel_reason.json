@@ -1,0 +1,49 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "field:cancel_status",
+ "creation": "2021-10-18 19:49:28.338184",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "cancel_status"
+ ],
+ "fields": [
+  {
+   "fieldname": "cancel_status",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Cancel Status",
+   "reqd": 1,
+   "unique": 1
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2021-10-18 19:49:44.554948",
+ "modified_by": "Administrator",
+ "module": "Shopee Open API",
+ "name": "Shopee Cancel Reason",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "quick_entry": 1,
+ "search_fields": "cancel_status",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "title_field": "cancel_status",
+ "track_changes": 1
+}

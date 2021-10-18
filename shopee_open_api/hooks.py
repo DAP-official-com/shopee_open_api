@@ -59,7 +59,9 @@ app_include_js = "/assets/shopee_open_api/js/branch_modification.js"
 # ------------
 fixtures = [
     "Shopee Logistic Status",
-    "Shopee Order Status"
+    "Shopee Order Status",
+    "Shopee Return Status",
+    "Shopee Cancel Reason"
 ]
 
 # Installation
