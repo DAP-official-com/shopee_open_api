@@ -65,8 +65,6 @@ def test_add_product():
 
     attribute_list[0]["attribute_value_list"].append(attribute_values)
 
-    print(attribute_list)
-
     channel_list = client.logistics.get_channel_list()["response"][
         "logistics_channel_list"
     ]
