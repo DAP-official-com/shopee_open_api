@@ -8,6 +8,7 @@
  "editable_grid": 1,
  "engine": "InnoDB",
  "field_order": [
+  "shopee_shop",
   "item",
   "shopee_porduct_id",
   "item_status",
@@ -256,12 +257,19 @@
    "fieldname": "shopping_detail_section",
    "fieldtype": "Section Break",
    "label": "Shipping Detail"
+  },
+  {
+   "fieldname": "shopee_shop",
+   "fieldtype": "Link",
+   "label": "Shopee Shop",
+   "options": "Shopee Shop",
+   "reqd": 1
   }
  ],
  "image_field": "image",
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2021-10-18 16:44:36.823325",
+ "modified": "2021-10-20 10:47:11.340483",
  "modified_by": "Administrator",
  "module": "Shopee Open API",
  "name": "Shopee Product",
