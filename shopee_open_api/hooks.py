@@ -55,13 +55,14 @@ app_include_js = "/assets/shopee_open_api/js/branch_modification.js"
 # automatically create page for each record of this doctype
 # website_generators = ["Web Page"]
 
-# Fixture 
+# Fixture
 # ------------
 fixtures = [
     "Shopee Logistic Status",
     "Shopee Order Status",
     "Shopee Return Status",
-    "Shopee Cancel Reason"
+    "Shopee Cancel Reason",
+    "Shopee Product Category",
 ]
 
 # Installation
