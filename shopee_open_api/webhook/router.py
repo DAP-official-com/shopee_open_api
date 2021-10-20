@@ -2,7 +2,9 @@ from .exceptions import IncorrectWebhookCodeError
 from .handlers import handle_order_status_update
 
 router = {
-    0: lambda: True,
+    0: lambda _: True,
+    1: lambda _: True,
+    2: lambda _: True,
     3: handle_order_status_update,
 }
 
