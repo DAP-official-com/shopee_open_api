@@ -8,12 +8,12 @@
  "editable_grid": 1,
  "engine": "InnoDB",
  "field_order": [
+  "shopee_product_id",
+  "shopee_model_id",
   "shopee_shop",
   "item",
-  "shopee_porduct_id",
   "item_status",
   "category",
-  "category_id",
   "column_break_6",
   "normal_stock",
   "item_code",
@@ -22,11 +22,9 @@
   "image",
   "section_break_10",
   "shopee_item_name",
-  "dimension_name",
   "package_width",
   "package_length",
   "package_height",
-  "diamension",
   "column_break_16",
   "description",
   "data_27",
@@ -44,7 +42,8 @@
   "stock_type",
   "shopping_detail_section",
   "weight_uom",
-  "logistic_info"
+  "logistic_info",
+  "weight"
  ],
  "fields": [
   {
@@ -92,7 +91,7 @@
    "fieldtype": "Select",
    "in_list_view": 1,
    "label": "Shopee Item Status",
-   "options": "UNLIST\nNORMAL",
+   "options": "NORMAL\nDELETED\nBANNED\nUNLIST",
    "reqd": 1
   },
   {
@@ -107,18 +106,12 @@
    "fieldtype": "Data",
    "in_list_view": 1,
    "label": "Normal Stock unit",
-   "read_only": 1,
-   "reqd": 1
+   "read_only": 1
   },
   {
    "fieldname": "section_break_10",
    "fieldtype": "Section Break",
    "label": "Basic Info"
-  },
-  {
-   "fieldname": "shopee_porduct_id",
-   "fieldtype": "Data",
-   "label": "Shopee Porduct ID"
   },
   {
    "fieldname": "original_price",
@@ -148,13 +141,6 @@
    "label": "Sale Information"
   },
   {
-   "fetch_from": "category.category_id",
-   "fieldname": "category_id",
-   "fieldtype": "Data",
-   "label": "Shopee Category Id",
-   "read_only": 1
-  },
-  {
    "fieldname": "column_break_6",
    "fieldtype": "Column Break"
   },
@@ -163,18 +149,10 @@
    "fieldtype": "Column Break"
   },
   {
-   "allow_in_quick_entry": 1,
-   "fieldname": "dimension_name",
-   "fieldtype": "Link",
-   "label": "Dimension Name",
-   "options": "Shopee Product Dimension",
-   "reqd": 1
-  },
-  {
    "fetch_from": "dimension_name.package_width",
    "fetch_if_empty": 1,
    "fieldname": "package_width",
-   "fieldtype": "Data",
+   "fieldtype": "Int",
    "label": "Package Width (cm)",
    "read_only": 1
   },
@@ -197,11 +175,6 @@
   {
    "fieldname": "column_break_21",
    "fieldtype": "Column Break"
-  },
-  {
-   "fieldname": "diamension",
-   "fieldtype": "Data",
-   "label": "Diamension"
   },
   {
    "fieldname": "logistic_info",
@@ -264,12 +237,30 @@
    "label": "Shopee Shop",
    "options": "Shopee Shop",
    "reqd": 1
+  },
+  {
+   "fieldname": "weight",
+   "fieldtype": "Float",
+   "label": "Weight",
+   "reqd": 1
+  },
+  {
+   "fieldname": "shopee_product_id",
+   "fieldtype": "Int",
+   "label": "Shopee Product Id",
+   "reqd": 1
+  },
+  {
+   "fieldname": "shopee_model_id",
+   "fieldtype": "Int",
+   "label": "Shopee Model Id",
+   "reqd": 1
   }
  ],
  "image_field": "image",
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2021-10-20 10:47:11.340483",
+ "modified": "2021-10-20 17:31:51.105151",
  "modified_by": "Administrator",
  "module": "Shopee Open API",
  "name": "Shopee Product",
