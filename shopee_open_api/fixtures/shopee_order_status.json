@@ -1,1 +1,122 @@
-[]
+[
+ {
+  "description": "Order is created, buyer has not paid yet.",
+  "docstatus": 0,
+  "doctype": "Shopee Order Status",
+  "modified": "2021-10-20 12:21:47.965063",
+  "name": "UNPAID",
+  "order_status": "UNPAID",
+  "order_status_id": "UNPAID",
+  "parent": null,
+  "parentfield": null,
+  "parenttype": null
+ },
+ {
+  "description": "Seller can arrange shipment.",
+  "docstatus": 0,
+  "doctype": "Shopee Order Status",
+  "modified": "2021-10-20 12:21:48.041734",
+  "name": "READY_TO_SHIP",
+  "order_status": "READY_TO_SHIP",
+  "order_status_id": "READY_TO_SHIP",
+  "parent": null,
+  "parentfield": null,
+  "parenttype": null
+ },
+ {
+  "description": "Seller has arranged shipment online and got tracking number from 3PL.",
+  "docstatus": 0,
+  "doctype": "Shopee Order Status",
+  "modified": "2021-10-20 12:21:48.072118",
+  "name": "PROCESSED",
+  "order_status": "PROCESSED",
+  "order_status_id": "PROCESSED",
+  "parent": null,
+  "parentfield": null,
+  "parenttype": null
+ },
+ {
+  "description": "3PL pickup parcel fail. Need to re arrange shipment.",
+  "docstatus": 0,
+  "doctype": "Shopee Order Status",
+  "modified": "2021-10-20 12:21:48.155621",
+  "name": "RETRY_SHIP",
+  "order_status": "RETRY_SHIP",
+  "order_status_id": "RETRY_SHIP",
+  "parent": null,
+  "parentfield": null,
+  "parenttype": null
+ },
+ {
+  "description": "The parcel has been drop to 3PL or picked up by 3PL.",
+  "docstatus": 0,
+  "doctype": "Shopee Order Status",
+  "modified": "2021-10-20 12:21:48.228240",
+  "name": "SHIPPED",
+  "order_status": "SHIPPED",
+  "order_status_id": "SHIPPED",
+  "parent": null,
+  "parentfield": null,
+  "parenttype": null
+ },
+ {
+  "description": "The order has been received by buyer.",
+  "docstatus": 0,
+  "doctype": "Shopee Order Status",
+  "modified": "2021-10-20 12:21:48.307074",
+  "name": "TO_CONFIRM_RECEIVE",
+  "order_status": "TO_CONFIRM_RECEIVE",
+  "order_status_id": "TO_CONFIRM_RECEIVE",
+  "parent": null,
+  "parentfield": null,
+  "parenttype": null
+ },
+ {
+  "description": "The order's cancelation is under processing.",
+  "docstatus": 0,
+  "doctype": "Shopee Order Status",
+  "modified": "2021-10-20 12:21:48.370279",
+  "name": "IN_CANCEL",
+  "order_status": "IN_CANCEL",
+  "order_status_id": "IN_CANCEL",
+  "parent": null,
+  "parentfield": null,
+  "parenttype": null
+ },
+ {
+  "description": "The order has been canceled.",
+  "docstatus": 0,
+  "doctype": "Shopee Order Status",
+  "modified": "2021-10-20 12:21:48.427295",
+  "name": "CANCELLED",
+  "order_status": "CANCELLED",
+  "order_status_id": "CANCELLED",
+  "parent": null,
+  "parentfield": null,
+  "parenttype": null
+ },
+ {
+  "description": "The buyer requested to return the order and order's return is processing.",
+  "docstatus": 0,
+  "doctype": "Shopee Order Status",
+  "modified": "2021-10-20 12:21:48.485300",
+  "name": "TO_RETURN",
+  "order_status": "TO_RETURN",
+  "order_status_id": "TO_RETURN",
+  "parent": null,
+  "parentfield": null,
+  "parenttype": null
+ },
+ {
+  "description": "The order has been completed.",
+  "docstatus": 0,
+  "doctype": "Shopee Order Status",
+  "modified": "2021-10-20 12:21:48.547195",
+  "name": "COMPLETED",
+  "order_status": "COMPLETED",
+  "order_status_id": "COMPLETED",
+  "parent": null,
+  "parentfield": null,
+  "parenttype": null
+ }
+]
