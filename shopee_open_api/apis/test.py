@@ -6,6 +6,69 @@ import os, json
 
 
 @frappe.whitelist()
+def get_category_list():
+
+    shops = frappe.db.get_all("Shopee Shop")
+
+    shop = frappe.get_doc("Shopee Shop", shops[0]["name"])
+
+    client = get_client_from_shop(shop)
+
+    categories = client.product.get_category()["response"]["category_list"]
+
+    for category in categories:
+
+        if frappe.db.exists(
+            {
+                "doctype": "Shopee Product Category",
+                "category_id": category["category_id"],
+            }
+        ):
+            continue
+
+        new_category = {"doctype": "Shopee Product Category"}
+        new_category["category"] = category["original_category_name"]
+        new_category["category_id"] = category["category_id"]
+        new_category["is_group"] = category["has_children"]
+
+        if category["parent_category_id"] != 0:
+            new_category["parent_catagory_id"] = category["parent_category_id"]
+
+        category = frappe.get_doc(new_category)
+        category.insert()
+        frappe.db.commit()
+
+    categories_with_parent = frappe.db.get_list(
+        "Shopee Product Category",
+        filters={"parent_catagory_id": ("!=", "")},
+        as_list=True,
+        fields=[
+            "name",
+            "parent_catagory_id",
+        ],
+    )
+
+    for category in categories_with_parent:
+        parent_category_name = frappe.db.get_list(
+            "Shopee Product Category",
+            filters={"category_id": int(category[1])},
+            fields=[
+                "name",
+            ],
+            as_list=True,
+        )[0][0]
+        frappe.db.set_value(
+            "Shopee Product Category",
+            category[0],
+            "parent_shopee_product_category",
+            parent_category_name,
+        )
+        frappe.db.commit()
+
+    return categories_with_parent
+
+
+@frappe.whitelist()
 def test_add_product():
 
     shops = frappe.db.get_all("Shopee Shop")
@@ -93,6 +156,35 @@ def test_add_product():
     )
 
     return added_item
+
+
+@frappe.whitelist()
+def test_get_orders():
+
+    shops = frappe.db.get_all("Shopee Shop")
+
+    shop = frappe.get_doc("Shopee Shop", shops[0]["name"])
+
+    client = get_client_from_shop(shop)
+
+    orders = client.order.get_order_list(
+        time_range_field="create_time",
+        time_from=1634137703,
+        time_to=1634638713,
+        page_size=100,
+        order_status="READY_TO_SHIP",
+    )["response"]["order_list"]
+
+    # to_ship_orders = client.order.get_shipment_list(page_size=100)
+
+    # order_details = client.order.get_order_detail(
+    #     order_sn_list=",".join([order["order_sn"] for order in orders]),
+    #     response_optional_fields="buyer_user_id,buyer_username,estimated_shipping_fee,recipient_address,actual_shipping_fee,goods_to_declare,note,note_update_time,item_list,pay_time,dropshipper,credit_card_number,dropshipper_phone,split_up,buyer_cancel_reason,cancel_by,cancel_reason,actual_shipping_fee_confirmed,buyer_cpf_id,fulfillment_flag,pickup_done_time,package_list,shipping_carrier,payment_method,total_amount,buyer_username,invoice_data,checkout_shipping_carrier,reverse_shipping_fee",
+    # )
+
+    shipped_orders = client.logistics.ship_order(order_sn=orders[0]["order_sn"])
+
+    return shipped_orders
 
 
 # @frappe.whitelist()
