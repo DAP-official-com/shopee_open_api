@@ -1,0 +1,170 @@
+{
+ "actions": [],
+ "autoname": "field:order_sn",
+ "creation": "2021-10-20 13:56:18.893803",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "order_sn",
+  "region",
+  "currency",
+  "cod",
+  "total_amount",
+  "order_status",
+  "checkout_shipping_carrier",
+  "buyer_cancel_reason",
+  "credit_card_number",
+  "days_to_ship",
+  "message_to_seller",
+  "note",
+  "pay_time",
+  "payment_method",
+  "pickup_done_time",
+  "ship_by_date",
+  "shipping_carrier",
+  "split_up",
+  "create_time",
+  "update_time"
+ ],
+ "fields": [
+  {
+   "fieldname": "order_sn",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Order SN",
+   "read_only": 1,
+   "reqd": 1,
+   "set_only_once": 1,
+   "unique": 1
+  },
+  {
+   "fieldname": "region",
+   "fieldtype": "Data",
+   "label": "Region"
+  },
+  {
+   "fieldname": "currency",
+   "fieldtype": "Data",
+   "label": "Currency"
+  },
+  {
+   "default": "0",
+   "fieldname": "cod",
+   "fieldtype": "Check",
+   "label": "COD"
+  },
+  {
+   "fieldname": "total_amount",
+   "fieldtype": "Float",
+   "label": "Total Amount"
+  },
+  {
+   "fieldname": "order_status",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Order Status",
+   "options": "Shopee Order Status",
+   "reqd": 1
+  },
+  {
+   "fieldname": "checkout_shipping_carrier",
+   "fieldtype": "Data",
+   "label": "Checkout Shipping Carrier"
+  },
+  {
+   "fieldname": "buyer_cancel_reason",
+   "fieldtype": "Data",
+   "label": "Buyer Cancel Reason"
+  },
+  {
+   "fieldname": "credit_card_number",
+   "fieldtype": "Data",
+   "label": "Credit Card Number"
+  },
+  {
+   "fieldname": "days_to_ship",
+   "fieldtype": "Int",
+   "label": "Days to Ship"
+  },
+  {
+   "fieldname": "message_to_seller",
+   "fieldtype": "Data",
+   "label": "Message to Seller"
+  },
+  {
+   "fieldname": "note",
+   "fieldtype": "Data",
+   "label": "Note"
+  },
+  {
+   "fieldname": "pay_time",
+   "fieldtype": "Datetime",
+   "label": "Pay Time"
+  },
+  {
+   "fieldname": "payment_method",
+   "fieldtype": "Data",
+   "label": "Payment Method"
+  },
+  {
+   "fieldname": "pickup_done_time",
+   "fieldtype": "Datetime",
+   "label": "Pickup Done Time"
+  },
+  {
+   "fieldname": "ship_by_date",
+   "fieldtype": "Datetime",
+   "label": "Ship by Date"
+  },
+  {
+   "fieldname": "shipping_carrier",
+   "fieldtype": "Data",
+   "label": "Shipping Carrier"
+  },
+  {
+   "default": "0",
+   "fieldname": "split_up",
+   "fieldtype": "Check",
+   "label": "Split Up"
+  },
+  {
+   "fieldname": "create_time",
+   "fieldtype": "Datetime",
+   "in_list_view": 1,
+   "label": "Create Time",
+   "reqd": 1
+  },
+  {
+   "fieldname": "update_time",
+   "fieldtype": "Datetime",
+   "in_list_view": 1,
+   "label": "Update Time",
+   "reqd": 1
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2021-10-20 13:56:18.893803",
+ "modified_by": "Administrator",
+ "module": "Shopee Open API",
+ "name": "Shopee Order",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "track_changes": 1
+}
