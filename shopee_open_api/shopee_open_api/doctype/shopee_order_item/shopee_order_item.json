@@ -1,0 +1,76 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2021-10-20 14:03:40.385346",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "shopee_product",
+  "qty",
+  "model_original_price",
+  "model_discounted_price",
+  "add_on_deal",
+  "main_item",
+  "promotion_type"
+ ],
+ "fields": [
+  {
+   "fieldname": "shopee_product",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Shopee Product",
+   "options": "Shopee Product",
+   "reqd": 1
+  },
+  {
+   "fieldname": "qty",
+   "fieldtype": "Int",
+   "in_list_view": 1,
+   "label": "Qty",
+   "reqd": 1
+  },
+  {
+   "fieldname": "model_original_price",
+   "fieldtype": "Float",
+   "in_list_view": 1,
+   "label": "Model Original Price",
+   "reqd": 1
+  },
+  {
+   "fieldname": "model_discounted_price",
+   "fieldtype": "Float",
+   "label": "Model Discounted Price",
+   "reqd": 1
+  },
+  {
+   "default": "0",
+   "fieldname": "add_on_deal",
+   "fieldtype": "Check",
+   "label": "Add on Deal"
+  },
+  {
+   "default": "0",
+   "fieldname": "main_item",
+   "fieldtype": "Check",
+   "label": "Main Item"
+  },
+  {
+   "fieldname": "promotion_type",
+   "fieldtype": "Data",
+   "label": "Promotion Type"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "istable": 1,
+ "links": [],
+ "modified": "2021-10-20 14:10:18.197386",
+ "modified_by": "Administrator",
+ "module": "Shopee Open API",
+ "name": "Shopee Order Item",
+ "owner": "Administrator",
+ "permissions": [],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "track_changes": 1
+}

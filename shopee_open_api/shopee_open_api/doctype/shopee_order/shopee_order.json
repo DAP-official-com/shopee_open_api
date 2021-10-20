@@ -25,7 +25,8 @@
   "shipping_carrier",
   "split_up",
   "create_time",
-  "update_time"
+  "update_time",
+  "shopee_order_items"
  ],
  "fields": [
   {
@@ -141,11 +142,17 @@
    "in_list_view": 1,
    "label": "Update Time",
    "reqd": 1
+  },
+  {
+   "fieldname": "shopee_order_items",
+   "fieldtype": "Table",
+   "label": "Shopee Order Items",
+   "options": "Shopee Order Item"
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2021-10-20 13:56:18.893803",
+ "modified": "2021-10-20 14:04:40.197323",
  "modified_by": "Administrator",
  "module": "Shopee Open API",
  "name": "Shopee Order",
