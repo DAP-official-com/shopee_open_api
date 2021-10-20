@@ -6,6 +6,7 @@
  "editable_grid": 1,
  "engine": "InnoDB",
  "field_order": [
+  "shopee_shop",
   "order_sn",
   "region",
   "currency",
@@ -148,11 +149,18 @@
    "fieldtype": "Table",
    "label": "Shopee Order Items",
    "options": "Shopee Order Item"
+  },
+  {
+   "fieldname": "shopee_shop",
+   "fieldtype": "Link",
+   "label": "Shopee Shop",
+   "options": "Shopee Shop",
+   "reqd": 1
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2021-10-20 14:04:40.197323",
+ "modified": "2021-10-20 16:06:54.681147",
  "modified_by": "Administrator",
  "module": "Shopee Open API",
  "name": "Shopee Order",
