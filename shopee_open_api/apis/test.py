@@ -16,12 +16,12 @@ def get_category_list():
 
     categories = client.product.get_category()["response"]["category_list"]
 
-    for category in categories:
+    for category in categories[:30]:
 
         if frappe.db.exists(
             {
                 "doctype": "Shopee Product Category",
-                "category_id": category["category_id"],
+                "shopee_category_id": str(category["category_id"]),
             }
         ):
             continue
@@ -29,6 +29,7 @@ def get_category_list():
         new_category = {"doctype": "Shopee Product Category"}
         new_category["category"] = category["original_category_name"]
         new_category["category_id"] = category["category_id"]
+        new_category["shopee_category_id"] = str(category["category_id"])
         new_category["is_group"] = category["has_children"]
 
         if category["parent_category_id"] != 0:
@@ -51,7 +52,7 @@ def get_category_list():
     for category in categories_with_parent:
         parent_category_name = frappe.db.get_list(
             "Shopee Product Category",
-            filters={"category_id": int(category[1])},
+            filters={"category_id": category[1]},
             fields=[
                 "name",
             ],
