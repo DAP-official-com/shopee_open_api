@@ -1,6 +1,6 @@
 import frappe
 from shopee_open_api.utils.client import get_client_from_branch, get_client_from_shop
-
+from tqdm import tqdm
 
 import os, json
 
@@ -16,7 +16,7 @@ def get_category_list():
 
     categories = client.product.get_category()["response"]["category_list"]
 
-    for category in categories[:30]:
+    for category in tqdm(categories):
 
         if frappe.db.exists(
             {
