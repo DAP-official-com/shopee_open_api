@@ -15,6 +15,7 @@
   "order_status",
   "checkout_shipping_carrier",
   "buyer_cancel_reason",
+  "cancel_reason",
   "credit_card_number",
   "days_to_ship",
   "message_to_seller",
@@ -156,11 +157,16 @@
    "label": "Shopee Shop",
    "options": "Shopee Shop",
    "reqd": 1
+  },
+  {
+   "fieldname": "cancel_reason",
+   "fieldtype": "Data",
+   "label": "Cancel Reason"
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2021-10-20 16:06:54.681147",
+ "modified": "2021-10-21 16:03:37.893239",
  "modified_by": "Administrator",
  "module": "Shopee Open API",
  "name": "Shopee Order",

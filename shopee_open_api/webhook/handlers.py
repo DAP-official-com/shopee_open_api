@@ -45,6 +45,7 @@ def handle_order_status_update(data: dict):
     order.cod = order_details["cod"]
     order.checkout_shipping_carrier = order_details["checkout_shipping_carrier"]
     order.buyer_cancel_reason = order_details["buyer_cancel_reason"]
+    order.cancel_reason = order_details["cancel_reason"]
     order.credit_card_number = order_details["credit_card_number"]
     order.days_to_ship = order_details["days_to_ship"]
     order.message_to_seller = order_details["message_to_seller"]
