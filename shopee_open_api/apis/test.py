@@ -21,7 +21,7 @@ def get_category_list():
         if frappe.db.exists(
             {
                 "doctype": "Shopee Product Category",
-                "shopee_category_id": str(category["category_id"]),
+                "category_id": str(category["category_id"]),
             }
         ):
             continue
@@ -40,15 +40,15 @@ def get_category_list():
 
     categories_with_parent = frappe.db.get_list(
         "Shopee Product Category",
-        filters={"parent_catagory_id": ("!=", "")},
+        filters={"parent_category_id": ("!=", "")},
         as_list=True,
         fields=[
             "name",
-            "parent_catagory_id",
+            "parent_category_id",
         ],
     )
 
-    for category in categories_with_parent:
+    for category in tqdm(categories_with_parent):
         parent_category_name = frappe.db.get_list(
             "Shopee Product Category",
             filters={"category_id": category[1]},
