@@ -2,7 +2,7 @@
  "actions": [],
  "allow_import": 1,
  "allow_rename": 1,
- "autoname": "field:item_name",
+ "autoname": "format:{shopee_product_id}-{shopee_model_id}",
  "creation": "2021-10-16 14:55:45.791358",
  "doctype": "DocType",
  "editable_grid": 1,
@@ -57,8 +57,7 @@
    "fieldname": "item_name",
    "fieldtype": "Data",
    "label": "Item name",
-   "read_only": 1,
-   "unique": 1
+   "read_only": 1
   },
   {
    "fetch_from": "item.item_code",
@@ -246,13 +245,13 @@
   },
   {
    "fieldname": "shopee_product_id",
-   "fieldtype": "Int",
+   "fieldtype": "Data",
    "label": "Shopee Product Id",
    "reqd": 1
   },
   {
    "fieldname": "shopee_model_id",
-   "fieldtype": "Int",
+   "fieldtype": "Data",
    "label": "Shopee Model Id",
    "reqd": 1
   }
@@ -260,7 +259,7 @@
  "image_field": "image",
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2021-10-20 17:31:51.105151",
+ "modified": "2021-10-21 17:06:48.978151",
  "modified_by": "Administrator",
  "module": "Shopee Open API",
  "name": "Shopee Product",
