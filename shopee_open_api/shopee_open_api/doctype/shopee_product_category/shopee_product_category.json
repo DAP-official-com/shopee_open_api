@@ -1,7 +1,7 @@
 {
  "actions": [],
  "allow_rename": 1,
- "autoname": "SPC-.#####",
+ "autoname": "field:category_id",
  "creation": "2021-10-16 15:47:40.882219",
  "doctype": "DocType",
  "editable_grid": 1,
@@ -15,16 +15,17 @@
   "rgt",
   "is_group",
   "old_parent",
-  "parent_catagory_id",
+  "parent_category_id",
   "parent_shopee_product_category"
  ],
  "fields": [
   {
    "fieldname": "category_id",
-   "fieldtype": "Int",
+   "fieldtype": "Data",
    "in_list_view": 1,
-   "label": "Catagory Id",
-   "reqd": 1
+   "label": "Category Id",
+   "reqd": 1,
+   "unique": 1
   },
   {
    "fieldname": "category",
@@ -77,15 +78,15 @@
   },
   {
    "fetch_from": "parent_shopee_product_category.category_id",
-   "fieldname": "parent_catagory_id",
+   "fieldname": "parent_category_id",
    "fieldtype": "Data",
-   "label": "Parent Catagory Id"
+   "label": "Parent Category Id"
   }
  ],
  "index_web_pages_for_search": 1,
  "is_tree": 1,
  "links": [],
- "modified": "2021-10-16 16:14:15.381575",
+ "modified": "2021-10-21 15:15:17.867018",
  "modified_by": "Administrator",
  "module": "Shopee Open API",
  "name": "Shopee Product Category",
