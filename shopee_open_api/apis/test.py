@@ -28,12 +28,11 @@ def get_category_list():
 
         new_category = {"doctype": "Shopee Product Category"}
         new_category["category"] = category["original_category_name"]
-        new_category["category_id"] = category["category_id"]
-        new_category["shopee_category_id"] = str(category["category_id"])
+        new_category["category_id"] = str(category["category_id"])
         new_category["is_group"] = category["has_children"]
 
         if category["parent_category_id"] != 0:
-            new_category["parent_catagory_id"] = category["parent_category_id"]
+            new_category["parent_category_id"] = category["parent_category_id"]
 
         category = frappe.get_doc(new_category)
         category.insert()
