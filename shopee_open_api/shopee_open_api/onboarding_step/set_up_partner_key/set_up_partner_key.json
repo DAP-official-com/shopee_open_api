@@ -1,0 +1,22 @@
+{
+ "action": "Update Settings",
+ "creation": "2021-10-21 15:50:29.638636",
+ "description": "Get the partner's key from your application here https://open.shopee.com/myconsole/management/app",
+ "docstatus": 0,
+ "doctype": "Onboarding Step",
+ "field": "partner_key",
+ "idx": 0,
+ "is_complete": 0,
+ "is_single": 1,
+ "is_skipped": 0,
+ "modified": "2021-10-21 15:51:14.713375",
+ "modified_by": "Administrator",
+ "name": "Set Up Partner Key",
+ "owner": "Administrator",
+ "reference_document": "Shopee API Settings",
+ "show_form_tour": 0,
+ "show_full_form": 0,
+ "title": "Set up the partner's key",
+ "validate_action": 1,
+ "value_to_validate": "%"
+}

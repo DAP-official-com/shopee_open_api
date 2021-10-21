@@ -1,0 +1,20 @@
+{
+ "action": "Create Entry",
+ "creation": "2021-10-21 15:51:45.625986",
+ "description": "Click \"Add From Shopee\" and authorize with your Shopee's account. You should see a new shop being added on the list of shops.",
+ "docstatus": 0,
+ "doctype": "Onboarding Step",
+ "idx": 0,
+ "is_complete": 0,
+ "is_single": 0,
+ "is_skipped": 0,
+ "modified": "2021-10-21 15:52:51.901478",
+ "modified_by": "Administrator",
+ "name": "Add First Shopee Shop",
+ "owner": "Administrator",
+ "reference_document": "Shopee Shop",
+ "show_form_tour": 0,
+ "show_full_form": 0,
+ "title": "Add your first Shopee shop",
+ "validate_action": 1
+}

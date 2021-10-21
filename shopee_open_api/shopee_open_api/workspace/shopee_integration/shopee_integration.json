@@ -153,10 +153,11 @@
    "type": "Card Break"
   }
  ],
- "modified": "2021-10-18 17:19:32.129340",
+ "modified": "2021-10-21 15:47:55.809399",
  "modified_by": "Administrator",
  "module": "Shopee Open API",
  "name": "Shopee Integration",
+ "onboarding": "Shopee ",
  "owner": "Administrator",
  "pin_to_bottom": 1,
  "pin_to_top": 0,
