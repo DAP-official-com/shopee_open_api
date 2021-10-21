@@ -12,7 +12,8 @@
   "description",
   "logo",
   "status",
-  "token"
+  "token",
+  "shop_logo"
  ],
  "fields": [
   {
@@ -55,11 +56,17 @@
    "label": "Token",
    "options": "Shopee Token",
    "reqd": 1
+  },
+  {
+   "fieldname": "shop_logo",
+   "fieldtype": "Attach Image",
+   "label": "Shop Logo"
   }
  ],
+ "image_field": "shop_logo",
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2021-10-16 15:14:41.057031",
+ "modified": "2021-10-21 15:04:15.333362",
  "modified_by": "Administrator",
  "module": "Shopee Open API",
  "name": "Shopee Shop",
