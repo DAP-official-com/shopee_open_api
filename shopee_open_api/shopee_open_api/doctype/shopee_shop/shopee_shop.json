@@ -66,7 +66,7 @@
  "image_field": "shop_logo",
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2021-10-21 15:04:15.333362",
+ "modified": "2021-10-21 22:44:25.086884",
  "modified_by": "Administrator",
  "module": "Shopee Open API",
  "name": "Shopee Shop",
@@ -87,5 +87,6 @@
  ],
  "sort_field": "modified",
  "sort_order": "DESC",
+ "title_field": "shop_name",
  "track_changes": 1
 }
