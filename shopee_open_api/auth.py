@@ -77,8 +77,6 @@ def authorize_callback():
         }
     )
 
-    print(branch_exists)
-
     if branch_exists:
         branch = frappe.get_doc("Branch", branch_exists[0][0])
     else:
