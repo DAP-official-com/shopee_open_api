@@ -6,6 +6,90 @@ import os, json
 
 
 @frappe.whitelist()
+def test_get_shopee_products():
+
+    shops = frappe.db.get_all("Shopee Shop")
+
+    shop = frappe.get_doc("Shopee Shop", shops[0]["name"])
+
+    client = get_client_from_shop(shop)
+
+    product_list = client.product.get_item_list(
+        offset=0, page_size=100, item_status="NORMAL"
+    )["response"]["item"]
+
+    return client.product.get_item_list(offset=0, page_size=100, item_status="DELETED")
+
+    product_details = client.product.get_item_base_info(
+        item_id_list=",".join([str(product["item_id"]) for product in product_list])
+    )["response"]["item_list"]
+
+    singular_products = [
+        product for product in product_details if product.get("price_info")
+    ]
+
+    multi_variants_products = [
+        product
+        for product in product_details
+        if product.get("price_info", False) == False
+    ]
+
+    for product in singular_products:
+        shopee_product = frappe.get_doc(
+            doctype="Shopee Product",
+            shopee_product_id=str(product["item_id"]),
+            shopee_model_id=str(0),
+            item_status=product["item_status"],
+            shopee_shop=shop.name,
+            category=str(product["category_id"]),
+            weight=float(product["weight"]),
+            item_name=product["item_name"],
+        )
+        shopee_product.save()
+
+    for product in multi_variants_products:
+
+        model_details = client.product.get_model_list(item_id=product["item_id"])[
+            "response"
+        ]
+        models = model_details["model"]
+        variations = model_details["tier_variation"]
+
+        variation_options = []
+
+        for variation in variations:
+            variation_options.append(
+                [variation["option"] for variation in variation["option_list"]]
+            )
+
+        for model in models:
+            variation_values = []
+            for variation_index, option_index in enumerate(model["tier_index"]):
+                variation_options[variation_index][option_index]
+                variation_values.append(
+                    variation_options[variation_index][option_index]
+                )
+
+            variant_name = "-".join(variation_values)
+
+            shopee_product = frappe.get_doc(
+                doctype="Shopee Product",
+                shopee_product_id=str(product["item_id"]),
+                shopee_model_id=str(model["model_id"]),
+                item_status=product["item_status"],
+                shopee_shop=shop.name,
+                category=str(product["category_id"]),
+                weight=float(product["weight"]),
+                item_name=f"{product['item_name']} ({variant_name})",
+            )
+            shopee_product.save()
+
+    frappe.db.commit()
+
+    return singular_products
+
+
+@frappe.whitelist()
 def get_category_list():
 
     shops = frappe.db.get_all("Shopee Shop")
@@ -161,30 +245,28 @@ def test_add_product():
 @frappe.whitelist()
 def test_get_orders():
 
-    shops = frappe.db.get_all("Shopee Shop")
-
-    shop = frappe.get_doc("Shopee Shop", shops[0]["name"])
+    shop = frappe.get_last_doc("Shopee Shop")
 
     client = get_client_from_shop(shop)
 
     orders = client.order.get_order_list(
         time_range_field="create_time",
         time_from=1634137703,
-        time_to=1634638713,
+        time_to=1634807647,
         page_size=100,
-        order_status="READY_TO_SHIP",
+        order_status="CANCELLED",
     )["response"]["order_list"]
 
     # to_ship_orders = client.order.get_shipment_list(page_size=100)
 
-    # order_details = client.order.get_order_detail(
-    #     order_sn_list=",".join([order["order_sn"] for order in orders]),
-    #     response_optional_fields="buyer_user_id,buyer_username,estimated_shipping_fee,recipient_address,actual_shipping_fee,goods_to_declare,note,note_update_time,item_list,pay_time,dropshipper,credit_card_number,dropshipper_phone,split_up,buyer_cancel_reason,cancel_by,cancel_reason,actual_shipping_fee_confirmed,buyer_cpf_id,fulfillment_flag,pickup_done_time,package_list,shipping_carrier,payment_method,total_amount,buyer_username,invoice_data,checkout_shipping_carrier,reverse_shipping_fee",
-    # )
+    order_details = client.order.get_order_detail(
+        order_sn_list=",".join([order["order_sn"] for order in orders]),
+        response_optional_fields="buyer_user_id,buyer_username,estimated_shipping_fee,recipient_address,actual_shipping_fee,goods_to_declare,note,note_update_time,item_list,pay_time,dropshipper,credit_card_number,dropshipper_phone,split_up,buyer_cancel_reason,cancel_by,cancel_reason,actual_shipping_fee_confirmed,buyer_cpf_id,fulfillment_flag,pickup_done_time,package_list,shipping_carrier,payment_method,total_amount,buyer_username,invoice_data,checkout_shipping_carrier,reverse_shipping_fee",
+    )
 
-    shipped_orders = client.logistics.ship_order(order_sn=orders[0]["order_sn"])
+    # shipped_orders = client.logistics.ship_order(order_sn=orders[0]["order_sn"])
 
-    return shipped_orders
+    return order_details
 
 
 @frappe.whitelist()
