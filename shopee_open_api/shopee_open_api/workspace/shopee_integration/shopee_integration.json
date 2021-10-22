@@ -34,15 +34,6 @@
   {
    "hidden": 0,
    "is_query_report": 0,
-   "label": "Shopee Token",
-   "link_to": "Shopee Token",
-   "link_type": "DocType",
-   "onboard": 0,
-   "type": "Link"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 0,
    "label": "Logistic Status",
    "link_to": "Shopee Logistic Status",
    "link_type": "DocType",
@@ -78,7 +69,7 @@
   {
    "hidden": 0,
    "is_query_report": 0,
-   "label": "Product Caegory",
+   "label": "Product Category",
    "link_to": "Shopee Product Category",
    "link_type": "DocType",
    "onboard": 0,
@@ -153,7 +144,7 @@
    "type": "Card Break"
   }
  ],
- "modified": "2021-10-22 08:54:56.671865",
+ "modified": "2021-10-22 09:06:06.515855",
  "modified_by": "Administrator",
  "module": "Shopee Open API",
  "name": "Shopee Integration",
