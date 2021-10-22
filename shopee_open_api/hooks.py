@@ -116,23 +116,28 @@ doc_events = {
 # Scheduled Tasks
 # ---------------
 
-# scheduler_events = {
-# 	"all": [
-# 		"shopee_open_api.tasks.all"
-# 	],
-# 	"daily": [
-# 		"shopee_open_api.tasks.daily"
-# 	],
-# 	"hourly": [
-# 		"shopee_open_api.tasks.hourly"
-# 	],
-# 	"weekly": [
-# 		"shopee_open_api.tasks.weekly"
-# 	]
-# 	"monthly": [
-# 		"shopee_open_api.tasks.monthly"
-# 	]
-# }
+scheduler_events = {
+    # "cron": {
+    #     "* * * * *": [
+    #         "shopee_open_api.tasks.cron",
+    #     ]
+    # }
+    # "all": [
+    # 	"shopee_open_api.tasks.all"
+    # ],
+    # "daily": [
+    # 	"shopee_open_api.tasks.daily"
+    # ],
+    # "hourly": [
+    # 	"shopee_open_api.tasks.hourly"
+    # ],
+    # "weekly": [
+    # 	"shopee_open_api.tasks.weekly"
+    # ]
+    # "monthly": [
+    # 	"shopee_open_api.tasks.monthly"
+    # ],
+}
 
 # Testing
 # -------
