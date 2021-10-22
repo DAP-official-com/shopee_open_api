@@ -11,8 +11,6 @@ def reload_shop_details_from_shopee(shop_id):
     shop_profile = client.shop.get_profile()["response"]
     shop_profile.update(client.shop.get_shop_info())
 
-    print(shop_profile)
-
     shop.shop_name = shop_profile["shop_name"][:30]
 
     shop.logo = shop_profile["shop_logo"]
