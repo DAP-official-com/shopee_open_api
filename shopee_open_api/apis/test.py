@@ -18,8 +18,6 @@ def test_get_shopee_products():
         offset=0, page_size=100, item_status="NORMAL"
     )["response"]["item"]
 
-    return client.product.get_item_list(offset=0, page_size=100, item_status="DELETED")
-
     product_details = client.product.get_item_base_info(
         item_id_list=",".join([str(product["item_id"]) for product in product_list])
     )["response"]["item_list"]
