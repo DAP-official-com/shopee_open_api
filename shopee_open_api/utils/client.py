@@ -87,3 +87,9 @@ def get_client_from_shop(shop: ShopeeShop) -> Client:
         frappe.db.commit()
 
     return client
+
+
+def get_client_from_shop_id(shop_id) -> Client:
+
+    shop = frappe.get_doc("Shopee Shop", str(shop_id))
+    return get_client_from_shop(shop)
