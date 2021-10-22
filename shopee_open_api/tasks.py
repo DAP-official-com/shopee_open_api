@@ -22,7 +22,9 @@ def pull_products(
     client = get_client_from_shop(shop)
 
     response = client.product.get_item_list(
-        offset=offset, item_status=item_status, page_size=100
+        offset=offset,
+        item_status=item_status,
+        page_size=100,
     )
 
     if response.get("error"):
@@ -97,7 +99,7 @@ def pull_products(
     has_next_page = response["response"].get("has_next_page")
 
     if has_next_page:
-        enqueue_long_job(
+        start_pulling_products(
             shop_id=shop_id,
             offset=response["response"].get("next_offset"),
             item_status=item_status,
