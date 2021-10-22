@@ -13,7 +13,7 @@
  "documentation_url": "docs.test.com",
  "idx": 0,
  "is_complete": 0,
- "modified": "2021-10-21 15:52:55.172811",
+ "modified": "2021-10-22 08:52:04.675524",
  "modified_by": "Administrator",
  "module": "Shopee Open API",
  "name": "Shopee ",
@@ -24,9 +24,6 @@
   },
   {
    "step": "Set Up Partner Key"
-  },
-  {
-   "step": "Add First Shopee Shop"
   }
  ],
  "subtitle": "Getting started with Shopee Open API",
