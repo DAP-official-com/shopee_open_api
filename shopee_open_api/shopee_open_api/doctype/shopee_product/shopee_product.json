@@ -91,6 +91,7 @@
    "in_list_view": 1,
    "label": "Shopee Item Status",
    "options": "NORMAL\nDELETED\nBANNED\nUNLIST",
+   "read_only": 1,
    "reqd": 1
   },
   {
@@ -132,6 +133,7 @@
    "fieldtype": "Link",
    "label": "Category",
    "options": "Shopee Product Category",
+   "read_only": 1,
    "reqd": 1
   },
   {
@@ -235,6 +237,7 @@
    "fieldtype": "Link",
    "label": "Shopee Shop",
    "options": "Shopee Shop",
+   "read_only": 1,
    "reqd": 1
   },
   {
@@ -247,19 +250,21 @@
    "fieldname": "shopee_product_id",
    "fieldtype": "Data",
    "label": "Shopee Product Id",
+   "read_only": 1,
    "reqd": 1
   },
   {
    "fieldname": "shopee_model_id",
    "fieldtype": "Data",
    "label": "Shopee Model Id",
+   "read_only": 1,
    "reqd": 1
   }
  ],
  "image_field": "image",
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2021-10-21 17:06:48.978151",
+ "modified": "2021-10-25 13:19:21.778481",
  "modified_by": "Administrator",
  "module": "Shopee Open API",
  "name": "Shopee Product",
