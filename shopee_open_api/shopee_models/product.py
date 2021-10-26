@@ -62,7 +62,7 @@ class Product(ShopeeResponseBaseClass):
     def is_existing_in_database(self) -> bool:
 
         if (
-            frappe.db.exists(
+            frappe.db.count(
                 self.DOCTYPE,
                 {
                     "shopee_product_id": self.product_id,
