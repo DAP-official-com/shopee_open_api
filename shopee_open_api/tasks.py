@@ -2,6 +2,7 @@ import time
 from frappe import enqueue
 import frappe
 from shopee_open_api.utils.client import get_client_from_shop
+from shopee_open_api.shopee_models.product import Product
 
 
 def cron():
@@ -24,11 +25,11 @@ def pull_products(
     response = client.product.get_item_list(
         offset=offset,
         item_status=item_status,
-        page_size=100,
+        page_size=1,
     )
 
     if response.get("error"):
-        raise Exception(response.get("message"))
+        raise frappe.RetryBackgroundJobError(response.get("message"))
 
     product_list = response["response"]["item"]
 
@@ -36,65 +37,17 @@ def pull_products(
         item_id_list=",".join([str(product["item_id"]) for product in product_list])
     )["response"]["item_list"]
 
-    singular_products = [
-        product for product in product_details if product.get("price_info")
+    products = [
+        Product(product_detail, shop_id=shop.name) for product_detail in product_details
     ]
 
-    multi_variants_products = [
-        product
-        for product in product_details
-        if product.get("price_info", False) == False
-    ]
+    singular_products = [product for product in products if not product.has_model]
 
-    for product in singular_products:
-        shopee_product = frappe.get_doc(
-            doctype="Shopee Product",
-            shopee_product_id=str(product["item_id"]),
-            shopee_model_id=str(0),
-            item_status=product["item_status"],
-            shopee_shop=shop.name,
-            category=str(product["category_id"]),
-            weight=float(product["weight"]),
-            item_name=product["item_name"],
-        )
-        shopee_product.save()
+    [product.update_or_insert() for product in singular_products]
 
-    for product in multi_variants_products:
+    multi_variants_products = [product for product in products if product.has_model]
 
-        model_details = client.product.get_model_list(item_id=product["item_id"])[
-            "response"
-        ]
-        models = model_details["model"]
-        variations = model_details["tier_variation"]
-
-        variation_options = []
-
-        for variation in variations:
-            variation_options.append(
-                [variation["option"] for variation in variation["option_list"]]
-            )
-
-        for model in models:
-            variation_values = []
-            for variation_index, option_index in enumerate(model["tier_index"]):
-                variation_options[variation_index][option_index]
-                variation_values.append(
-                    variation_options[variation_index][option_index]
-                )
-
-            variant_name = "-".join(variation_values)
-
-            shopee_product = frappe.get_doc(
-                doctype="Shopee Product",
-                shopee_product_id=str(product["item_id"]),
-                shopee_model_id=str(model["model_id"]),
-                item_status=product["item_status"],
-                shopee_shop=shop.name,
-                category=str(product["category_id"]),
-                weight=float(product["weight"]),
-                item_name=f"{product['item_name']} ({variant_name})",
-            )
-            shopee_product.save()
+    [product.update_or_insert() for product in multi_variants_products]
 
     has_next_page = response["response"].get("has_next_page")
 

@@ -1,5 +1,6 @@
 from .base import ShopeeResponseBaseClass
 from shopee_open_api.utils.client import get_client_from_shop_id
+from .model import Model
 import copy
 import frappe
 
@@ -26,12 +27,16 @@ class Product(ShopeeResponseBaseClass):
 
         response = self.__dict__
         response["is_existing_in_database"] = self.is_existing_in_database
-        response["models"] = self.get_models()
-        response["variations"] = self.get_variations()
+        response.pop("models", False)
 
         return response
 
     def update_or_insert(self):
+
+        if self.has_model and self.get_models():
+            for model in self.get_models():
+                model.update_or_insert()
+            return
 
         if self.is_existing_in_database:
             shopee_product = frappe.get_doc(
@@ -56,17 +61,22 @@ class Product(ShopeeResponseBaseClass):
     @property
     def is_existing_in_database(self) -> bool:
 
-        if self.has_model and not getattr(self, "model_id", False):
-            return None
-
-        if self.has_model:
-            return 0 < frappe.db.count(
+        if (
+            frappe.db.exists(
                 self.DOCTYPE,
                 {
                     "shopee_product_id": self.product_id,
-                    "shopee_model_id": str(self.model_id),
                 },
             )
+            == 0
+        ):
+            return False
+
+        if self.has_model and self.get_models():
+            for model in self.get_models():
+                if not model.is_existing_in_database:
+                    return False
+            return True
 
         return 0 < frappe.db.count(
             self.DOCTYPE,
@@ -88,14 +98,35 @@ class Product(ShopeeResponseBaseClass):
             "response"
         ]
         self.models = self.model_details["model"]
-        self.tier_variations = self.model_details["tier_variation"]
 
     def get_models(self):
         """Getter method for variant models"""
+        if self.has_model and not hasattr(self, "models"):
+            self.instantiate_models()
 
         return getattr(self, "models", [])
 
-    def get_variations(self):
-        """Getter method for variations"""
+    def instantiate_models(self):
+        """Instantiate all models for current product."""
 
-        return getattr(self, "variations", [])
+        if not self.has_model:
+            return
+
+        if not hasattr(self, "model_details"):
+            self.retrieve_model_details()
+
+        for model in self.model_details["model"]:
+            model["variations"] = []
+
+            for variation_index, option_index in enumerate(model["tier_index"]):
+
+                variation = self.model_details["tier_variation"][variation_index]
+
+                variation_details = {}
+                variation_details["name"] = variation["name"]
+
+                variation_details["variation"] = variation["option_list"][option_index]
+
+                model["variations"].append(variation_details)
+
+        self.models = [Model(model, product=self) for model in self.get_models()]
