@@ -25,7 +25,7 @@ def pull_products(
     response = client.product.get_item_list(
         offset=offset,
         item_status=item_status,
-        page_size=1,
+        page_size=100,
     )
 
     if response.get("error"):
