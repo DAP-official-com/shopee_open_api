@@ -2,27 +2,26 @@ from .base import BaseModule
 
 
 class Product(BaseModule):
-
     def get_comment(self, **kwargs):
         """
-        Use this api to get comment by shop_id, item_id, or comment_id.
-.
-        :param kwargs:
-        - item_id
-        - comment_id
-        - cursor Required
-        - page_size Required
+                Use this api to get comment by shop_id, item_id, or comment_id.
+        .
+                :param kwargs:
+                - item_id
+                - comment_id
+                - cursor Required
+                - page_size Required
         """
         return self.client.execute("product/get_comment", "GET", kwargs)
 
     def reply_comment(self, **kwargs):
         """
-        Use this api to reply comments from buyers in batch.
-.
-        :param kwargs:
-        - comment_list Required
-        - comment_id Required
-        - comment Required
+                Use this api to reply comments from buyers in batch.
+        .
+                :param kwargs:
+                - comment_list Required
+                - comment_id Required
+                - comment Required
         """
         return self.client.execute("product/reply_comment", "POST", kwargs)
 
@@ -58,6 +57,28 @@ class Product(BaseModule):
         - item_status Required
         """
         return self.client.execute("product/get_item_list", "GET", kwargs)
+
+    def get_item_list_and_info(self, **kwargs):
+        """
+        Use this call to get a list of items and their details
+
+        :param kwargs:
+        - offset Required
+        - page_size Required
+        - update_time_from
+        - update_time_to
+        - item_status Required
+        """
+
+        response = self.get_item_list(**kwargs)
+
+        if response.get("error"):
+            raise Exception(response.get("message"))
+
+        product_list = response["response"]["item"]
+        item_id_list = ",".join([str(product["item_id"]) for product in product_list])
+
+        return self.get_item_base_info(item_id_list=item_id_list)
 
     def delete_item(self, **kwargs):
         """
@@ -185,7 +206,6 @@ class Product(BaseModule):
 
         """
         return self.client.execute("product/support_size_chart", "GET", kwargs)
-
 
     def init_tier_variation(self, **kwargs):
         """
@@ -347,4 +367,3 @@ class Product(BaseModule):
 
         """
         return self.client.execute("product/category_recommend", "GET", kwargs)
-
