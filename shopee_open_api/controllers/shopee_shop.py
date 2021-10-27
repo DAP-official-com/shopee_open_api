@@ -16,6 +16,9 @@ def update_profile(shopee_shop, _):
     Call shopee shop.update_profile when the shop is saved to the database.
     """
 
+    if not shopee_shop.authorized:
+        return
+
     client = get_client_from_shop(shopee_shop)
 
     updated_fields = {

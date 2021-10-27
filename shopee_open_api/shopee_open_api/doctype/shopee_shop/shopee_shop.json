@@ -13,7 +13,8 @@
   "logo",
   "status",
   "token",
-  "shop_logo"
+  "shop_logo",
+  "authorized"
  ],
  "fields": [
   {
@@ -61,12 +62,19 @@
    "fieldname": "shop_logo",
    "fieldtype": "Attach Image",
    "label": "Shop Logo"
+  },
+  {
+   "default": "0",
+   "fieldname": "authorized",
+   "fieldtype": "Check",
+   "label": "Authorized",
+   "reqd": 1
   }
  ],
  "image_field": "shop_logo",
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2021-10-21 22:44:25.086884",
+ "modified": "2021-10-27 11:54:59.567695",
  "modified_by": "Administrator",
  "module": "Shopee Open API",
  "name": "Shopee Shop",

@@ -49,6 +49,7 @@ def authorize_callback():
     shop.logo = shop_profile["shop_logo"]
     shop.status = shop_profile["status"]
     shop.description = shop_profile["description"]
+    shop.authorized = True
 
     if shop_exists:
         token = frappe.get_doc("Shopee Token", shop_id)
@@ -117,21 +118,12 @@ def unauthorize_callback():
 
     if shop_exists:
 
-        frappe.db.delete(
-            "Branch",
-            {
-                "shopee_shop": shop_id,
-            },
-        )
-
         shop = frappe.get_doc(
             "Shopee Shop",
             shop_id,
         )
-        shop.delete()
-
-        shopee_token = frappe.get_doc("Shopee Token", shop_id)
-        shopee_token.delete()
+        shop.authorized = False
+        shop.save()
 
         frappe.db.commit()
 

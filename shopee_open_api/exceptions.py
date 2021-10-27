@@ -4,3 +4,7 @@ class NotShopeeBranchError(Exception):
 
 class BadRequestError(Exception):
     pass
+
+
+class NotAuthorizedError(Exception):
+    pass

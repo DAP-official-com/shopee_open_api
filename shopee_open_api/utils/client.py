@@ -1,7 +1,7 @@
 import time
 from shopee_open_api.python_shopee.pyshopee2 import Client
 from erpnext.hr.doctype.branch.branch import Branch
-from shopee_open_api.exceptions import NotShopeeBranchError
+from shopee_open_api.exceptions import NotShopeeBranchError, NotAuthorizedError
 from shopee_open_api.shopee_open_api.doctype.shopee_shop.shopee_shop import ShopeeShop
 import frappe
 
@@ -33,6 +33,11 @@ def get_client_from_branch(branch: Branch) -> Client:
     if not branch.shopee_shop:
         raise NotShopeeBranchError(f"The branch {branch.name} is not a Shopee's shop")
 
+    shop = frappe.get_doc("Shopee Shop", branch.shopee_shop)
+
+    if not shop.authorized:
+        raise NotAuthorizedError("This shop has been unauthorized")
+
     token = frappe.get_doc("Shopee Token", branch.shopee_shop)
 
     client = get_shopless_client()
@@ -61,6 +66,9 @@ def get_client_from_branch(branch: Branch) -> Client:
 
 
 def get_client_from_shop(shop: ShopeeShop) -> Client:
+
+    if not shop.authorized:
+        raise NotAuthorizedError("This shop has been unauthorized")
 
     token = frappe.get_doc("Shopee Token", shop.shop_id)
 
