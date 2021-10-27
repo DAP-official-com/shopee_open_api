@@ -10,21 +10,11 @@ class Product(ShopeeResponseBaseClass):
 
     DOCTYPE = "Shopee Product"
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.parse_attributes()
-
     def __str__(self):
         return f"{super().__str__()} {self.item_name}"
 
     def make_primary_key(self):
-        return f"{self.product_id}-{self.model_id if self.has_model else 0}"
-
-    def parse_attributes(self):
-        self.shop_id = str(self.shop_id)
-        self.category_id = str(self.category_id)
-        self.weight = float(self.weight)
-        self.product_id = str(self.item_id)
+        return f"{self.get_product_id()}-{self.get_model_id()}"
 
     def to_json(self):
 
@@ -50,14 +40,14 @@ class Product(ShopeeResponseBaseClass):
         else:
             shopee_product = frappe.get_doc(
                 doctype=self.DOCTYPE,
-                shopee_product_id=self.product_id,
-                shopee_model_id=str(self.model_id) if self.has_model else "0",
-                shopee_shop=self.shop_id,
+                shopee_product_id=self.get_product_id(),
+                shopee_model_id=self.get_model_id(),
+                shopee_shop=self.get_shop_id(),
             )
 
         shopee_product.item_status = self.item_status
-        shopee_product.category = self.category_id
-        shopee_product.weight = self.weight
+        shopee_product.category = self.get_category_id()
+        shopee_product.weight = self.get_weight()
         shopee_product.item_name = self.item_name
         shopee_product.image = self.get_main_image()
 
@@ -70,7 +60,7 @@ class Product(ShopeeResponseBaseClass):
             frappe.db.count(
                 self.DOCTYPE,
                 {
-                    "shopee_product_id": self.product_id,
+                    "shopee_product_id": self.get_product_id(),
                 },
             )
             == 0
@@ -86,7 +76,7 @@ class Product(ShopeeResponseBaseClass):
         return 0 < frappe.db.count(
             self.DOCTYPE,
             {
-                "shopee_product_id": self.product_id,
+                "shopee_product_id": self.get_product_id(),
                 "shopee_model_id": "0",
             },
         )
@@ -94,7 +84,7 @@ class Product(ShopeeResponseBaseClass):
     @property
     def client(self):
         """Get Shopee client"""
-        return get_client_from_shop_id(self.shop_id)
+        return get_client_from_shop_id(self.get_shop_id())
 
     def retrieve_model_details(self):
         """Fetch variant details from Shopee"""
@@ -136,5 +126,22 @@ class Product(ShopeeResponseBaseClass):
 
         self.models = [Model(model, product=self) for model in self.get_models()]
 
-    def get_main_image(self):
+    def get_main_image(self) -> str:
         return self.image["image_url_list"][0]
+
+    def get_shop_id(self) -> str:
+        return str(self.shop_id)
+
+    def get_category_id(self):
+        return str(self.category_id)
+
+    def get_weight(self) -> float:
+        return float(self.weight)
+
+    def get_product_id(self) -> str:
+        return str(self.item_id)
+
+    def get_model_id(self) -> str:
+        if self.has_model:
+            return str(self.model_id)
+        return str(0)
