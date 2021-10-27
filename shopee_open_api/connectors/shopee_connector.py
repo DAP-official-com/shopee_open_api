@@ -5,7 +5,7 @@ from frappe.data_migration.doctype.data_migration_connector.connectors.base impo
     BaseConnection,
 )
 
-
+"""Returns SQL conditions with user permissions and filters for event queries"""
 class FrappeConnection(BaseConnection):
     def __init__(self, connector):
         self.connector = connector
