@@ -175,7 +175,7 @@ class Order(ShopeeResponseBaseClass):
         return float(self.reverse_shipping_fee)
 
     def get_buyer_user_id(self):
-        return self.buyer_user_id
+        return str(self.buyer_user_id)
 
     def get_buyer_username(self):
         return self.buyer_username
