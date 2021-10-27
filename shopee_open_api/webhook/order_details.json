@@ -1,0 +1,161 @@
+{
+    "actual_shipping_fee": 0,
+    "actual_shipping_fee_confirmed": false,
+    "buyer_cancel_reason": "",
+    "buyer_cpf_id": null,
+    "buyer_user_id": 28215,
+    "buyer_username": "sandbox_buyer.0364d9064946b2",
+    "cancel_by": "",
+    "cancel_reason": "",
+    "checkout_shipping_carrier": "Standard Delivery - ส่งธรรมดาในประเทศ",
+    "cod": false,
+    "create_time": 1635241676,
+    "credit_card_number": null,
+    "currency": "THB",
+    "days_to_ship": 7,
+    "dropshipper": "",
+    "dropshipper_phone": "",
+    "estimated_shipping_fee": 0,
+    "fulfillment_flag": "fulfilled_by_local_seller",
+    "goods_to_declare": false,
+    "invoice_data": null,
+    "item_list": [
+        {
+            "add_on_deal": false,
+            "add_on_deal_id": 0,
+            "image_info": {
+                "image_url": "https://cf.shopee.co.th/file/61c6a249274006634e5380702dbc4548_tn"
+            },
+            "item_id": 1676561,
+            "item_name": "iphone",
+            "item_sku": "",
+            "main_item": false,
+            "model_discounted_price": 100,
+            "model_id": 0,
+            "model_name": "",
+            "model_original_price": 100,
+            "model_quantity_purchased": 2,
+            "model_sku": "",
+            "order_item_id": 1676561,
+            "promotion_group_id": 0,
+            "promotion_id": 0,
+            "promotion_type": "",
+            "weight": 0.25,
+            "wholesale": false
+        },
+        {
+            "add_on_deal": false,
+            "add_on_deal_id": 0,
+            "image_info": {
+                "image_url": "https://cf.shopee.co.th/file/b6ed2b13f5d58438c69f8922af34a06a_tn"
+            },
+            "item_id": 101567218,
+            "item_name": "Bird Bird Bird",
+            "item_sku": "",
+            "main_item": false,
+            "model_discounted_price": 2000,
+            "model_id": 9379157,
+            "model_name": "More Deceptive",
+            "model_original_price": 2000,
+            "model_quantity_purchased": 1,
+            "model_sku": "",
+            "order_item_id": 101567218,
+            "promotion_group_id": 0,
+            "promotion_id": 0,
+            "promotion_type": "",
+            "weight": 8,
+            "wholesale": false
+        }
+    ],
+    "items": [
+        {
+            "add_on_deal": false,
+            "add_on_deal_id": 0,
+            "image_info": {
+                "image_url": "https://cf.shopee.co.th/file/61c6a249274006634e5380702dbc4548_tn"
+            },
+            "item_id": 1676561,
+            "item_name": "iphone",
+            "item_sku": "",
+            "main_item": false,
+            "model_discounted_price": 100,
+            "model_id": 0,
+            "model_name": "",
+            "model_original_price": 100,
+            "model_quantity_purchased": 2,
+            "model_sku": "",
+            "order_item_id": 1676561,
+            "promotion_group_id": 0,
+            "promotion_id": 0,
+            "promotion_type": "",
+            "weight": 0.25,
+            "wholesale": false
+        },
+        {
+            "add_on_deal": false,
+            "add_on_deal_id": 0,
+            "image_info": {
+                "image_url": "https://cf.shopee.co.th/file/b6ed2b13f5d58438c69f8922af34a06a_tn"
+            },
+            "item_id": 101567218,
+            "item_name": "Bird Bird Bird",
+            "item_sku": "",
+            "main_item": false,
+            "model_discounted_price": 2000,
+            "model_id": 9379157,
+            "model_name": "More Deceptive",
+            "model_original_price": 2000,
+            "model_quantity_purchased": 1,
+            "model_sku": "",
+            "order_item_id": 101567218,
+            "promotion_group_id": 0,
+            "promotion_id": 0,
+            "promotion_type": "",
+            "weight": 8,
+            "wholesale": false
+        }
+    ],
+    "message_to_seller": "",
+    "note": "",
+    "note_update_time": 0,
+    "order_sn": "211026UC89CV9K",
+    "order_status": "READY_TO_SHIP",
+    "package_list": [
+        {
+            "item_list": [
+                {
+                    "item_id": 1676561,
+                    "model_id": 0
+                },
+                {
+                    "item_id": 101567218,
+                    "model_id": 9379157
+                }
+            ],
+            "logistics_status": "LOGISTICS_NOT_START",
+            "package_number": "OFG88940877160539",
+            "shipping_carrier": "Standard Delivery - ส่งธรรมดาในประเทศ"
+        }
+    ],
+    "pay_time": 1635241694,
+    "payment_method": "Online Payment",
+    "pickup_done_time": 0,
+    "recipient_address": {
+        "city": "เขตสาทร",
+        "district": "",
+        "full_address": "283/2, ซอย จันทน์ 18/7, Thung Wat Don เขตสาทร จังหวัดกรุงเทพมหานคร TH 10120",
+        "name": "Buyer",
+        "phone": "66988888888",
+        "region": "TH",
+        "state": "จังหวัดกรุงเทพมหานคร",
+        "town": "",
+        "zipcode": "10120"
+    },
+    "region": "TH",
+    "reverse_shipping_fee": 0,
+    "ship_by_date": 1635846494,
+    "shipping_carrier": "",
+    "split_up": false,
+    "total_amount": 2200,
+    "update_time": 1635241694
+}

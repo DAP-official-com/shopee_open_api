@@ -2,6 +2,7 @@ import frappe, json
 from datetime import datetime
 from shopee_open_api.utils.client import get_client_from_shop
 from shopee_open_api.exceptions import BadRequestError
+from shopee_open_api.shopee_models.order import Order
 
 
 def handle_order_status_update(data: dict):
@@ -25,53 +26,6 @@ def handle_order_status_update(data: dict):
 
     order_details = order_detail_response["response"]["order_list"][0]
 
-    if frappe.db.exists("Shopee Order", order_sn):
-        order = frappe.get_doc("Shopee Order", order_sn)
-    else:
-        create_time = datetime.utcfromtimestamp(order_details["create_time"]).strftime(
-            "%Y-%m-%d %H:%M:%S"
-        )
-        order = frappe.get_doc(
-            doctype="Shopee Order",
-            order_sn=order_sn,
-            create_time=create_time,
-            shopee_shop=str(shop_id),
-        )
+    order = Order(order_details, shop_id=shop_id)
 
-    order.order_status = order_details["order_status"]
-    order.total_amount = float(order_details.get("total_amount"))
-    order.currency = order_details["currency"]
-    order.region = order_details["region"]
-    order.cod = order_details["cod"]
-    order.checkout_shipping_carrier = order_details["checkout_shipping_carrier"]
-    order.buyer_cancel_reason = order_details["buyer_cancel_reason"]
-    order.cancel_reason = order_details["cancel_reason"]
-    order.credit_card_number = order_details["credit_card_number"]
-    order.days_to_ship = order_details["days_to_ship"]
-    order.message_to_seller = order_details["message_to_seller"]
-    order.note = order_details["note"]
-    order.payment_method = order_details["payment_method"]
-    order.shipping_carrier = order_details["shipping_carrier"]
-    order.split_up = order_details["split_up"]
-
-    if order_details["pay_time"]:
-        order.pay_time = datetime.utcfromtimestamp(order_details["pay_time"]).strftime(
-            "%Y-%m-%d %H:%M:%S"
-        )
-
-    if order_details["pickup_done_time"]:
-        order.pay_time = datetime.utcfromtimestamp(
-            order_details["pickup_done_time"]
-        ).strftime("%Y-%m-%d %H:%M:%S")
-
-    order.update_time = datetime.utcfromtimestamp(
-        order_details["update_time"]
-    ).strftime("%Y-%m-%d %H:%M:%S")
-
-    order.ship_by_date = datetime.utcfromtimestamp(
-        order_details["ship_by_date"]
-    ).strftime("%Y-%m-%d %H:%M:%S")
-
-    order.save(ignore_permissions=True)
-
-    frappe.db.commit()
+    order.update_or_insert_with_items(ignore_permissions=True)

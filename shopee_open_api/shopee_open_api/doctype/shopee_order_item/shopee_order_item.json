@@ -1,6 +1,6 @@
 {
  "actions": [],
- "allow_rename": 1,
+ "autoname": "format:{parent}-{item}",
  "creation": "2021-10-20 14:03:40.385346",
  "doctype": "DocType",
  "editable_grid": 1,
@@ -40,6 +40,7 @@
   {
    "fieldname": "model_discounted_price",
    "fieldtype": "Float",
+   "in_list_view": 1,
    "label": "Model Discounted Price",
    "reqd": 1
   },
@@ -64,7 +65,7 @@
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2021-10-20 14:10:18.197386",
+ "modified": "2021-10-27 15:05:58.910112",
  "modified_by": "Administrator",
  "module": "Shopee Open API",
  "name": "Shopee Order Item",

@@ -1,4 +1,5 @@
 import json
+from shopee_open_api.utils.client import get_client_from_shop_id
 
 
 class ShopeeResponseBaseClass(json.JSONEncoder):
@@ -10,6 +11,17 @@ class ShopeeResponseBaseClass(json.JSONEncoder):
                 setattr(self, key, dictionary[key])
             for key, value in kwargs.items():
                 setattr(self, key, value)
+
+    @property
+    def client(self):
+
+        if not hasattr(self, "shop_id"):
+            raise NotImplementedError("Property shop_id is required to get the client")
+
+        return get_client_from_shop_id(self.shop_id)
+
+    def __str__(self):
+        return f"{self.__class__.__name__}"
 
     def to_json(self):
         return json.loads(
