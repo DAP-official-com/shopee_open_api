@@ -13,7 +13,7 @@
 				});
 			});
 
-			this.add_button(['Remove Shopee Branch'], 'danger', function () {
+			this.add_button(['Unauthorize Shopee Shop'], 'danger', function () {
 				frappe.call({
 					method: 'shopee_open_api.auth.get_unauthorize_url',
 					callback: function (r) {
