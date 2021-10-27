@@ -38,6 +38,7 @@ class Model(ShopeeResponseBaseClass):
         shopee_product.category = self.product.category_id
         shopee_product.weight = self.product.weight
         shopee_product.item_name = self.make_product_name()
+        shopee_product.image = self.product.get_main_image()
 
         shopee_product.save()
 

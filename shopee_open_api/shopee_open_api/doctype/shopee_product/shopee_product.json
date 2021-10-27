@@ -71,7 +71,8 @@
    "fieldname": "image",
    "fieldtype": "Attach Image",
    "hidden": 1,
-   "label": "Image"
+   "label": "Image",
+   "read_only": 1
   },
   {
    "fetch_from": "item.weight_uom",
@@ -264,7 +265,7 @@
  "image_field": "image",
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2021-10-25 13:19:21.778481",
+ "modified": "2021-10-27 16:23:01.380884",
  "modified_by": "Administrator",
  "module": "Shopee Open API",
  "name": "Shopee Product",

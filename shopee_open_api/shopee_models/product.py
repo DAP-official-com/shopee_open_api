@@ -14,11 +14,14 @@ class Product(ShopeeResponseBaseClass):
         super().__init__(*args, **kwargs)
         self.parse_attributes()
 
+    def __str__(self):
+        return f"{super().__str__()} {self.item_name}"
+
     def make_primary_key(self):
         return f"{self.product_id}-{self.model_id if self.has_model else 0}"
 
     def parse_attributes(self):
-        self.shope_ip = str(self.shop_id)
+        self.shop_id = str(self.shop_id)
         self.category_id = str(self.category_id)
         self.weight = float(self.weight)
         self.product_id = str(self.item_id)
@@ -27,6 +30,7 @@ class Product(ShopeeResponseBaseClass):
 
         response = self.__dict__
         response["is_existing_in_database"] = self.is_existing_in_database
+        response["main_image"] = self.get_main_image()
         response.pop("models", False)
 
         return response
@@ -55,6 +59,7 @@ class Product(ShopeeResponseBaseClass):
         shopee_product.category = self.category_id
         shopee_product.weight = self.weight
         shopee_product.item_name = self.item_name
+        shopee_product.image = self.get_main_image()
 
         shopee_product.save()
 
@@ -130,3 +135,6 @@ class Product(ShopeeResponseBaseClass):
                 model["variations"].append(variation_details)
 
         self.models = [Model(model, product=self) for model in self.get_models()]
+
+    def get_main_image(self):
+        return self.image["image_url_list"][0]
