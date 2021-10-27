@@ -10,10 +10,10 @@
   "order_sn",
   "order_status",
   "shopee_shop",
+  "cancel_reason",
   "column_break_4",
   "total_amount",
   "currency",
-  "cancel_reason",
   "buyer_cancel_reason",
   "purchased_items_section",
   "shopee_order_items",
@@ -329,7 +329,7 @@
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2021-10-27 21:29:26.876751",
+ "modified": "2021-10-27 21:45:02.331398",
  "modified_by": "Administrator",
  "module": "Shopee Open API",
  "name": "Shopee Order",
@@ -348,7 +348,7 @@
    "write": 1
   }
  ],
- "sort_field": "modified",
+ "sort_field": "create_time",
  "sort_order": "DESC",
  "track_changes": 1
 }
