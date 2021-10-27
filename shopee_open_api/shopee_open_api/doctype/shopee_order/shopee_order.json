@@ -6,19 +6,27 @@
  "editable_grid": 1,
  "engine": "InnoDB",
  "field_order": [
-  "shopee_shop",
+  "order_summary_section",
   "order_sn",
-  "region",
-  "currency",
-  "cod",
-  "total_amount",
   "order_status",
-  "checkout_shipping_carrier",
-  "buyer_cancel_reason",
+  "shopee_shop",
+  "column_break_4",
+  "total_amount",
+  "currency",
   "cancel_reason",
+  "buyer_cancel_reason",
+  "purchased_items_section",
+  "shopee_order_items",
+  "message_to_seller",
+  "recipient_section",
+  "recipient_name",
+  "recipient_full_address",
+  "recipient_phone",
+  "section_break_5",
+  "region",
+  "checkout_shipping_carrier",
   "credit_card_number",
   "days_to_ship",
-  "message_to_seller",
   "note",
   "pay_time",
   "payment_method",
@@ -28,7 +36,22 @@
   "split_up",
   "create_time",
   "update_time",
-  "shopee_order_items"
+  "shipment_details_section",
+  "estimated_shipping_fee",
+  "actual_shipping_fee",
+  "shipping_fee_confirmed",
+  "reverse_shipping_fee",
+  "cod",
+  "buyer_cpf_id",
+  "recipient_city",
+  "recipient_district",
+  "recipient_region",
+  "recipient_state",
+  "recipient_town",
+  "recipient_zipcode",
+  "buyer_section",
+  "buyer_user_id",
+  "buyer_username"
  ],
  "fields": [
   {
@@ -78,7 +101,8 @@
   {
    "fieldname": "buyer_cancel_reason",
    "fieldtype": "Data",
-   "label": "Buyer Cancel Reason"
+   "label": "Buyer Cancel Reason",
+   "read_only": 1
   },
   {
    "fieldname": "credit_card_number",
@@ -162,12 +186,150 @@
   {
    "fieldname": "cancel_reason",
    "fieldtype": "Data",
-   "label": "Cancel Reason"
+   "label": "Cancel Reason",
+   "read_only": 1
+  },
+  {
+   "fieldname": "shipment_details_section",
+   "fieldtype": "Section Break",
+   "label": "Shipment Details"
+  },
+  {
+   "fieldname": "estimated_shipping_fee",
+   "fieldtype": "Float",
+   "label": "Estimated Shipping Fee",
+   "read_only": 1
+  },
+  {
+   "fieldname": "actual_shipping_fee",
+   "fieldtype": "Float",
+   "label": "Actual Shipping Fee",
+   "read_only": 1
+  },
+  {
+   "default": "0",
+   "fieldname": "shipping_fee_confirmed",
+   "fieldtype": "Check",
+   "label": "Shipping Fee Confirmed",
+   "read_only": 1
+  },
+  {
+   "fieldname": "reverse_shipping_fee",
+   "fieldtype": "Float",
+   "label": "Reverse Shipping Fee",
+   "read_only": 1
+  },
+  {
+   "fieldname": "buyer_section",
+   "fieldtype": "Section Break",
+   "label": "Buyer",
+   "read_only": 1
+  },
+  {
+   "fieldname": "buyer_user_id",
+   "fieldtype": "Data",
+   "label": "Buyer User Id",
+   "read_only": 1
+  },
+  {
+   "fieldname": "buyer_username",
+   "fieldtype": "Data",
+   "label": "Buyer Username",
+   "read_only": 1
+  },
+  {
+   "fieldname": "buyer_cpf_id",
+   "fieldtype": "Data",
+   "label": "Buyer CPF Id",
+   "read_only": 1
+  },
+  {
+   "fieldname": "recipient_section",
+   "fieldtype": "Section Break",
+   "label": "Recipient"
+  },
+  {
+   "fieldname": "recipient_city",
+   "fieldtype": "Data",
+   "hidden": 1,
+   "label": "Recipient City",
+   "read_only": 1
+  },
+  {
+   "fieldname": "recipient_district",
+   "fieldtype": "Data",
+   "hidden": 1,
+   "label": "Recipient District",
+   "read_only": 1
+  },
+  {
+   "fieldname": "recipient_name",
+   "fieldtype": "Data",
+   "label": "Recipient Name",
+   "read_only": 1
+  },
+  {
+   "fieldname": "recipient_phone",
+   "fieldtype": "Data",
+   "label": "Recipient Phone",
+   "read_only": 1
+  },
+  {
+   "fieldname": "recipient_region",
+   "fieldtype": "Data",
+   "hidden": 1,
+   "label": "Recipient Region",
+   "read_only": 1
+  },
+  {
+   "fieldname": "recipient_state",
+   "fieldtype": "Data",
+   "hidden": 1,
+   "label": "Recipient State",
+   "read_only": 1
+  },
+  {
+   "fieldname": "recipient_town",
+   "fieldtype": "Data",
+   "hidden": 1,
+   "label": "Recipient Town",
+   "read_only": 1
+  },
+  {
+   "fieldname": "recipient_zipcode",
+   "fieldtype": "Data",
+   "hidden": 1,
+   "label": "Recipient Zipcode",
+   "read_only": 1
+  },
+  {
+   "fieldname": "recipient_full_address",
+   "fieldtype": "Text",
+   "label": "Recipient Full Address",
+   "read_only": 1
+  },
+  {
+   "fieldname": "purchased_items_section",
+   "fieldtype": "Section Break",
+   "label": "Purchased Items"
+  },
+  {
+   "fieldname": "section_break_5",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "order_summary_section",
+   "fieldtype": "Section Break",
+   "label": "Order Summary"
+  },
+  {
+   "fieldname": "column_break_4",
+   "fieldtype": "Column Break"
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2021-10-27 15:32:24.556812",
+ "modified": "2021-10-27 21:29:26.876751",
  "modified_by": "Administrator",
  "module": "Shopee Open API",
  "name": "Shopee Order",

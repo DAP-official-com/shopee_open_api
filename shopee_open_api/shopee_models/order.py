@@ -61,6 +61,22 @@ class Order(ShopeeResponseBaseClass):
         order.update_time = self.get_update_time()
         order.ship_by_date = self.get_ship_by_date()
         order.create_time = self.get_create_time()
+        order.estimated_shipping_fee = self.get_estimated_shipping_fee()
+        order.actual_shipping_fee = self.get_actual_shipping_fee()
+        order.shipping_fee_confirmed = self.get_shipping_fee_confirmed()
+        order.reverse_shipping_fee = self.get_reverse_shipping_fee()
+        order.buyer_user_id = self.get_buyer_user_id()
+        order.buyer_username = self.get_buyer_username()
+        order.buyer_cpf_id = self.get_buyer_cpf_id()
+        order.recipient_name = self.get_recipient_name()
+        order.recipient_full_address = self.get_recipient_full_address()
+        order.recipient_city = self.get_recipient_city()
+        order.recipient_district = self.get_recipient_district()
+        order.recipient_phone = self.get_recipient_phone()
+        order.recipient_region = self.get_recipient_region()
+        order.recipient_state = self.get_recipient_state()
+        order.recipient_town = self.get_recipient_town()
+        order.recipient_zipcode = self.get_recipient_zipcode()
 
         order.save(ignore_permissions=ignore_permissions)
 
@@ -145,3 +161,51 @@ class Order(ShopeeResponseBaseClass):
 
     def get_create_time(self):
         return datetime_string_from_unix(self.create_time)
+
+    def get_estimated_shipping_fee(self):
+        return float(self.estimated_shipping_fee)
+
+    def get_actual_shipping_fee(self):
+        return float(self.actual_shipping_fee)
+
+    def get_shipping_fee_confirmed(self):
+        return self.actual_shipping_fee_confirmed
+
+    def get_reverse_shipping_fee(self):
+        return float(self.reverse_shipping_fee)
+
+    def get_buyer_user_id(self):
+        return self.buyer_user_id
+
+    def get_buyer_username(self):
+        return self.buyer_username
+
+    def get_buyer_cpf_id(self):
+        return self.buyer_cpf_id
+
+    def get_recipient_name(self):
+        return self.recipient_address.get("name")
+
+    def get_recipient_full_address(self):
+        return self.recipient_address.get("full_address")
+
+    def get_recipient_city(self):
+        return self.recipient_address.get("city")
+
+    def get_recipient_district(self):
+        return self.recipient_address.get("district")
+
+    def get_recipient_phone(self):
+        return self.recipient_address.get("phone")
+
+    def get_recipient_region(self):
+        return self.recipient_address.get("region")
+
+    def get_recipient_state(self):
+        return self.recipient_address.get("state")
+
+    def get_recipient_town(self):
+        return self.recipient_address.get("town")
+
+    def get_recipient_zipcode(self):
+        return self.recipient_address.get("zipcode")
