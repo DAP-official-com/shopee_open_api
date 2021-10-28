@@ -1,4 +1,5 @@
 from .base import ShopeeResponseBaseClass
+from shopee_open_api.exceptions import BadRequestError
 from .product import Product
 import frappe
 
@@ -13,6 +14,9 @@ class OrderItem(ShopeeResponseBaseClass):
         super().__init__(*args, **kwargs)
 
     def update_or_insert(self, ignore_permissions=False):
+
+        self.insert_product_if_not_existing(ignore_permissions=ignore_permissions)
+
         if self.is_existing_in_database:
             order_item = frappe.get_doc(self.DOCTYPE, self.get_primary_key())
         else:
@@ -31,6 +35,21 @@ class OrderItem(ShopeeResponseBaseClass):
         order_item.model_discounted_price = self.get_model_discounted_price()
         order_item.save(ignore_permissions=ignore_permissions)
 
+    def insert_product_if_not_existing(self, ignore_permissions=False):
+
+        if not self.is_product_existing_in_database:
+            product_instance = self.get_product_instance()
+            product_instance.update_or_insert(ignore_permissions=ignore_permissions)
+
+    def get_product_instance(self):
+
+        r = self.client.product.get_item_base_info(item_id_list=self.get_product_id())
+
+        if r.get("error"):
+            raise BadRequestError(r.get("message"))
+
+        return Product(r["response"]["item_list"][0], shop_id=self.get_shop_id())
+
     @property
     def is_existing_in_database(self):
         return frappe.db.exists(
@@ -44,6 +63,9 @@ class OrderItem(ShopeeResponseBaseClass):
     @property
     def is_product_existing_in_database(self):
         return frappe.db.exists(self.PRODUCT_DOCTYPE, self.make_product_primary_key())
+
+    def get_shop_id(self):
+        return self.shop_id
 
     def get_order_sn(self):
         return self.order_sn

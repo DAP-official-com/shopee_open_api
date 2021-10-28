@@ -20,7 +20,7 @@ class Model(ShopeeResponseBaseClass):
     def make_product_name(self):
         return f"{self.product.item_name} ({self.make_variant_string()})"
 
-    def update_or_insert(self):
+    def update_or_insert(self, ignore_permissions=False):
         if self.is_existing_in_database:
             shopee_product = frappe.get_doc(
                 self.DOCTYPE,
@@ -40,7 +40,7 @@ class Model(ShopeeResponseBaseClass):
         shopee_product.item_name = self.make_product_name()
         shopee_product.image = self.product.get_main_image()
 
-        shopee_product.save()
+        shopee_product.save(ignore_permissions=ignore_permissions)
 
     @property
     def is_existing_in_database(self):

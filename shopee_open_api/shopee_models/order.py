@@ -11,7 +11,8 @@ class Order(ShopeeResponseBaseClass):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.items = [
-            OrderItem(item, order_sn=self.get_order_sn()) for item in self.item_list
+            OrderItem(item, order_sn=self.get_order_sn(), shop_id=self.get_shop_id())
+            for item in self.item_list
         ]
 
     def __str__(self):

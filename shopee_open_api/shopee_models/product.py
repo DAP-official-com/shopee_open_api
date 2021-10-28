@@ -25,11 +25,11 @@ class Product(ShopeeResponseBaseClass):
 
         return response
 
-    def update_or_insert(self):
+    def update_or_insert(self, ignore_permissions=False):
 
         if self.has_model and self.get_models():
             for model in self.get_models():
-                model.update_or_insert()
+                model.update_or_insert(ignore_permissions=ignore_permissions)
             return
 
         if self.is_existing_in_database:
@@ -51,7 +51,7 @@ class Product(ShopeeResponseBaseClass):
         shopee_product.item_name = self.item_name
         shopee_product.image = self.get_main_image()
 
-        shopee_product.save()
+        shopee_product.save(ignore_permissions=ignore_permissions)
 
     @property
     def is_existing_in_database(self) -> bool:
