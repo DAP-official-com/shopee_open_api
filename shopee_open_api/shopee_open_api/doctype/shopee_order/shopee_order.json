@@ -173,7 +173,8 @@
    "fieldname": "shopee_order_items",
    "fieldtype": "Table",
    "label": "Shopee Order Items",
-   "options": "Shopee Order Item"
+   "options": "Shopee Order Item",
+   "read_only": 1
   },
   {
    "fieldname": "shopee_shop",
@@ -328,7 +329,7 @@
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2021-10-28 14:47:47.702410",
+ "modified": "2021-10-28 15:42:12.311409",
  "modified_by": "Administrator",
  "module": "Shopee Open API",
  "name": "Shopee Order",
