@@ -45,7 +45,6 @@ def update_profile(shopee_shop, _):
         return
 
     if version_before_save:
-        print(getattr(version_before_save, "shop_name"))
 
         old_logo_url = version_before_save.shop_logo
         new_logo_url = shopee_shop.shop_logo
