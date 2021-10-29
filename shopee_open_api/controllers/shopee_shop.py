@@ -1,5 +1,6 @@
 from shopee_open_api.utils.client import get_client_from_branch, get_client_from_shop
 import frappe, os
+from shopee_open_api.python_shopee.pyshopee2.exceptions import OnlyGetMethodAllowedError
 from frappe.utils import get_site_base_path, get_site_name
 
 PARTNER_ID = frappe.db.get_single_value("Shopee API Settings", "partner_id")
@@ -11,6 +12,8 @@ AUTHORIZE_REDIRECT_URL = (
 
 
 def update_profile(shopee_shop, _):
+
+    fields_to_compare = ["shop_name", "description", "shop_logo"]
 
     """
     Call shopee shop.update_profile when the shop is saved to the database.
@@ -28,7 +31,22 @@ def update_profile(shopee_shop, _):
 
     version_before_save = shopee_shop.get_doc_before_save()
 
+    if not version_before_save:
+        return
+
+    no_changes = True
+
+    for field in fields_to_compare:
+        if getattr(shopee_shop, field) != getattr(version_before_save, field):
+            no_changes = False
+            break
+
+    if no_changes:
+        return
+
     if version_before_save:
+        print(getattr(version_before_save, "shop_name"))
+
         old_logo_url = version_before_save.shop_logo
         new_logo_url = shopee_shop.shop_logo
 
@@ -56,10 +74,10 @@ def update_profile(shopee_shop, _):
                     shopee_shop.shop_logo = shopee_image_url
                     # updated_fields["shop_logo"] = shopee_image_url
 
-    r = client.shop.update_profile(**updated_fields)
+        r = client.shop.update_profile(**updated_fields)
 
-    if r.get("error"):
-        frappe.throw(f'Shopee values update failed: {r.get("message")}')
+        if r.get("error"):
+            frappe.throw(f'Shopee values update failed: {r.get("message")}')
 
 
 def retrieve_all_products(branch, event_type):
