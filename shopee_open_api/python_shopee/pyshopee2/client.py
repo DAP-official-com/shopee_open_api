@@ -26,6 +26,7 @@ from .accounthealth import AccountHealth
 from .chat import Chat
 from .public import Public
 from .push import Push
+from .exceptions import OnlyGetMethodAllowedError
 
 # installed sub-module
 registered_module = {
@@ -79,7 +80,15 @@ class Client(object, metaclass=ClientMeta):
 
     # PER_MINUTE_API_RATE = 1000
 
-    def __init__(self, shop_id, partner_id, partner_key, redirect_url, test_env=False):
+    def __init__(
+        self,
+        shop_id,
+        partner_id,
+        partner_key,
+        redirect_url,
+        test_env=False,
+        only_get_allowed=True,
+    ):
         """initialize basic params and cache class"""
         if test_env:
             self.BASE_URL = self.BASE_TEST_URL
@@ -94,6 +103,7 @@ class Client(object, metaclass=ClientMeta):
         self.timeout = None
         self.expiration_unix = None
         self.test_env = test_env
+        self.only_get_allowed = only_get_allowed
 
         self.CACHED_MODULE = {}
 
@@ -223,6 +233,12 @@ class Client(object, metaclass=ClientMeta):
         return CACHED_MODULE
 
     def execute(self, uri, method, body=None, files=None):
+
+        if self.only_get_allowed and method.lower() != "get":
+            raise OnlyGetMethodAllowedError(
+                "Only get method is allowed by default to prevent changing client's data. Call client's allow_all_method method to change this behavior"
+            )
+
         """defalut timeout value will be 10 seconds"""
         # parameter = self._make_default_parameter()
         if body.get("timeout"):
@@ -351,3 +367,9 @@ class Client(object, metaclass=ClientMeta):
         self.expiration_unix = int(time.time()) + resp["expire_in"]
 
         return self.access_token, self.timeout, self.refresh_token
+
+    def allow_all_method(self):
+        self.only_get_allowed = False
+
+    def allow_get_only(self):
+        self.only_get_allowed = True

@@ -1,0 +1,2 @@
+class OnlyGetMethodAllowedError(Exception):
+    pass
