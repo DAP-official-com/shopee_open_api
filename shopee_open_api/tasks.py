@@ -17,17 +17,17 @@ def pull_products(
     shop_id: str,
     offset: int = 0,
     item_status: str = "NORMAL",
-    update_item_from=None,
+    update_time_from=None,
 ):
     shop = frappe.get_doc("Shopee Shop", shop_id)
     client = get_client_from_shop(shop)
 
-    if update_item_from:
+    if update_time_from:
         response = client.product.get_item_list(
             offset=offset,
             item_status=item_status,
             page_size=100,
-            update_item_from=update_item_from,
+            update_time_from=update_time_from,
         )
     else:
         response = client.product.get_item_list(
@@ -38,6 +38,10 @@ def pull_products(
 
     if response.get("error"):
         raise frappe.RetryBackgroundJobError(response.get("message"))
+
+    if response.get("response", {}).get("total_count", 0) == 0:
+        frappe.publish_realtime("msgprint", "All products downloaded")
+        return
 
     product_list = response["response"]["item"]
 
@@ -64,7 +68,7 @@ def pull_products(
             shop_id=shop_id,
             offset=response["response"].get("next_offset"),
             item_status=item_status,
-            update_item_from=update_item_from,
+            update_time_from=update_time_from,
         )
     else:
         frappe.publish_realtime("msgprint", "All products downloaded")
