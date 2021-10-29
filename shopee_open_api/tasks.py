@@ -7,6 +7,7 @@ from shopee_open_api.shopee_models.product import Product
 
 def cron():
     return True
+    frappe.publish_realtime("msgprint", "All products downloaded")
 
 
 def start_pulling_products(**kwargs):
@@ -26,17 +27,18 @@ def pull_products(
         response = client.product.get_item_list(
             offset=offset,
             item_status=item_status,
-            page_size=100,
+            page_size=50,
             update_time_from=update_time_from,
         )
     else:
         response = client.product.get_item_list(
             offset=offset,
             item_status=item_status,
-            page_size=100,
+            page_size=50,
         )
 
     if response.get("error"):
+        frappe.publish_realtime("msgprint", response.get("message"))
         raise frappe.RetryBackgroundJobError(response.get("message"))
 
     if response.get("response", {}).get("total_count", 0) == 0:
@@ -45,9 +47,15 @@ def pull_products(
 
     product_list = response["response"]["item"]
 
-    product_details = client.product.get_item_base_info(
+    product_details_response = client.product.get_item_base_info(
         item_id_list=",".join([str(product["item_id"]) for product in product_list])
-    )["response"]["item_list"]
+    )
+
+    product_details = product_details_response["response"]["item_list"]
+
+    if product_details_response.get("error"):
+        frappe.publish_realtime("msgprint", product_details_response.get("message"))
+        raise frappe.RetryBackgroundJobError(response.get("message"))
 
     products = [
         Product(product_detail, shop_id=shop.name) for product_detail in product_details
