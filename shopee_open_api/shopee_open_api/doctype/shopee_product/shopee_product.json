@@ -236,6 +236,7 @@
   {
    "fieldname": "shopee_shop",
    "fieldtype": "Link",
+   "in_list_view": 1,
    "label": "Shopee Shop",
    "options": "Shopee Shop",
    "read_only": 1,
@@ -265,7 +266,7 @@
  "image_field": "image",
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2021-10-27 16:23:01.380884",
+ "modified": "2021-10-30 21:38:56.608530",
  "modified_by": "Administrator",
  "module": "Shopee Open API",
  "name": "Shopee Product",
