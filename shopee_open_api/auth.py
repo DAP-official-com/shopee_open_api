@@ -2,7 +2,7 @@ import frappe
 import time
 from datetime import datetime
 from shopee_open_api.utils.client import get_shopless_client
-from shopee_open_api.tasks import start_pulling_products
+from shopee_open_api.tasks.tasks import start_pulling_products
 
 PARTNER_ID = frappe.db.get_single_value("Shopee API Settings", "partner_id")
 PARTNER_KEY = frappe.db.get_single_value("Shopee API Settings", "partner_key")
