@@ -106,7 +106,7 @@ def update_products():
         task_arguments["shop_id"] = shop["shop_id"]
         task_arguments["offset"] = 0
 
-        if shop.last_product_update == 0:
+        if shop.last_product_update != 0:
             task_arguments["update_time_from"] = shop["last_product_update"] - 60
 
         for item_status in ITEM_STATUSES:

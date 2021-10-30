@@ -119,7 +119,7 @@ doc_events = {
 scheduler_events = {
     "cron": {
         "* * * * *": [
-            "shopee_open_api.tasks.cron",
+            "shopee_open_api.scheduled_tasks.tasks.update_products",
         ]
     },
     # "all": [
