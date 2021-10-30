@@ -4,6 +4,8 @@ from shopee_open_api.utils.client import get_client_from_shop
 from shopee_open_api.shopee_models.product import Product
 from .tasks import start_pulling_products
 
+ITEM_STATUSES = ["NORMAL", "BANNED", "DELETED", "UNLIST"]
+
 
 def pull_products(
     shop_id: str,
@@ -100,24 +102,22 @@ def update_products():
 
     for shop in shops:
 
-        if shop.last_product_update == 0:
-            start_pulling_products(
-                shop_id=shop["shop_id"],
-                offset=0,
-                item_status="NORMAL",
-            )
-        else:
-            start_pulling_products(
-                shop_id=shop["shop_id"],
-                offset=0,
-                item_status="NORMAL",
-                update_time_from=shop["last_product_update"] - 60,
-            )
+        task_arguments = {}
+        task_arguments["shop_id"] = shop["shop_id"]
+        task_arguments["offset"] = 0
 
-    frappe.db.set_value(
-        "Shopee Shop",
-        shop["shop_id"],
-        {
-            "last_product_update": int(time.time()),
-        },
-    )
+        if shop.last_product_update == 0:
+            task_arguments["update_time_from"] = shop["last_product_update"] - 60
+
+        for item_status in ITEM_STATUSES:
+            task_arguments["item_status"] = item_status
+
+            start_pulling_products(**task_arguments)
+
+        frappe.db.set_value(
+            "Shopee Shop",
+            shop["shop_id"],
+            {
+                "last_product_update": int(time.time()),
+            },
+        )

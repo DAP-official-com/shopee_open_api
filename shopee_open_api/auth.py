@@ -3,6 +3,7 @@ import time
 from datetime import datetime
 from shopee_open_api.utils.client import get_shopless_client
 from shopee_open_api.scheduled_tasks.tasks import start_pulling_products
+from shopee_open_api.shopee_models.product import ITEM_STATUSES
 
 PARTNER_ID = frappe.db.get_single_value("Shopee API Settings", "partner_id")
 PARTNER_KEY = frappe.db.get_single_value("Shopee API Settings", "partner_key")
@@ -91,7 +92,8 @@ def authorize_callback():
 
     frappe.db.commit()
 
-    start_pulling_products(shop_id=shop_id)
+    for item_status in ITEM_STATUSES:
+        start_pulling_products(shop_id=shop_id, item_status=item_status)
 
     url = frappe.utils.get_url("app/branch")
 

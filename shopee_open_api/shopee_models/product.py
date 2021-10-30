@@ -4,6 +4,8 @@ from .model import Model
 import copy
 import frappe
 
+ITEM_STATUSES = ["NORMAL", "BANNED", "DELETED", "UNLIST"]
+
 
 class Product(ShopeeResponseBaseClass):
     """This class represents a shopee product with additional methods"""
