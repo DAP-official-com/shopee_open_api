@@ -117,11 +117,11 @@ doc_events = {
 # ---------------
 
 scheduler_events = {
-    # "cron": {
-    #     "* * * * *": [
-    #         "shopee_open_api.tasks.cron",
-    #     ]
-    # }
+    "cron": {
+        "* * * * *": [
+            "shopee_open_api.tasks.cron",
+        ]
+    },
     # "all": [
     # 	"shopee_open_api.tasks.all"
     # ],

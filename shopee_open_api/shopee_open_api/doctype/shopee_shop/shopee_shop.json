@@ -14,7 +14,8 @@
   "status",
   "token",
   "shop_logo",
-  "authorized"
+  "authorized",
+  "last_product_update"
  ],
  "fields": [
   {
@@ -71,12 +72,17 @@
    "label": "Authorized",
    "read_only": 1,
    "reqd": 1
+  },
+  {
+   "fieldname": "last_product_update",
+   "fieldtype": "Int",
+   "label": "Last Product Update"
   }
  ],
  "image_field": "shop_logo",
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2021-10-27 12:05:30.345282",
+ "modified": "2021-10-29 18:12:22.715193",
  "modified_by": "Administrator",
  "module": "Shopee Open API",
  "name": "Shopee Shop",

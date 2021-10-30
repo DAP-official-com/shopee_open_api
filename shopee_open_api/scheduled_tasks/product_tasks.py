@@ -1,4 +1,5 @@
 import frappe
+import time
 from shopee_open_api.utils.client import get_client_from_shop
 from shopee_open_api.shopee_models.product import Product
 from .tasks import start_pulling_products
@@ -72,3 +73,36 @@ def pull_products(
         frappe.publish_realtime("msgprint", "All products downloaded")
 
     return True
+
+
+def update_products():
+
+    shops = frappe.db.get_all(
+        "Shopee Shop",
+        filters={"authorized": True},
+        fields=["shop_id", "last_product_update"],
+    )
+
+    for shop in shops:
+
+        if shop.last_product_update == 0:
+            start_pulling_products(
+                shop_id=shop["shop_id"],
+                offset=0,
+                item_status="NORMAL",
+            )
+        else:
+            start_pulling_products(
+                shop_id=shop["shop_id"],
+                offset=0,
+                item_status="NORMAL",
+                update_time_from=shop["last_product_update"] - 60,
+            )
+
+    frappe.db.set_value(
+        "Shopee Shop",
+        shop["shop_id"],
+        {
+            "last_product_update": int(time.time()),
+        },
+    )
