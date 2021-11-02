@@ -6,6 +6,11 @@ class Model(ShopeeResponseBaseClass):
 
     DOCTYPE = "Shopee Product"
 
+    def to_json(self):
+        data = self.__dict__.copy()
+        data.pop("product", False)
+        return data
+
     def make_primary_key(self):
         return f"{self.product.get_product_id()}-{self.get_model_id()}"
 
@@ -39,6 +44,7 @@ class Model(ShopeeResponseBaseClass):
         shopee_product.weight = self.product.get_weight()
         shopee_product.item_name = self.make_product_name()
         shopee_product.image = self.product.get_main_image()
+        shopee_product.brand = self.product.get_brand_name()
 
         shopee_product.save(ignore_permissions=ignore_permissions)
 

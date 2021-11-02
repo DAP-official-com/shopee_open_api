@@ -1,6 +1,7 @@
 from .base import ShopeeResponseBaseClass
 from shopee_open_api.utils.client import get_client_from_shop_id
 from .model import Model
+from .stock import Stock
 import copy
 import frappe
 
@@ -52,6 +53,7 @@ class Product(ShopeeResponseBaseClass):
         shopee_product.weight = self.get_weight()
         shopee_product.item_name = self.item_name
         shopee_product.image = self.get_main_image()
+        shopee_product.brand = self.get_brand_name()
 
         shopee_product.save(ignore_permissions=ignore_permissions)
 
@@ -147,3 +149,9 @@ class Product(ShopeeResponseBaseClass):
         if self.has_model:
             return str(self.model_id)
         return str(0)
+
+    def get_brand_name(self):
+        return self.brand["original_brand_name"]
+
+    def get_inventory(self):
+        return [Stock(inventory, product=self) for inventory in self.stock_info]
