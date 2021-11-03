@@ -2,6 +2,7 @@ from .base import ShopeeResponseBaseClass
 from shopee_open_api.utils.client import get_client_from_shop_id
 from .model import Model
 from .stock import Stock
+from .product_attribute import ProductAttribute
 import copy
 import frappe
 
@@ -55,6 +56,9 @@ class Product(ShopeeResponseBaseClass):
         shopee_product.image = self.get_main_image()
         shopee_product.brand = self.get_brand_name()
 
+        self.reset_product_attributes(product_object=shopee_product)
+        self.add_product_attributes(product_object=shopee_product)
+
         shopee_product.save(ignore_permissions=ignore_permissions)
 
     @property
@@ -89,6 +93,20 @@ class Product(ShopeeResponseBaseClass):
     def client(self):
         """Get Shopee client"""
         return get_client_from_shop_id(self.get_shop_id())
+
+    def reset_product_attributes(self, product_object):
+        product_object.attributes = []
+
+    def add_product_attributes(self, product_object):
+        for attribute in self.get_attributes():
+            new_attribute = product_object.append("attributes", {})
+            new_attribute.attribute_id = attribute.get_attribute_id()
+
+            original_attribute_name = attribute.get_original_attribute_name()
+            new_attribute.original_attribute_name = original_attribute_name
+
+            new_attribute.is_mandatory = attribute.get_is_mandatory()
+            new_attribute.values = attribute.get_values_as_str()
 
     def retrieve_model_details(self):
         """Fetch variant details from Shopee"""
@@ -155,3 +173,15 @@ class Product(ShopeeResponseBaseClass):
 
     def get_inventory(self):
         return [Stock(inventory, product=self) for inventory in self.stock_info]
+
+    def get_attributes(self):
+
+        if not hasattr(self, "attribute_list"):
+            return []
+
+        attributes = [
+            ProductAttribute(attribute, product_id=self.get_product_id())
+            for attribute in self.attribute_list
+        ]
+
+        return attributes

@@ -46,6 +46,10 @@ class Model(ShopeeResponseBaseClass):
         shopee_product.image = self.product.get_main_image()
         shopee_product.brand = self.product.get_brand_name()
 
+        shopee_product.attributes = []
+        self.product.reset_product_attributes(product_object=shopee_product)
+        self.product.add_product_attributes(product_object=shopee_product)
+
         shopee_product.save(ignore_permissions=ignore_permissions)
 
     @property
@@ -63,3 +67,11 @@ class Model(ShopeeResponseBaseClass):
 
     def get_model_id(self) -> str:
         return str(self.model_id)
+
+    def get_attributes(self):
+        attributes = self.product.get_attributes()
+
+        for attribute in attributes:
+            attribute.set_model_id(self.get_model_id())
+
+        return attributes

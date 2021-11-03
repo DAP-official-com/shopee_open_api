@@ -20,6 +20,8 @@
   "item_name",
   "column_break_10",
   "image",
+  "product_attributes_section",
+  "attributes",
   "section_break_10",
   "shopee_item_name",
   "package_width",
@@ -84,7 +86,8 @@
    "fetch_from": "item.brand",
    "fieldname": "brand",
    "fieldtype": "Data",
-   "label": " Brand"
+   "label": " Brand",
+   "read_only": 1
   },
   {
    "fieldname": "item_status",
@@ -117,7 +120,8 @@
   {
    "fieldname": "original_price",
    "fieldtype": "Data",
-   "label": "Original Price "
+   "label": "Original Price ",
+   "read_only": 1
   },
   {
    "fieldname": "description",
@@ -261,12 +265,24 @@
    "label": "Shopee Model Id",
    "read_only": 1,
    "reqd": 1
+  },
+  {
+   "fieldname": "attributes",
+   "fieldtype": "Table",
+   "label": "Attributes",
+   "options": "Shopee Product Attribute"
+  },
+  {
+   "fieldname": "product_attributes_section",
+   "fieldtype": "Section Break",
+   "label": "Product Attributes",
+   "read_only": 1
   }
  ],
  "image_field": "image",
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2021-10-30 21:38:56.608530",
+ "modified": "2021-11-03 22:29:28.315521",
  "modified_by": "Administrator",
  "module": "Shopee Open API",
  "name": "Shopee Product",

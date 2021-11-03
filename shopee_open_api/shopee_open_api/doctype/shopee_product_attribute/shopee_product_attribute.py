@@ -4,5 +4,5 @@
 # import frappe
 from frappe.model.document import Document
 
-class ShoppeProductAttributes(Document):
+class ShopeeProductAttribute(Document):
 	pass

@@ -1,0 +1,61 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2021-10-16 15:39:27.019046",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "attribute_id",
+  "original_attribute_name",
+  "is_mandatory",
+  "values"
+ ],
+ "fields": [
+  {
+   "fieldname": "attribute_id",
+   "fieldtype": "Int",
+   "in_list_view": 1,
+   "label": "Attribute Id",
+   "read_only": 1,
+   "reqd": 1
+  },
+  {
+   "default": "0",
+   "fieldname": "is_mandatory",
+   "fieldtype": "Check",
+   "in_list_view": 1,
+   "label": "Is Mandatory",
+   "read_only": 1,
+   "reqd": 1
+  },
+  {
+   "fieldname": "values",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Values",
+   "read_only": 1,
+   "reqd": 1
+  },
+  {
+   "fieldname": "original_attribute_name",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Original Attribute Name",
+   "read_only": 1,
+   "reqd": 1
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "istable": 1,
+ "links": [],
+ "modified": "2021-11-03 22:27:03.325229",
+ "modified_by": "Administrator",
+ "module": "Shopee Open API",
+ "name": "Shopee Product Attribute",
+ "owner": "Administrator",
+ "permissions": [],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "track_changes": 1
+}
