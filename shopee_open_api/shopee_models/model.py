@@ -1,4 +1,5 @@
 from .base import ShopeeResponseBaseClass
+from .stock import Stock
 import frappe
 
 
@@ -50,6 +51,8 @@ class Model(ShopeeResponseBaseClass):
         self.product.reset_product_attributes(product_object=shopee_product)
         self.product.add_product_attributes(product_object=shopee_product)
 
+        self.update_product_stock(product_object=shopee_product)
+
         shopee_product.save(ignore_permissions=ignore_permissions)
 
     @property
@@ -75,3 +78,37 @@ class Model(ShopeeResponseBaseClass):
             attribute.set_model_id(self.get_model_id())
 
         return attributes
+
+    def get_inventories(self):
+        return [Stock(inventory, product=self.product) for inventory in self.stock_info]
+
+    def update_product_stock(self, product_object):
+
+        current_stocks = product_object.get("stock_details", [])
+        shopee_stocks = self.get_inventories()
+
+        shopee_stock_types = [stock.get_stock_type() for stock in shopee_stocks]
+
+        for current_stock in current_stocks:
+            """Remove stocks in the database that no longer exists on shopee"""
+            if current_stock.stock_type not in shopee_stock_types:
+                product_object.stock_details.remove(current_stock)
+
+        for stock in shopee_stocks:
+
+            current_stocks = product_object.get(
+                "stock_details", {"stock_type": stock.get_stock_type()}
+            )
+
+            if current_stocks:
+                for current_stock in current_stocks:
+                    current_stock.current_stock = stock.get_current_stock()
+                    current_stock.normal_stock = stock.get_normal_stock()
+                    current_stock.reserved_stock = stock.get_reserved_stock()
+            else:
+                new_stock_details = product_object.append("stock_details", {})
+                new_stock_details.stock_type = stock.get_stock_type()
+                new_stock_details.stock_type_name = stock.get_stock_type_name()
+                new_stock_details.current_stock = stock.get_current_stock()
+                new_stock_details.normal_stock = stock.get_normal_stock()
+                new_stock_details.reserved_stock = stock.get_reserved_stock()

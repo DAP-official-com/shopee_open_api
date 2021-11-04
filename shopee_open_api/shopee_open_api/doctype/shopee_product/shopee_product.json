@@ -45,7 +45,9 @@
   "shopping_detail_section",
   "weight_uom",
   "logistic_info",
-  "weight"
+  "weight",
+  "stock_info_section",
+  "stock_details"
  ],
  "fields": [
   {
@@ -277,12 +279,23 @@
    "fieldtype": "Section Break",
    "label": "Product Attributes",
    "read_only": 1
+  },
+  {
+   "fieldname": "stock_info_section",
+   "fieldtype": "Section Break",
+   "label": "Stock Info"
+  },
+  {
+   "fieldname": "stock_details",
+   "fieldtype": "Table",
+   "label": "Stock Details",
+   "options": "Shopee Product Stock"
   }
  ],
  "image_field": "image",
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2021-11-03 22:29:28.315521",
+ "modified": "2021-11-04 13:06:33.544460",
  "modified_by": "Administrator",
  "module": "Shopee Open API",
  "name": "Shopee Product",
