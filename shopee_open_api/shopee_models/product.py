@@ -55,6 +55,9 @@ class Product(ShopeeResponseBaseClass):
         shopee_product.item_name = self.item_name
         shopee_product.image = self.get_main_image()
         shopee_product.brand = self.get_brand_name()
+        shopee_product.currency = self.get_currency()
+        shopee_product.original_price = self.get_original_price()
+        shopee_product.current_price = self.get_current_price()
 
         self.reset_product_attributes(product_object=shopee_product)
         self.add_product_attributes(product_object=shopee_product)
@@ -172,6 +175,15 @@ class Product(ShopeeResponseBaseClass):
 
     def get_brand_name(self):
         return self.brand["original_brand_name"]
+
+    def get_currency(self):
+        return self.price_info[0].get("currency")
+
+    def get_original_price(self):
+        return float(self.price_info[0].get("original_price"))
+
+    def get_current_price(self):
+        return float(self.price_info[0].get("current_price"))
 
     def get_inventories(self):
         return [Stock(inventory, product=self) for inventory in self.stock_info]

@@ -46,8 +46,10 @@ class Model(ShopeeResponseBaseClass):
         shopee_product.item_name = self.make_product_name()
         shopee_product.image = self.product.get_main_image()
         shopee_product.brand = self.product.get_brand_name()
+        shopee_product.currency = self.get_currency()
+        shopee_product.original_price = self.get_original_price()
+        shopee_product.current_price = self.get_current_price()
 
-        shopee_product.attributes = []
         self.product.reset_product_attributes(product_object=shopee_product)
         self.product.add_product_attributes(product_object=shopee_product)
 
@@ -81,6 +83,15 @@ class Model(ShopeeResponseBaseClass):
 
     def get_inventories(self):
         return [Stock(inventory, product=self.product) for inventory in self.stock_info]
+
+    def get_currency(self):
+        return self.price_info[0].get("currency")
+
+    def get_original_price(self):
+        return float(self.price_info[0].get("original_price"))
+
+    def get_current_price(self):
+        return float(self.price_info[0].get("current_price"))
 
     def update_product_stock(self, product_object):
 
