@@ -85,7 +85,7 @@ class Model(ShopeeResponseBaseClass):
         return [Stock(inventory, product=self.product) for inventory in self.stock_info]
 
     def get_currency(self):
-        return self.price_info[0].get("currency")
+        return self.price_info[0].get("currency", frappe.db.get_default("Currency"))
 
     def get_original_price(self):
         return float(self.price_info[0].get("original_price"))
