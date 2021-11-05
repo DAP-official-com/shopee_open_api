@@ -1,5 +1,6 @@
 from .base import ShopeeResponseBaseClass
 from .order_item import OrderItem
+from .product import Product
 import frappe
 from shopee_open_api.utils.datetime import datetime_string_from_unix
 
@@ -10,7 +11,7 @@ class Order(ShopeeResponseBaseClass):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.items = [
+        self.order_items = [
             OrderItem(item, order_sn=self.get_order_sn(), shop_id=self.get_shop_id())
             for item in self.item_list
         ]
@@ -25,8 +26,30 @@ class Order(ShopeeResponseBaseClass):
 
         self.update_or_insert(ignore_permissions=ignore_permissions)
 
-        for item in self.items:
-            item.update_or_insert(ignore_permissions=ignore_permissions)
+        for order_item in self.order_items:
+            order_item.update_or_insert(ignore_permissions=ignore_permissions)
+
+        self.update_products_stock(ignore_permissions=ignore_permissions)
+
+    def get_item_list_ids(self):
+        return [item["item_id"] for item in self.item_list]
+
+    def get_shopee_products(self) -> list[Product]:
+
+        items = self.client.product.get_item_base_info(
+            item_id_list=",".join(
+                [str(item_id) for item_id in self.get_item_list_ids()]
+            )
+        )["response"]["item_list"]
+
+        products = [Product(item, shop_id=self.get_shop_id()) for item in items]
+
+        return products
+
+    def update_products_stock(self, ignore_permissions=False):
+
+        products = self.get_shopee_products()
+        [product.update_or_insert(ignore_permissions) for product in products]
 
     def update_or_insert(self, ignore_permissions=False):
 
