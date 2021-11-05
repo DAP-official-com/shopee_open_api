@@ -8,6 +8,7 @@
  "field_order": [
   "order_summary_section",
   "order_sn",
+  "order_status_description",
   "order_status",
   "shopee_shop",
   "cancel_reason",
@@ -344,11 +345,18 @@
   {
    "fieldname": "column_break_4",
    "fieldtype": "Column Break"
+  },
+  {
+   "fetch_from": "order_status.description",
+   "fieldname": "order_status_description",
+   "fieldtype": "Data",
+   "label": "Order Status Description",
+   "read_only": 1
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2021-11-05 18:04:59.587866",
+ "modified": "2021-11-05 19:54:50.618676",
  "modified_by": "Administrator",
  "module": "Shopee Open API",
  "name": "Shopee Order",
