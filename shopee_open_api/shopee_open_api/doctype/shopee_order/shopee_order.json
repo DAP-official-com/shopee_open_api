@@ -67,23 +67,27 @@
   {
    "fieldname": "region",
    "fieldtype": "Data",
-   "label": "Region"
+   "label": "Region",
+   "read_only": 1
   },
   {
    "fieldname": "currency",
    "fieldtype": "Data",
-   "label": "Currency"
+   "label": "Currency",
+   "read_only": 1
   },
   {
    "default": "0",
    "fieldname": "cod",
    "fieldtype": "Check",
-   "label": "COD"
+   "label": "COD",
+   "read_only": 1
   },
   {
    "fieldname": "total_amount",
    "fieldtype": "Float",
-   "label": "Total Amount"
+   "label": "Total Amount",
+   "read_only": 1
   },
   {
    "fieldname": "order_status",
@@ -91,12 +95,14 @@
    "in_list_view": 1,
    "label": "Order Status",
    "options": "Shopee Order Status",
+   "read_only": 1,
    "reqd": 1
   },
   {
    "fieldname": "checkout_shipping_carrier",
    "fieldtype": "Data",
-   "label": "Checkout Shipping Carrier"
+   "label": "Checkout Shipping Carrier",
+   "read_only": 1
   },
   {
    "fieldname": "buyer_cancel_reason",
@@ -107,59 +113,70 @@
   {
    "fieldname": "credit_card_number",
    "fieldtype": "Data",
-   "label": "Credit Card Number"
+   "label": "Credit Card Number",
+   "read_only": 1
   },
   {
    "fieldname": "days_to_ship",
    "fieldtype": "Int",
-   "label": "Days to Ship"
+   "label": "Days to Ship",
+   "read_only": 1
   },
   {
    "fieldname": "message_to_seller",
    "fieldtype": "Data",
-   "label": "Message to Seller"
+   "label": "Message to Seller",
+   "read_only": 1
   },
   {
    "fieldname": "note",
    "fieldtype": "Data",
-   "label": "Note"
+   "label": "Note",
+   "read_only": 1
   },
   {
    "fieldname": "pay_time",
    "fieldtype": "Datetime",
-   "label": "Pay Time"
+   "label": "Pay Time",
+   "read_only": 1
   },
   {
    "fieldname": "payment_method",
    "fieldtype": "Data",
-   "label": "Payment Method"
+   "label": "Payment Method",
+   "read_only": 1
   },
   {
    "fieldname": "pickup_done_time",
    "fieldtype": "Datetime",
-   "label": "Pickup Done Time"
+   "label": "Pickup Done Time",
+   "read_only": 1
   },
   {
    "fieldname": "ship_by_date",
    "fieldtype": "Datetime",
-   "label": "Ship by Date"
+   "label": "Ship by Date",
+   "read_only": 1
   },
   {
    "fieldname": "shipping_carrier",
    "fieldtype": "Data",
-   "label": "Shipping Carrier"
+   "label": "Shipping Carrier",
+   "read_only": 1
   },
   {
    "default": "0",
    "fieldname": "split_up",
    "fieldtype": "Check",
-   "label": "Split Up"
+   "label": "Split Up",
+   "read_only": 1
   },
   {
    "fieldname": "create_time",
    "fieldtype": "Datetime",
    "in_list_view": 1,
    "label": "Create Time",
+   "read_only": 1,
    "reqd": 1
   },
   {
@@ -167,6 +184,7 @@
    "fieldtype": "Datetime",
    "in_list_view": 1,
    "label": "Update Time",
+   "read_only": 1,
    "reqd": 1
   },
   {
@@ -181,6 +199,7 @@
    "fieldtype": "Link",
    "label": "Shopee Shop",
    "options": "Shopee Shop",
+   "read_only": 1,
    "reqd": 1
   },
   {
@@ -329,7 +348,7 @@
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2021-10-28 15:42:12.311409",
+ "modified": "2021-11-05 18:04:59.587866",
  "modified_by": "Administrator",
  "module": "Shopee Open API",
  "name": "Shopee Order",
