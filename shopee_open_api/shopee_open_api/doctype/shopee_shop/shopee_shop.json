@@ -35,7 +35,7 @@
   },
   {
    "fieldname": "description",
-   "fieldtype": "Data",
+   "fieldtype": "Long Text",
    "label": "Description"
   },
   {
@@ -82,7 +82,7 @@
  "image_field": "shop_logo",
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2021-10-29 18:12:22.715193",
+ "modified": "2021-11-05 17:43:27.910092",
  "modified_by": "Administrator",
  "module": "Shopee Open API",
  "name": "Shopee Shop",
