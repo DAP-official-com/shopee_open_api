@@ -1,4 +1,5 @@
 from .base import ShopeeResponseBaseClass
+from .payment_escrow import PaymentEscrow
 from .order_item import OrderItem
 from .product import Product
 import frappe
@@ -11,6 +12,7 @@ class Order(ShopeeResponseBaseClass):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        self.payment_escrow = None
         self.order_items = [
             OrderItem(item, order_sn=self.get_order_sn(), shop_id=self.get_shop_id())
             for item in self.item_list
@@ -101,6 +103,64 @@ class Order(ShopeeResponseBaseClass):
         order.recipient_state = self.get_recipient_state()
         order.recipient_town = self.get_recipient_town()
         order.recipient_zipcode = self.get_recipient_zipcode()
+
+        ## details from payment escrow
+        order.buyer_total_amount = self.get_order_income().get("buyer_total_amount")
+        order.original_price = self.get_order_income().get("original_price")
+        order.seller_discount = self.get_order_income().get("seller_discount")
+        order.shopee_discount = self.get_order_income().get("shopee_discount")
+        order.voucher_from_seller = self.get_order_income().get("voucher_from_seller")
+        order.voucher_from_shopee = self.get_order_income().get("voucher_from_shopee")
+        order.coins = self.get_order_income().get("coins")
+        order.buyer_paid_shipping_fee = self.get_order_income().get(
+            "buyer_paid_shipping_fee"
+        )
+        order.buyer_transaction_fee = self.get_order_income().get(
+            "buyer_transaction_fee"
+        )
+
+        order.cross_border_tax = self.get_order_income().get("cross_border_tax")
+        order.payment_promotion = self.get_order_income().get("payment_promotion")
+        order.commission_fee = self.get_order_income().get("commission_fee")
+        order.service_fee = self.get_order_income().get("service_fee")
+        order.seller_transaction_fee = self.get_order_income().get(
+            "seller_transaction_fee"
+        )
+        order.seller_lost_compensation = self.get_order_income().get(
+            "seller_lost_compensation"
+        )
+        order.seller_coin_cash_back = self.get_order_income().get(
+            "seller_coin_cash_back"
+        )
+        order.escrow_tax = self.get_order_income().get("escrow_tax")
+        order.final_shipping_fee = self.get_order_income().get("final_shipping_fee")
+        order.escrow_actual_shipping_fee = self.get_order_income().get(
+            "actual_shipping_fee"
+        )
+        order.escrow_estimated_shipping_fee = self.get_order_income().get(
+            "estimated_shipping_fee"
+        )
+        order.shopee_shipping_rebate = self.get_order_income().get(
+            "shopee_shipping_rebate"
+        )
+        order.shipping_fee_discount_from_3pl = self.get_order_income().get(
+            "shipping_fee_discount_from_3pl"
+        )
+        order.seller_shipping_discount = self.get_order_income().get(
+            "seller_shipping_discount"
+        )
+        order.drc_adjustable_refund = self.get_order_income().get(
+            "drc_adjustable_refund"
+        )
+        order.cost_of_goods_sold = self.get_order_income().get("cost_of_goods_sold")
+        order.original_cost_of_goods_sold = self.get_order_income().get(
+            "original_cost_of_goods_sold"
+        )
+        order.original_shopee_discount = self.get_order_income().get(
+            "original_shopee_discount"
+        )
+        order.seller_return_refund = self.get_order_income().get("seller_return_refund")
+        order.escrow_amount = self.get_order_income().get("escrow_amount")
 
         order.save(ignore_permissions=ignore_permissions)
 
@@ -233,3 +293,17 @@ class Order(ShopeeResponseBaseClass):
 
     def get_recipient_zipcode(self):
         return self.recipient_address.get("zipcode")
+
+    def get_payment_escrow(self):
+
+        if self.payment_escrow is None:
+            escrow_response = self.client.payment.get_escrow_detail(
+                order_sn=self.get_order_sn()
+            )["response"]
+
+            self.payment_escrow = PaymentEscrow(escrow_response)
+
+        return self.payment_escrow
+
+    def get_order_income(self):
+        return self.get_payment_escrow().order_income

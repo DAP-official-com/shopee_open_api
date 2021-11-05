@@ -52,7 +52,38 @@
   "recipient_zipcode",
   "buyer_section",
   "buyer_user_id",
-  "buyer_username"
+  "buyer_username",
+  "fees_and_other_details_section",
+  "escrow_amount",
+  "buyer_total_amount",
+  "original_price",
+  "seller_discount",
+  "shopee_discount",
+  "voucher_from_seller",
+  "voucher_from_shopee",
+  "coins",
+  "buyer_paid_shipping_fee",
+  "buyer_transaction_fee",
+  "cross_border_tax",
+  "payment_promotion",
+  "commission_fee",
+  "service_fee",
+  "seller_transaction_fee",
+  "column_break_62",
+  "seller_lost_compensation",
+  "seller_coin_cash_back",
+  "escrow_tax",
+  "final_shipping_fee",
+  "escrow_actual_shipping_fee",
+  "escrow_estimated_shipping_fee",
+  "shopee_shipping_rebate",
+  "shipping_fee_discount_from_3pl",
+  "seller_shipping_discount",
+  "drc_adjustable_refund",
+  "cost_of_goods_sold",
+  "original_cost_of_goods_sold",
+  "original_shopee_discount",
+  "seller_return_refund"
  ],
  "fields": [
   {
@@ -352,11 +383,196 @@
    "fieldtype": "Data",
    "label": "Order Status Description",
    "read_only": 1
+  },
+  {
+   "collapsible": 1,
+   "fieldname": "fees_and_other_details_section",
+   "fieldtype": "Section Break",
+   "label": "Fees and Other Details"
+  },
+  {
+   "fieldname": "escrow_amount",
+   "fieldtype": "Float",
+   "label": "Escrow Amount",
+   "read_only": 1
+  },
+  {
+   "fieldname": "buyer_total_amount",
+   "fieldtype": "Float",
+   "label": "Buyer Total Amount",
+   "read_only": 1
+  },
+  {
+   "fieldname": "original_price",
+   "fieldtype": "Float",
+   "label": "Original Price",
+   "read_only": 1
+  },
+  {
+   "fieldname": "seller_discount",
+   "fieldtype": "Float",
+   "label": "Seller Discount",
+   "read_only": 1
+  },
+  {
+   "fieldname": "shopee_discount",
+   "fieldtype": "Float",
+   "label": "Shopee Discount",
+   "read_only": 1
+  },
+  {
+   "fieldname": "voucher_from_seller",
+   "fieldtype": "Float",
+   "label": "Voucher from Seller",
+   "read_only": 1
+  },
+  {
+   "fieldname": "voucher_from_shopee",
+   "fieldtype": "Float",
+   "label": "Voucher from Shopee",
+   "read_only": 1
+  },
+  {
+   "fieldname": "coins",
+   "fieldtype": "Float",
+   "label": "Coins",
+   "read_only": 1
+  },
+  {
+   "fieldname": "buyer_paid_shipping_fee",
+   "fieldtype": "Float",
+   "label": "Buyer Paid Shipping Fee",
+   "read_only": 1
+  },
+  {
+   "fieldname": "buyer_transaction_fee",
+   "fieldtype": "Float",
+   "label": "Buyer Transaction Fee",
+   "read_only": 1
+  },
+  {
+   "fieldname": "cross_border_tax",
+   "fieldtype": "Float",
+   "label": "Cross Border Tax",
+   "read_only": 1
+  },
+  {
+   "fieldname": "payment_promotion",
+   "fieldtype": "Float",
+   "label": "Payment Promotion",
+   "read_only": 1
+  },
+  {
+   "fieldname": "commission_fee",
+   "fieldtype": "Float",
+   "label": "Commission Fee",
+   "read_only": 1
+  },
+  {
+   "fieldname": "service_fee",
+   "fieldtype": "Float",
+   "label": "Service Fee",
+   "read_only": 1
+  },
+  {
+   "fieldname": "seller_transaction_fee",
+   "fieldtype": "Float",
+   "label": "Seller Transaction Fee",
+   "read_only": 1
+  },
+  {
+   "fieldname": "seller_lost_compensation",
+   "fieldtype": "Float",
+   "label": "Seller Lost Compensation",
+   "read_only": 1
+  },
+  {
+   "fieldname": "seller_coin_cash_back",
+   "fieldtype": "Float",
+   "label": "Seller Coin Cash Back",
+   "read_only": 1
+  },
+  {
+   "fieldname": "escrow_tax",
+   "fieldtype": "Float",
+   "label": "Escrow Tax",
+   "read_only": 1
+  },
+  {
+   "fieldname": "final_shipping_fee",
+   "fieldtype": "Float",
+   "label": "Final Shipping Fee",
+   "read_only": 1
+  },
+  {
+   "fieldname": "escrow_actual_shipping_fee",
+   "fieldtype": "Float",
+   "label": "Escrow Actual Shipping Fee",
+   "read_only": 1
+  },
+  {
+   "fieldname": "shopee_shipping_rebate",
+   "fieldtype": "Float",
+   "label": "Shopee Shipping Rebate",
+   "read_only": 1
+  },
+  {
+   "fieldname": "shipping_fee_discount_from_3pl",
+   "fieldtype": "Float",
+   "label": "Shipping Fee Discount from 3PL",
+   "read_only": 1
+  },
+  {
+   "fieldname": "seller_shipping_discount",
+   "fieldtype": "Float",
+   "label": "Seller Shipping Discount",
+   "read_only": 1
+  },
+  {
+   "fieldname": "drc_adjustable_refund",
+   "fieldtype": "Float",
+   "label": "DRC Adjustable Refund",
+   "read_only": 1
+  },
+  {
+   "fieldname": "cost_of_goods_sold",
+   "fieldtype": "Float",
+   "label": "Cost of Goods Sold",
+   "read_only": 1
+  },
+  {
+   "fieldname": "original_cost_of_goods_sold",
+   "fieldtype": "Float",
+   "label": "Original Cost of Goods Sold",
+   "read_only": 1
+  },
+  {
+   "fieldname": "original_shopee_discount",
+   "fieldtype": "Float",
+   "label": "Original Shopee Discount",
+   "read_only": 1
+  },
+  {
+   "fieldname": "seller_return_refund",
+   "fieldtype": "Float",
+   "label": "Seller Return Refund",
+   "read_only": 1
+  },
+  {
+   "fieldname": "escrow_estimated_shipping_fee",
+   "fieldtype": "Float",
+   "label": "Escrow Estimated Shipping Fee",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_62",
+   "fieldtype": "Column Break",
+   "read_only": 1
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2021-11-05 19:54:50.618676",
+ "modified": "2021-11-05 22:23:48.288458",
  "modified_by": "Administrator",
  "module": "Shopee Open API",
  "name": "Shopee Order",
