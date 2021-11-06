@@ -36,7 +36,7 @@ class Order(ShopeeResponseBaseClass):
     def get_item_list_ids(self):
         return [item["item_id"] for item in self.item_list]
 
-    def get_shopee_products(self) -> list[Product]:
+    def get_shopee_products(self):
 
         items = self.client.product.get_item_base_info(
             item_id_list=",".join(
