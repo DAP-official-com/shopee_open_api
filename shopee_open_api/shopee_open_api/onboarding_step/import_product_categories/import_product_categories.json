@@ -1,0 +1,20 @@
+{
+ "action": "Go to Page",
+ "creation": "2021-11-06 09:07:24.555814",
+ "docstatus": 0,
+ "doctype": "Onboarding Step",
+ "idx": 0,
+ "is_complete": 0,
+ "is_single": 0,
+ "is_skipped": 0,
+ "modified": "2021-11-06 09:07:24.555814",
+ "modified_by": "Administrator",
+ "name": "Import Product Categories",
+ "owner": "Administrator",
+ "path": "/app/shopee-product-category",
+ "reference_document": "Shopee Product Category",
+ "show_form_tour": 0,
+ "show_full_form": 0,
+ "title": "Import Product Categories",
+ "validate_action": 1
+}

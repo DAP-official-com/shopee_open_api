@@ -1,0 +1,38 @@
+{
+ "allow_roles": [
+  {
+   "role": "Sales Manager"
+  },
+  {
+   "role": "Sales User"
+  }
+ ],
+ "creation": "2021-10-21 15:47:35.711656",
+ "docstatus": 0,
+ "doctype": "Module Onboarding",
+ "documentation_url": "docs.test.com",
+ "idx": 0,
+ "is_complete": 0,
+ "modified": "2021-11-06 09:07:26.656602",
+ "modified_by": "Administrator",
+ "module": "Shopee Open API",
+ "name": "Shopee",
+ "owner": "Administrator",
+ "steps": [
+  {
+   "step": "Set Up Partner ID"
+  },
+  {
+   "step": "Set Up Partner Key"
+  },
+  {
+   "step": "Add First Shopee Shop"
+  },
+  {
+   "step": "Import Product Categories"
+  }
+ ],
+ "subtitle": "Getting started with Shopee Open API",
+ "success_message": "Your Shopee application is successfully set up",
+ "title": "Shopee Open API Onboarding"
+}
