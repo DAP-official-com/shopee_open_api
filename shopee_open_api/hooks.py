@@ -62,7 +62,6 @@ fixtures = [
     "Shopee Order Status",
     "Shopee Return Status",
     "Shopee Cancel Reason",
-    "Shopee Product Category",
 ]
 
 # Installation

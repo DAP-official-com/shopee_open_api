@@ -24,6 +24,7 @@
    "fieldtype": "Data",
    "in_list_view": 1,
    "label": "Category Id",
+   "read_only": 1,
    "reqd": 1,
    "unique": 1
   },
@@ -31,6 +32,7 @@
    "fieldname": "category",
    "fieldtype": "Data",
    "label": "Category",
+   "read_only": 1,
    "reqd": 1
   },
   {
@@ -74,19 +76,21 @@
    "fieldname": "parent_shopee_product_category",
    "fieldtype": "Link",
    "label": "Parent Shopee Product Category",
-   "options": "Shopee Product Category"
+   "options": "Shopee Product Category",
+   "read_only": 1
   },
   {
    "fetch_from": "parent_shopee_product_category.category_id",
    "fieldname": "parent_category_id",
    "fieldtype": "Data",
-   "label": "Parent Category Id"
+   "label": "Parent Category Id",
+   "read_only": 1
   }
  ],
  "index_web_pages_for_search": 1,
  "is_tree": 1,
  "links": [],
- "modified": "2021-10-21 15:15:17.867018",
+ "modified": "2021-11-06 08:22:28.789613",
  "modified_by": "Administrator",
  "module": "Shopee Open API",
  "name": "Shopee Product Category",
