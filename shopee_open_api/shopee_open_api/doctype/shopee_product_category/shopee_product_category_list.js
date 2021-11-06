@@ -8,7 +8,7 @@ frappe.listview_settings['Shopee Product Category'] = {
 				},
 				error: function (e) {
 					if (e.exc_type == 'NoShopAuthorizedError') {
-						window.open('/app/shopee-shop', '_blank');
+						window.open('/app/branch', '_blank');
 					}
 				},
 			});
