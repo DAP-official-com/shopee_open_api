@@ -159,3 +159,14 @@ class ShopeeProductTest(TestCase):
             ),
             len(product.models),
         )
+
+        model = frappe.get_doc("Shopee Product", product.models[0].make_primary_key())
+        model.delete()
+
+        product.update_or_insert()
+        self.assertEqual(
+            frappe.db.count(
+                "Shopee Product", {"shopee_product_id": product.get_product_id()}
+            ),
+            len(product.models),
+        )
