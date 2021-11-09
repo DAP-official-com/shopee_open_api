@@ -69,6 +69,17 @@ class ShopeeProductTest(TestCase):
         cls.shop.delete()
         cls.token.delete()
 
+    def tearDown(self):
+        product_ids = frappe.db.get_list(
+            "Shopee Product",
+            filters={
+                "shopee_shop": self.SHOP_ID,
+            },
+            pluck="name",
+        )
+        for product_id in product_ids:
+            frappe.get_doc("Shopee Product", product_id).delete()
+
     def test_single_product_is_existing_in_database(self):
         product = self.single_products[0]
         self.assertFalse(product.is_existing_in_database)
@@ -91,3 +102,60 @@ class ShopeeProductTest(TestCase):
         model = frappe.get_doc("Shopee Product", product.models[0].make_primary_key())
         model.delete()
         self.assertFalse(product.is_existing_in_database)
+
+    def test_product_to_json(self):
+        single_product = self.single_products[0]
+        self.assertIsInstance(single_product.to_json(), dict)
+
+        product_with_model = self.variant_products[0]
+        self.assertIsInstance(product_with_model.to_json(), dict)
+
+    def test_update_or_insert_single_product(self):
+
+        product = self.single_products[0]
+        self.assertEqual(
+            frappe.db.count("Shopee Product", {"name": product.make_primary_key()}),
+            0,
+        )
+
+        product.update_or_insert()
+        self.assertEqual(
+            frappe.db.count("Shopee Product", {"name": product.make_primary_key()}),
+            1,
+        )
+
+        product.update_or_insert()
+        self.assertEqual(
+            frappe.db.count("Shopee Product", {"name": product.make_primary_key()}),
+            1,
+        )
+
+    def test_update_or_insert_product_with_model(self):
+
+        product = self.variant_products[0]
+        product.model_details = model_list
+        product.models = product.model_details["model"]
+        product.instantiate_models()
+
+        self.assertEqual(
+            frappe.db.count(
+                "Shopee Product", {"shopee_product_id": product.get_product_id()}
+            ),
+            0,
+        )
+
+        product.update_or_insert()
+        self.assertEqual(
+            frappe.db.count(
+                "Shopee Product", {"shopee_product_id": product.get_product_id()}
+            ),
+            len(product.models),
+        )
+
+        product.update_or_insert()
+        self.assertEqual(
+            frappe.db.count(
+                "Shopee Product", {"shopee_product_id": product.get_product_id()}
+            ),
+            len(product.models),
+        )
