@@ -3,6 +3,7 @@ from shopee_open_api.utils.client import get_client_from_shop_id
 from .model import Model
 from .stock import Stock
 from .product_attribute import ProductAttribute
+from typing import List
 import copy
 import frappe
 
@@ -99,10 +100,10 @@ class Product(ShopeeResponseBaseClass):
         """Get Shopee client"""
         return get_client_from_shop_id(self.get_shop_id())
 
-    def reset_product_attributes(self, product_object):
+    def reset_product_attributes(self, product_object) -> None:
         product_object.attributes = []
 
-    def add_product_attributes(self, product_object):
+    def add_product_attributes(self, product_object) -> None:
         for attribute in self.get_attributes():
             new_attribute = product_object.append("attributes", {})
             new_attribute.attribute_id = attribute.get_attribute_id()
@@ -113,7 +114,7 @@ class Product(ShopeeResponseBaseClass):
             new_attribute.is_mandatory = attribute.get_is_mandatory()
             new_attribute.values = attribute.get_values_as_str()
 
-    def retrieve_model_details(self):
+    def retrieve_model_details(self) -> None:
         """Fetch variant details from Shopee"""
 
         self.model_details = self.client.product.get_model_list(item_id=self.item_id)[
@@ -128,7 +129,7 @@ class Product(ShopeeResponseBaseClass):
 
         return getattr(self, "models", [])
 
-    def instantiate_models(self):
+    def instantiate_models(self) -> None:
         """Instantiate all models for current product."""
 
         if not self.has_model:
@@ -159,7 +160,7 @@ class Product(ShopeeResponseBaseClass):
     def get_shop_id(self) -> str:
         return str(self.shop_id)
 
-    def get_category_id(self):
+    def get_category_id(self) -> str:
         return str(self.category_id)
 
     def get_weight(self) -> float:
@@ -173,16 +174,16 @@ class Product(ShopeeResponseBaseClass):
             return str(self.model_id)
         return str(0)
 
-    def get_brand_name(self):
+    def get_brand_name(self) -> str:
         return self.brand["original_brand_name"]
 
-    def get_currency(self):
+    def get_currency(self) -> str:
         return self.price_info[0].get("currency")
 
-    def get_original_price(self):
+    def get_original_price(self) -> float:
         return float(self.price_info[0].get("original_price"))
 
-    def get_current_price(self):
+    def get_current_price(self) -> float:
         return float(self.price_info[0].get("current_price"))
 
     def get_inventories(self):
