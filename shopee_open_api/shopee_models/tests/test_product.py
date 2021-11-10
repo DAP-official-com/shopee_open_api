@@ -171,3 +171,45 @@ class ShopeeProductTest(TestCase):
             ),
             len(product.models),
         )
+
+    def test_single_product_stock(self):
+        product = self.single_products[0]
+        product.update_or_insert()
+
+        product_document = frappe.get_doc("Shopee Product", product.make_primary_key())
+
+        for stock in product.stock_info:
+            stock_document = product_document.get(
+                "stock_details", {"stock_type": str(stock["stock_type"])}
+            )
+            self.assertEqual(len(stock_document), 1)
+            self.assertEqual(stock_document[0].current_stock, stock["current_stock"])
+            self.assertEqual(stock_document[0].normal_stock, stock["normal_stock"])
+            self.assertEqual(stock_document[0].reserved_stock, stock["reserved_stock"])
+
+    @mock.patch(
+        "shopee_open_api.shopee_models.product.Product.client",
+    )
+    def test_product_with_model_stock(self, client_mock):
+        product = self.variant_products[0]
+        product.client.product.get_model_list.return_value = get_model_list_response
+
+        product.update_or_insert()
+
+        for model in product.models:
+            product_document = frappe.get_doc(
+                "Shopee Product", model.make_primary_key()
+            )
+
+            for stock in model.stock_info:
+                stock_document = product_document.get(
+                    "stock_details", {"stock_type": str(stock["stock_type"])}
+                )
+                self.assertEqual(len(stock_document), 1)
+                self.assertEqual(
+                    stock_document[0].current_stock, stock["current_stock"]
+                )
+                self.assertEqual(stock_document[0].normal_stock, stock["normal_stock"])
+                self.assertEqual(
+                    stock_document[0].reserved_stock, stock["reserved_stock"]
+                )
