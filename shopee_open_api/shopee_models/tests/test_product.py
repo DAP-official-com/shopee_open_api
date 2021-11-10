@@ -69,6 +69,7 @@ class ShopeeProductTest(TestCase):
         cls.token.delete()
 
     def tearDown(self):
+        frappe.set_user("Administrator")
         product_ids = frappe.db.get_list(
             "Shopee Product",
             filters={
@@ -213,3 +214,15 @@ class ShopeeProductTest(TestCase):
                 self.assertEqual(
                     stock_document[0].reserved_stock, stock["reserved_stock"]
                 )
+
+    def test_update_with_ignore_permission(self):
+        frappe.set_user("Guest")
+        product = self.single_products[0]
+        self.assertRaises(
+            frappe.exceptions.PermissionError, lambda: product.update_or_insert()
+        )
+
+        self.assertIsNone(product.update_or_insert(ignore_permissions=True))
+
+        frappe.set_user("Administrator")
+        self.assertIsNone(product.update_or_insert())
