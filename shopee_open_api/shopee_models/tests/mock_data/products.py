@@ -10450,7 +10450,8 @@ product_base_info = [
     },
 ]
 
-model_list = {
+get_model_list_response = {
+    'response' :{
     "tier_variation": [
         {
             "name": "Characteristic",
@@ -10530,4 +10531,5 @@ model_list = {
             "pre_order": {"is_pre_order": False, "days_to_ship": 7},
         },
     ],
+}
 }

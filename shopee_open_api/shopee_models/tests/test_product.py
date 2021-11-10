@@ -2,8 +2,7 @@ import frappe, time, uuid
 from unittest import mock, TestCase
 from shopee_open_api.utils.client import get_shopless_client
 from shopee_open_api.utils.datetime import datetime_string_from_unix
-from shopee_open_api.python_shopee.pyshopee2.client import Client
-from .mock_data.products import product_base_info, model_list
+from .mock_data.products import product_base_info, get_model_list_response
 from shopee_open_api.shopee_models.product import Product
 
 
@@ -87,11 +86,12 @@ class ShopeeProductTest(TestCase):
         product.update_or_insert()
         self.assertTrue(product.is_existing_in_database)
 
-    def test_product_with_model_is_existing_in_database(self):
+    @mock.patch(
+        "shopee_open_api.shopee_models.product.Product.client",
+    )
+    def test_product_with_model_is_existing_in_database(self, client_mock):
         product = self.variant_products[0]
-        product.model_details = model_list
-        product.models = product.model_details["model"]
-        product.instantiate_models()
+        product.client.product.get_model_list.return_value = get_model_list_response
 
         self.assertFalse(product.is_existing_in_database)
 
@@ -130,12 +130,13 @@ class ShopeeProductTest(TestCase):
             1,
         )
 
-    def test_update_or_insert_product_with_model(self):
+    @mock.patch(
+        "shopee_open_api.shopee_models.product.Product.client",
+    )
+    def test_update_or_insert_product_with_model(self, client_mock):
 
         product = self.variant_products[0]
-        product.model_details = model_list
-        product.models = product.model_details["model"]
-        product.instantiate_models()
+        product.client.product.get_model_list.return_value = get_model_list_response
 
         self.assertEqual(
             frappe.db.count(
