@@ -21,6 +21,30 @@ class ShopeeProductTest(TestCase):
             get_escrow_detail_response
         )
 
+        cls.product_client_patcher = mock.patch(
+            "shopee_open_api.shopee_models.product.Product.client"
+        )
+        cls.mock_product_client = cls.product_client_patcher.start()
+        cls.mock_product_client.product.get_model_list.return_value = (
+            get_model_list_response
+        )
+
+        cls.base_client_patcher = mock.patch(
+            "shopee_open_api.shopee_models.base.ShopeeResponseBaseClass.client"
+        )
+
+        cls.fake_item_id = uuid.uuid4().hex.upper()[:6]
+
+        get_item_base_info_response["response"]["item_list"][0][
+            "item_id"
+        ] = cls.fake_item_id
+
+        cls.mock_base_client = cls.base_client_patcher.start()
+
+        cls.mock_base_client.product.get_item_base_info.return_value = (
+            get_item_base_info_response
+        )
+
         cls.SHOP_ID = uuid.uuid4().hex.upper()[0:6]
 
         cls.client = get_shopless_client()
@@ -56,14 +80,12 @@ class ShopeeProductTest(TestCase):
             shop_id=cls.SHOP_ID,
         )
 
-        cls.fake_item_id = uuid.uuid4().hex.upper()[:6]
-
         for order_item in cls.order.order_items:
             order_item.item_id = cls.fake_item_id
 
     @classmethod
     def tearDownClass(cls):
-        cls.patcher.stop()
+        mock.patch.stopall()
 
         order_ids = frappe.db.get_list(
             "Shopee Order",
@@ -160,33 +182,15 @@ class ShopeeProductTest(TestCase):
         )
 
     def test_update_or_insert_with_items(self):
-        with mock.patch(
-            "shopee_open_api.shopee_models.base.ShopeeResponseBaseClass.client"
-        ) as mock_client, mock.patch(
-            "shopee_open_api.shopee_models.product.Product.client",
-        ) as mock_product_client:
 
-            mock_product_client.product.get_model_list.return_value = (
-                get_model_list_response
-            )
-            get_item_base_info_response["response"]["item_list"][0][
-                "item_id"
-            ] = self.fake_item_id
+        self.order.update_or_insert_with_items()
+        self.assertTrue(frappe.get_all("Shopee Order", filters={"name": self.ORDER_ID}))
 
-            mock_client.product.get_item_base_info.return_value = (
-                get_item_base_info_response
-            )
+        self.assertEqual(
+            frappe.db.count("Shopee Order", filters={"name": self.ORDER_ID}), 1
+        )
 
-            self.order.update_or_insert_with_items()
-            self.assertTrue(
-                frappe.get_all("Shopee Order", filters={"name": self.ORDER_ID})
-            )
-
-            self.assertEqual(
-                frappe.db.count("Shopee Order", filters={"name": self.ORDER_ID}), 1
-            )
-
-            self.order.update_or_insert_with_items()
-            self.assertEqual(
-                frappe.db.count("Shopee Order", filters={"name": self.ORDER_ID}), 1
-            )
+        self.order.update_or_insert_with_items()
+        self.assertEqual(
+            frappe.db.count("Shopee Order", filters={"name": self.ORDER_ID}), 1
+        )
