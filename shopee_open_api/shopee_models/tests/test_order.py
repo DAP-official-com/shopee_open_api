@@ -113,51 +113,51 @@ class ShopeeProductTest(TestCase):
 
         self.order.payment_escrow = None
 
-    def test_get_payment_escrow(self):
-        self.assertIsInstance(self.order.get_payment_escrow(), PaymentEscrow)
+    # def test_get_payment_escrow(self):
+    #     self.assertIsInstance(self.order.get_payment_escrow(), PaymentEscrow)
 
-    def test_order_items_type(self):
-        for item in self.order.order_items:
-            self.assertIsInstance(item, OrderItem)
+    # def test_order_items_type(self):
+    #     for item in self.order.order_items:
+    #         self.assertIsInstance(item, OrderItem)
 
-    def test_update_or_insert(self):
-        self.assertFalse(self.order.is_existing_in_database)
+    # def test_update_or_insert(self):
+    #     self.assertFalse(self.order.is_existing_in_database)
 
-        self.assertEqual(
-            frappe.db.count(
-                "Shopee Order",
-                filters={
-                    "name": self.order.make_primary_key(),
-                },
-            ),
-            0,
-        )
+    #     self.assertEqual(
+    #         frappe.db.count(
+    #             "Shopee Order",
+    #             filters={
+    #                 "name": self.order.make_primary_key(),
+    #             },
+    #         ),
+    #         0,
+    #     )
 
-        self.order.update_or_insert()
+    #     self.order.update_or_insert()
 
-        self.assertTrue(self.order.is_existing_in_database)
+    #     self.assertTrue(self.order.is_existing_in_database)
 
-        self.assertEqual(
-            frappe.db.count(
-                "Shopee Order",
-                filters={
-                    "name": self.order.make_primary_key(),
-                },
-            ),
-            1,
-        )
+    #     self.assertEqual(
+    #         frappe.db.count(
+    #             "Shopee Order",
+    #             filters={
+    #                 "name": self.order.make_primary_key(),
+    #             },
+    #         ),
+    #         1,
+    #     )
 
-        self.order.update_or_insert()
+    #     self.order.update_or_insert()
 
-        self.assertEqual(
-            frappe.db.count(
-                "Shopee Order",
-                filters={
-                    "name": self.order.make_primary_key(),
-                },
-            ),
-            1,
-        )
+    #     self.assertEqual(
+    #         frappe.db.count(
+    #             "Shopee Order",
+    #             filters={
+    #                 "name": self.order.make_primary_key(),
+    #             },
+    #         ),
+    #         1,
+    #     )
 
     def test_update_or_insert_with_items(self):
         with mock.patch(
@@ -165,6 +165,7 @@ class ShopeeProductTest(TestCase):
         ) as mock_client, mock.patch(
             "shopee_open_api.shopee_models.product.Product.client",
         ) as mock_product_client:
+
             mock_product_client.product.get_model_list.return_value = (
                 get_model_list_response
             )
@@ -176,6 +177,16 @@ class ShopeeProductTest(TestCase):
                 get_item_base_info_response
             )
 
-            # for order_item in self.order.order_items:
-            #     print(order_item.get_product_instance().item_id)
             self.order.update_or_insert_with_items()
+            self.assertTrue(
+                frappe.get_all("Shopee Order", filters={"name": self.ORDER_ID})
+            )
+
+            self.assertEqual(
+                frappe.db.count("Shopee Order", filters={"name": self.ORDER_ID}), 1
+            )
+
+            self.order.update_or_insert_with_items()
+            self.assertEqual(
+                frappe.db.count("Shopee Order", filters={"name": self.ORDER_ID}), 1
+            )
