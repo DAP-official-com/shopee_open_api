@@ -197,12 +197,20 @@ class ShopeeProductTest(TestCase):
 
     def test_update_or_insert_permission(self):
         frappe.set_user("Guest")
-        product = self.order
+        order = self.order
         self.assertRaises(
-            frappe.exceptions.PermissionError, lambda: product.update_or_insert()
+            frappe.exceptions.PermissionError, lambda: order.update_or_insert()
         )
 
-        self.assertIsNone(self.order.update_or_insert(ignore_permissions=True))
+        self.assertRaises(
+            frappe.exceptions.PermissionError,
+            lambda: order.update_or_insert_with_items(),
+        )
+
+        self.assertIsNone(
+            self.order.update_or_insert_with_items(ignore_permissions=True)
+        )
 
         frappe.set_user("Administrator")
         self.assertIsNone(self.order.update_or_insert())
+        self.assertIsNone(self.order.update_or_insert_with_items())
