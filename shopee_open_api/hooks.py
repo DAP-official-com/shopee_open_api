@@ -16,7 +16,7 @@ required_apps = ["erpnext"]
 # app_include_css = "/assets/shopee_open_api/css/shopee_open_api.css"
 
 # << include customize doctype js to desk>>
-app_include_js = "/assets/shopee_open_api/js/branch_modification.js"
+# app_include_js = "/assets/shopee_open_api/js/branch_modification.js"
 
 # include js, css files in header of web template
 # web_include_css = "/assets/shopee_open_api/css/shopee_open_api.css"
@@ -34,7 +34,7 @@ app_include_js = "/assets/shopee_open_api/js/branch_modification.js"
 
 # include js in doctype views
 # doctype_js = {"branch" : "public/js/branch_modification.js"}
-# doctype_list_js = {"branch" : "public/js/branch_list.js"}
+doctype_list_js = {"Branch": "public/js/branch_modification.js"}
 # doctype_tree_js = {"doctype" : "public/js/doctype_tree.js"}
 # doctype_calendar_js = {"doctype" : "public/js/doctype_calendar.js"}
 
