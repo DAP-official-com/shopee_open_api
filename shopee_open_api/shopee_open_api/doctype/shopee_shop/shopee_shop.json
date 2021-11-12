@@ -15,7 +15,8 @@
   "token",
   "shop_logo",
   "authorized",
-  "last_product_update"
+  "last_product_update",
+  "warehouse"
  ],
  "fields": [
   {
@@ -77,12 +78,20 @@
    "fieldname": "last_product_update",
    "fieldtype": "Int",
    "label": "Last Product Update"
+  },
+  {
+   "fieldname": "warehouse",
+   "fieldtype": "Link",
+   "label": "Warehouse",
+   "options": "Warehouse",
+   "read_only": 1,
+   "reqd": 1
   }
  ],
  "image_field": "shop_logo",
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2021-11-05 17:43:27.910092",
+ "modified": "2021-11-12 16:12:15.194287",
  "modified_by": "Administrator",
  "module": "Shopee Open API",
  "name": "Shopee Shop",
