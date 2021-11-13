@@ -1,4 +1,5 @@
 from .base import ShopeeResponseBaseClass
+from .address import Address
 import frappe
 
 
@@ -69,3 +70,32 @@ class Customer(ShopeeResponseBaseClass):
     @property
     def customer_detail(self) -> dict:
         return {attribute: getattr(self, attribute) for attribute in self.DATA_FIELDS}
+
+    def add_address(self, address: Address) -> None:
+        if self.has_address(address):
+            address_link = frappe.get_doc(
+                {
+                    "doctype": "Dynamic Link",
+                    "link_doctype": self.DOCTYPE,
+                    "link_name": self.get_primary_key(),
+                    "link_title": self.get_primary_key(),
+                    "parent": address.get_primary_key(),
+                    "parenttype": "Address",
+                    "parentfield": "links",
+                    "idx": 1,
+                }
+            )
+
+            address_link.insert()
+
+    def has_address(self, address: Address):
+        return frappe.db.get_list(
+            "Dynamic Link",
+            filters={
+                "link_doctype": self.DOCTYPE,
+                "link_name": self.get_primary_key(),
+                "parent": address.get_primary_key(),
+                "parenttype": "Address",
+                "parentfield": "links",
+            },
+        )
