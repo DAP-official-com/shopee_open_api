@@ -1,9 +1,5 @@
 from .base import ShopeeResponseBaseClass
-from .payment_escrow import PaymentEscrow
-from .order_item import OrderItem
-from .product import Product
 import frappe
-from shopee_open_api.utils.datetime import datetime_string_from_unix
 
 
 class Customer(ShopeeResponseBaseClass):
@@ -14,7 +10,6 @@ class Customer(ShopeeResponseBaseClass):
     DATA_FIELDS = (
         "customer_type",
         "customer_group",
-        "address_type",
         "customer_name",
         "territory",
         "username",
