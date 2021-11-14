@@ -31,6 +31,10 @@ class Address(ShopeeResponseBaseClass):
 
     @classmethod
     def from_shopee_address(cls, *args, **kwargs):
+
+        if "customer" not in kwargs:
+            raise ValueError("Shopee customer object is required")
+
         address = cls(args, kwargs)
 
         address.address_line1 = " ".join(

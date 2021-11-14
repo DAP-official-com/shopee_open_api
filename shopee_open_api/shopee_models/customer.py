@@ -72,7 +72,7 @@ class Customer(ShopeeResponseBaseClass):
         return {attribute: getattr(self, attribute) for attribute in self.DATA_FIELDS}
 
     def add_address(self, address: Address) -> None:
-        if self.has_address(address):
+        if not self.has_address(address):
             address_link = frappe.get_doc(
                 {
                     "doctype": "Dynamic Link",
@@ -88,14 +88,16 @@ class Customer(ShopeeResponseBaseClass):
 
             address_link.insert()
 
-    def has_address(self, address: Address):
-        return frappe.db.get_list(
-            "Dynamic Link",
-            filters={
-                "link_doctype": self.DOCTYPE,
-                "link_name": self.get_primary_key(),
-                "parent": address.get_primary_key(),
-                "parenttype": "Address",
-                "parentfield": "links",
-            },
+    def has_address(self, address: Address) -> bool:
+        return bool(
+            frappe.db.get_list(
+                "Dynamic Link",
+                filters={
+                    "link_doctype": self.DOCTYPE,
+                    "link_name": self.get_primary_key(),
+                    "parent": address.get_primary_key(),
+                    "parenttype": "Address",
+                    "parentfield": "links",
+                },
+            )
         )

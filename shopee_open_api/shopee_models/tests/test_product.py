@@ -51,8 +51,6 @@ class ShopeeProductTest(TestCase):
         cls.variant_products = [
             product for product in cls.products if product.has_model
         ]
-        print(len(cls.single_products))
-        print(len(cls.variant_products))
 
     @classmethod
     def tearDownClass(cls):
