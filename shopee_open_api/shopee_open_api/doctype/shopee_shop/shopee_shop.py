@@ -40,3 +40,19 @@ class ShopeeShop(Document):
 
     def get_warehouse_name(self):
         return f"Shopee Shop {self.shop_id}"
+
+    def after_delete(self):
+        default_company = frappe.get_doc("Company", frappe.db.get_default("Company"))
+        company_abbr = default_company.abbr
+
+        warehouse_name = frappe.db.get_list(
+            "Warehouse",
+            filters={
+                "warehouse_name": self.get_warehouse_name(),
+                "parent_warehouse": f"Stores - {company_abbr}",
+                "company": frappe.db.get_default("Company"),
+            },
+            pluck="name",
+        )[0]
+
+        frappe.get_doc("Warehouse", warehouse_name).delete()
