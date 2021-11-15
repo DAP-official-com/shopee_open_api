@@ -24,3 +24,12 @@ def reload_product_details_from_shopee(product_primary_key):
     product.update_or_insert()
 
     return {"message": "ok"}
+
+
+@frappe.whitelist()
+def create_new_item_and_add_to_product(product_primary_key):
+
+    product = frappe.get_doc("Shopee Product", product_primary_key)
+    product.create_new_item_and_add_to_product()
+
+    return {"message": "ok"}
