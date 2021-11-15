@@ -33,6 +33,7 @@ class ShopeeOrder(Document):
         return customer
 
     def get_customer_instance(self) -> Customer:
+        """Get an instance of a customer (shopee customer, not erpnext customer)"""
         return Customer.from_shopee_customer(**self.customer_detail)
 
     @property
@@ -52,9 +53,11 @@ class ShopeeOrder(Document):
         return address
 
     def get_address_instance(self) -> Address:
+        """Get an instance of an address (shopee address, not erpnext address)"""
         return Address.from_shopee_address(**self.address_detail)
 
     def create_sales_order(self):
+        """Create Sales Order document from Shopee Order"""
 
         self.create_sales_order_validate()
         self.pre_create_sales_order()
@@ -91,16 +94,22 @@ class ShopeeOrder(Document):
         return self.get("shopee_order_items")
 
     def create_sales_order_validate(self):
+        """Perform validation before creating a new sales order"""
+
         self.no_sales_order_validate()
         self.shopee_order_items_validate()
 
     def no_sales_order_validate(self):
+        """Check if current shopee order already has a sales order"""
+
         if self.sales_order:
             frappe.throw(
                 msg=f"Shopee order {self.name} already has a sales order {self.sales_order} matched",
             )
 
     def shopee_order_items_validate(self):
+        """Check that all Shopee Order Items are matched with erpnext Item"""
+
         for order_item in self.order_items:
             if order_item.get_shopee_product().item is None:
                 frappe.throw(
@@ -108,6 +117,8 @@ class ShopeeOrder(Document):
                 )
 
     def pre_create_sales_order(self):
+        """Perform actions before creating a sales order, e.g. creating a customer and address"""
+
         self.create_customer_document()
         self.create_address_document()
 
@@ -116,7 +127,11 @@ class ShopeeOrder(Document):
         customer.add_address(address)
 
     def create_customer_document(self):
+        """Create a new customer or update current customer document for the order's buyer"""
+
         self.get_customer_instance().update_or_insert()
 
     def create_address_document(self):
+        """Create a new address or update current address document for the order's buyer"""
+
         self.get_address_instance().update_or_insert()

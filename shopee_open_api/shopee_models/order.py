@@ -31,7 +31,17 @@ class Order(ShopeeResponseBaseClass):
         for order_item in self.order_items:
             order_item.update_or_insert(ignore_permissions=ignore_permissions)
 
+        if frappe.db.get_single_value(
+            "Shopee API Settings",
+            "create_sales_order_after_shopee_order_has_been_created",
+        ):
+            self.create_sales_order()
+
         self.update_products_stock(ignore_permissions=ignore_permissions)
+
+    def create_sales_order(self):
+        order = frappe.get_doc(self.DOCTYPE, self.make_primary_key())
+        order.create_sales_order()
 
     def get_item_list_ids(self):
         return [item["item_id"] for item in self.item_list]
