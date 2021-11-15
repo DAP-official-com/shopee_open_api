@@ -83,7 +83,8 @@
   "cost_of_goods_sold",
   "original_cost_of_goods_sold",
   "original_shopee_discount",
-  "seller_return_refund"
+  "seller_return_refund",
+  "sales_order"
  ],
  "fields": [
   {
@@ -568,11 +569,17 @@
    "fieldname": "column_break_62",
    "fieldtype": "Column Break",
    "read_only": 1
+  },
+  {
+   "fieldname": "sales_order",
+   "fieldtype": "Link",
+   "label": "Sales Order",
+   "options": "Sales Order"
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2021-11-05 22:23:48.288458",
+ "modified": "2021-11-15 12:40:29.672878",
  "modified_by": "Administrator",
  "module": "Shopee Open API",
  "name": "Shopee Order",
