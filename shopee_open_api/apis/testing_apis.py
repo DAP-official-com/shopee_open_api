@@ -10,6 +10,17 @@ import uuid
 
 
 @frappe.whitelist()
+def test_get_client():
+
+    shops = frappe.db.get_all("Shopee Shop")
+    shop_id = shops[1].name
+
+    client = get_client_from_shop_id(shop_id)
+
+    return client.__dict__
+
+
+@frappe.whitelist()
 def test_create_sales_order_from_shopee_order():
 
     order = frappe.get_doc("Shopee Order", "211103HHF2HJ42")

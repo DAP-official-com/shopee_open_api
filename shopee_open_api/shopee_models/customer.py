@@ -23,7 +23,7 @@ class Customer(ShopeeResponseBaseClass):
     def from_shopee_customer(cls, *args, **kwargs):
         return cls(args, kwargs)
 
-    def update_or_insert(self) -> None:
+    def update_or_insert(self, ignore_permissions=False) -> None:
         if self.is_existing_in_database:
             customer = frappe.get_doc(self.DOCTYPE, self.get_primary_key())
         else:
@@ -36,7 +36,7 @@ class Customer(ShopeeResponseBaseClass):
         for field in self.DATA_FIELDS:
             setattr(customer, field, getattr(self, field))
 
-        customer.save()
+        customer.save(ignore_permissions=ignore_permissions)
 
     @property
     def is_existing_in_database(self) -> bool:
@@ -54,7 +54,7 @@ class Customer(ShopeeResponseBaseClass):
         """Get name (primary key) field from existing customer, otherwise throw DoesNotExistError"""
 
         try:
-            return frappe.db.get_list(
+            return frappe.db.get_all(
                 self.DOCTYPE,
                 filters={
                     "shopee_user_id": self.shopee_user_id,

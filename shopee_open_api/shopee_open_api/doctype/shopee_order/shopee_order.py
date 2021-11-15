@@ -56,11 +56,11 @@ class ShopeeOrder(Document):
         """Get an instance of an address (shopee address, not erpnext address)"""
         return Address.from_shopee_address(**self.address_detail)
 
-    def create_sales_order(self):
+    def create_sales_order(self, ignore_permissions=False):
         """Create Sales Order document from Shopee Order"""
 
         self.create_sales_order_validate()
-        self.pre_create_sales_order()
+        self.pre_create_sales_order(ignore_permissions=ignore_permissions)
 
         shop = self.get_shopee_shop_instance()
 
@@ -81,11 +81,11 @@ class ShopeeOrder(Document):
             sales_order_item.qty = order_item.qty
             sales_order_item.rate = order_item.model_discounted_price
 
-        new_sales_order.insert()
+        new_sales_order.insert(ignore_permissions=ignore_permissions)
 
         self.sales_order = new_sales_order.name
 
-        self.save()
+        self.save(ignore_permissions=ignore_permissions)
 
         return new_sales_order
 
@@ -116,22 +116,26 @@ class ShopeeOrder(Document):
                     msg=f"Shopee product {order_item.get_shopee_product()} has not been matched with erpnext item",
                 )
 
-    def pre_create_sales_order(self):
+    def pre_create_sales_order(self, ignore_permissions=False):
         """Perform actions before creating a sales order, e.g. creating a customer and address"""
 
-        self.create_customer_document()
-        self.create_address_document()
+        self.create_customer_document(ignore_permissions=ignore_permissions)
+        self.create_address_document(ignore_permissions=ignore_permissions)
 
         customer = self.get_customer_instance()
         address = self.get_address_instance()
         customer.add_address(address)
 
-    def create_customer_document(self):
+    def create_customer_document(self, ignore_permissions=False):
         """Create a new customer or update current customer document for the order's buyer"""
 
-        self.get_customer_instance().update_or_insert()
+        self.get_customer_instance().update_or_insert(
+            ignore_permissions=ignore_permissions
+        )
 
-    def create_address_document(self):
+    def create_address_document(self, ignore_permissions=False):
         """Create a new address or update current address document for the order's buyer"""
 
-        self.get_address_instance().update_or_insert()
+        self.get_address_instance().update_or_insert(
+            ignore_permissions=ignore_permissions
+        )

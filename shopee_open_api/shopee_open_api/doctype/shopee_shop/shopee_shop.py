@@ -61,7 +61,7 @@ class ShopeeShop(Document):
         default_company = frappe.get_doc("Company", frappe.db.get_default("Company"))
         company_abbr = default_company.abbr
 
-        warehouse_name = frappe.db.get_list(
+        warehouse_name = frappe.db.get_all(
             "Warehouse",
             filters={
                 "warehouse_name": self.get_warehouse_name(),

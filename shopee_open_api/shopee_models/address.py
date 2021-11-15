@@ -18,7 +18,7 @@ class Address(ShopeeResponseBaseClass):
         "address_type",
     )
 
-    def update_or_insert(self) -> None:
+    def update_or_insert(self, ignore_permissions=False) -> None:
         if self.is_existing_in_database:
             address = frappe.get_doc(self.DOCTYPE, self.get_primary_key())
         else:
@@ -27,7 +27,7 @@ class Address(ShopeeResponseBaseClass):
         for field in self.DATA_FIELDS:
             setattr(address, field, getattr(self, field))
 
-        address.save()
+        address.save(ignore_permissions=ignore_permissions)
 
     @classmethod
     def from_shopee_address(cls, *args, **kwargs):
@@ -60,7 +60,7 @@ class Address(ShopeeResponseBaseClass):
 
     def get_primary_key(self) -> str:
         try:
-            return frappe.db.get_list(
+            return frappe.db.get_all(
                 self.DOCTYPE,
                 filters=self.address_detail,
                 pluck="name",

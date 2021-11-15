@@ -35,13 +35,25 @@ class Order(ShopeeResponseBaseClass):
             "Shopee API Settings",
             "create_sales_order_after_shopee_order_has_been_created",
         ):
-            self.create_sales_order()
+            self.create_sales_order(ignore_permissions=ignore_permissions)
 
         self.update_products_stock(ignore_permissions=ignore_permissions)
 
-    def create_sales_order(self):
+    def create_sales_order(self, ignore_permissions=False) -> None:
+        """
+        Create sales order from shopee order. It is called here instead of after_insert
+        since creating a new sales order requires order items, which are created after the order has been created
+        """
         order = frappe.get_doc(self.DOCTYPE, self.make_primary_key())
-        order.create_sales_order()
+
+        try:
+            order.create_sales_order(ignore_permissions=ignore_permissions)
+        except frappe.exceptions.ValidationError as e:
+            """
+            This can happen due to shopee product not being matched with erpnext item
+            or the order is already matched with a sales order
+            """
+            return
 
     def get_item_list_ids(self):
         return [item["item_id"] for item in self.item_list]
