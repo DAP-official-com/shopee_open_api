@@ -12,6 +12,30 @@ frappe.listview_settings['Shopee Order'] = {
 		button.onclick = action;
 		document.querySelector(wrapper_class).prepend(button);
 	},
+
+	button: {
+		show: function (doc) {
+			console.log(doc);
+			return doc.sales_order == null;
+		},
+		get_label: function () {
+			return __('Create Sales Order');
+		},
+		get_description: function (doc) {
+			return __('Create new sales order from order {0}', [doc.name]);
+		},
+		action: function (doc) {
+			frappe.call({
+				method: 'shopee_open_api.apis.order.create_sales_order_from_shopee_order',
+				args: {
+					order_sn: doc.name,
+				},
+				callback: function (r) {
+					frappe.set_route('Form', 'Sales Order', r.message.name);
+				},
+			});
+		},
+	},
 };
 
 let d = new frappe.ui.Dialog({

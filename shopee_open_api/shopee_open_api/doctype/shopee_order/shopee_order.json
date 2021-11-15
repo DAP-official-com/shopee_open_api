@@ -574,6 +574,7 @@
   {
    "fieldname": "sales_order",
    "fieldtype": "Link",
+   "in_list_view": 1,
    "label": "Sales Order",
    "options": "Sales Order"
   },
@@ -585,7 +586,7 @@
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2021-11-15 14:56:08.804702",
+ "modified": "2021-11-15 15:30:12.521447",
  "modified_by": "Administrator",
  "module": "Shopee Open API",
  "name": "Shopee Order",

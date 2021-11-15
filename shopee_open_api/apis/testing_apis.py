@@ -8,21 +8,17 @@ from shopee_open_api.shopee_models.product import Product
 from shopee_open_api.shopee_models.order import Order
 import uuid
 
+
 @frappe.whitelist()
-def get_products():
-    shops = frappe.db.get_all("Shopee Shop")
-    shop_id = shops[0].name
+def test_create_sales_order_from_shopee_order():
 
-    client = get_client_from_shop_id(shop_id)
+    order = frappe.get_doc("Shopee Order", "211103HHF2HJ42")
 
-    products = []
+    order.create_sales_order()
 
-    for offset in range(0, 150, 50):
-        products += client.product.get_item_list_and_info(
-            offset=offset, page_size=50, item_status="NORMAL"
-        )["response"]["item_list"]
+    frappe.db.commit()
 
-    return products
+    return order
 
 
 @frappe.whitelist()
