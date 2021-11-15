@@ -91,7 +91,6 @@
   {
    "fieldname": "order_sn",
    "fieldtype": "Data",
-   "in_list_view": 1,
    "label": "Order SN",
    "read_only": 1,
    "reqd": 1,
@@ -216,7 +215,6 @@
   {
    "fieldname": "update_time",
    "fieldtype": "Datetime",
-   "in_list_view": 1,
    "label": "Update Time",
    "read_only": 1,
    "reqd": 1
@@ -287,6 +285,7 @@
   {
    "fieldname": "buyer_username",
    "fieldtype": "Data",
+   "in_list_view": 1,
    "label": "Buyer Username",
    "read_only": 1
   },
@@ -586,7 +585,7 @@
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2021-11-15 15:30:12.521447",
+ "modified": "2021-11-15 15:47:52.933376",
  "modified_by": "Administrator",
  "module": "Shopee Open API",
  "name": "Shopee Order",
