@@ -92,45 +92,60 @@ build_shopee_open_api_nginx:
   only:
     - tags
   script:
+    - git clone https://github.com/castlecraft/cfe --depth 1 repos/castlecraft
     - export VERSION=$(git tag --list --sort=-version:refname | sed -n 1p | sed -e 's#.*@\(\)#\1#')
-    - docker build -t excel-erpnext-nginx docker/excel-erpnext-nginx
-    - docker tag excel-erpnext-nginx "$CI_REGISTRY/$CI_PROJECT_NAMESPACE/excel_erpnext/excel-erpnext-nginx:$VERSION"
-    - docker push "$CI_REGISTRY/$CI_PROJECT_NAMESPACE/excel_erpnext/excel-erpnext-nginx:$VERSION"
-
-   # - docker pull $CI_REGISTRY_IMAGE:latest || true
-   # - docker build --cache-from $CI_REGISTRY_IMAGE:latest --tag $CI_REGISTRY_IMAGE:$CI_COMMIT_SHA --tag $CI_REGISTRY_IMAGE:latest .
-   # - docker push $CI_REGISTRY_IMAGE:$CI_COMMIT_SHA
-   # - docker push $CI_REGISTRY_IMAGE:latest
-
+    - docker build --build-arg=FRAPPE_BRANCH=v13.12.1 --build-arg=ERPNEXT_BRANCH=v13.12.1 -t nginx -f docker/nginx/Dockerfile .
+    - docker tag nginx "$CI_REGISTRY/$CI_PROJECT_NAMESPACE/shopee_open_api/nginx:$VERSION"
+    - docker push "$CI_REGISTRY/$CI_PROJECT_NAMESPACE/shopee_open_api/nginx:$VERSION"
 
 build_shopee_open_api_worker:
   stage: build
   only:
     - tags
   script:
+    - git clone https://github.com/castlecraft/cfe --depth 1 repos/castlecraft
     - export VERSION=$(git tag --list --sort=-version:refname | sed -n 1p | sed -e 's#.*@\(\)#\1#')
-    - docker build -t excel-erpnext-worker docker/excel-erpnext-worker
-    - docker tag excel-erpnext-worker "$CI_REGISTRY/$CI_PROJECT_NAMESPACE/excel_erpnext/excel-erpnext-worker:$VERSION"
-    - docker push "$CI_REGISTRY/$CI_PROJECT_NAMESPACE/excel_erpnext/excel-erpnext-worker:$VERSION"
+    - docker build --build-arg=ERPNEXT_BRANCH=v13.12.1 -t worker -f docker/worker/Dockerfile .
+    - docker tag worker "$CI_REGISTRY/$CI_PROJECT_NAMESPACE/shopee_open_api/worker:$VERSION"
+    - docker push "$CI_REGISTRY/$CI_PROJECT_NAMESPACE/shopee_open_api/worker:$VERSION"
 
 build_staging_shopee_open_api_nginx:
   stage: build
   only:
     refs:
-      - version-13
+      - main
   script:
-    - docker build -t excel-erpnext-nginx docker/excel-erpnext-nginx
-    - docker tag excel-erpnext-nginx "$CI_REGISTRY/$CI_PROJECT_NAMESPACE/excel_erpnext/excel-erpnext-nginx:latest"
-    - docker push "$CI_REGISTRY/$CI_PROJECT_NAMESPACE/excel_erpnext/excel-erpnext-nginx:latest"
+    - git clone https://github.com/castlecraft/cfe --depth 1 repos/castlecraft
+    - docker build --build-arg=FRAPPE_BRANCH=v13.12.1 --build-arg=ERPNEXT_BRANCH=v13.12.1 -t nginx -f docker/nginx/Dockerfile .
+    - docker tag nginx "$CI_REGISTRY/$CI_PROJECT_NAMESPACE/shopee_open_api/nginx:latest"
+    - docker push "$CI_REGISTRY/$CI_PROJECT_NAMESPACE/shopee_open_api/nginx:latest"
 
 build_staging_shopee_open_api_worker:
   stage: build
   only:
     refs:
-      - version-13
+      - main
   script:
-    - docker build -t excel-erpnext-worker docker/excel-erpnext-worker
-    - docker tag excel-erpnext-worker "$CI_REGISTRY/$CI_PROJECT_NAMESPACE/excel_erpnext/excel-erpnext-worker:latest"
-    - docker push "$CI_REGISTRY/$CI_PROJECT_NAMESPACE/excel_erpnext/excel-erpnext-worker:latest"
-# !SECTION
+    - git clone https://github.com/castlecraft/cfe --depth 1 repos/castlecraft
+    - docker build --build-arg=ERPNEXT_BRANCH=v13.12.1 -t worker -f docker/worker/Dockerfile .
+    - docker tag worker "$CI_REGISTRY/$CI_PROJECT_NAMESPACE/shopee_open_api/worker:latest"
+    - docker push "$CI_REGISTRY/$CI_PROJECT_NAMESPACE/shopee_open_api/worker:latest"
+
+deploy_staging:
+  image: alpine:latest
+  stage: deploy
+  only:
+    refs:
+      - main
+  before_script:
+    - apk add curl bash
+  script:
+    - curl -s -X POST $NGINX_UPDATE_KEY -o /dev/null
+    - curl -s -X POST $GUNICORN_UPDATE_KEY -o /dev/null
+    - curl -s -X POST $DEFAULT_WORKER_UPDATE_KEY -o /dev/null
+    - curl -s -X POST $SHORT_WORKER_UPDATE_KEY -o /dev/null
+    - curl -s -X POST $LONG_WORKER_UPDATE_KEY -o /dev/null
+    - curl -s -X POST $SCHEDULER_UPDATE_KEY -o /dev/null
+    - curl -s -X POST $SOCKETIO_UPDATE_KEY -o /dev/null
+    - curl -s -X POST $MIGRATE_SITE_KEY -o /dev/null
 
