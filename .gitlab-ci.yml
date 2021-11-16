@@ -34,7 +34,7 @@
 
 stages:
   - build
-  - test
+  #- test
 
 # NOTE : In Frappe framework application CD stage will run in frappe-docker CI/CD
 
@@ -59,30 +59,30 @@ before_script:
 # SECTION : Define a job in each stage
 # ANCHOR : Test Stage for python (lint & unit Test)
 
-lint_test:
-  image: python:3.8.0-slim
-  stage: test
-  before_script:
-    - pip install flake8-html
-  script:
-    - flake8 --format=html --htmldir=flake_reports/
-  artifacts:
-    when: always
-    paths:
-      - flake_reports/
+#lint_test:
+#  image: python:3.8.0-slim
+#  stage: test
+#  before_script:
+#    - pip install flake8-html
+#  script:
+#    - flake8 --format=html --htmldir=flake_reports/
+#  artifacts:
+#    when: always
+#    paths:
+#      - flake_reports/
 
-pytest:
-  image: python:3.8.0-slim
-  stage: test
-  before_script:
+#pytest:
+#  image: python:3.8.0-slim
+#  stage: test
+#  before_script:
    # - pip install pytest-html
   #  - pip install -r requirements.txt
-  script:
+#  script:
   #  - pytest --html=pytest_reports/pytest-report.html --self-contained-html
-  artifacts:
-    when: always
-    paths:
-      - pytest_reports/
+#  artifacts:
+#    when: always
+#    paths:
+ #     - pytest_reports/
 
 # ANCHOR : Build Stage
 # NOTE : Frappe framework run build stage to build two image (nginx & worker)
