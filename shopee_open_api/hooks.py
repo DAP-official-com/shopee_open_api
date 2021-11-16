@@ -103,13 +103,12 @@ fixtures = [
 # << custom tricker event in form for doctype (overide/extend)>>
 doc_events = {
     # "*": {
-    # 	"on_update": "method",
-    # 	"on_cancel": "method",
-    # 	"on_trash": "method"
-    # }
+    #     "on_update": "shopee_open_api.controllers.test.on_all_events",
+    #     "after_insert": "shopee_open_api.controllers.test.on_all_events",
+    # },
     "Shopee Shop": {
         "before_save": "shopee_open_api.controllers.shopee_shop.update_profile",
-    }
+    },
 }
 # << Events for running tasks periodically in the background >>
 # Scheduled Tasks
@@ -141,7 +140,8 @@ scheduler_events = {
 # Testing
 # -------
 
-# before_tests = "shopee_open_api.install.before_tests"
+# before_tests = "shopee_open_api.tests.before_tests.before_tests"
+before_tests = "erpnext.setup.utils.before_tests"
 
 # Overriding Methods
 # ------------------------------
