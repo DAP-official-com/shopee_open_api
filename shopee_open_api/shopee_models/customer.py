@@ -16,7 +16,7 @@ class Customer(ShopeeResponseBaseClass):
         "username",
         "user_id",
         "shopee_user_id",
-        "mobile_no",
+        # "mobile_no",
     )
 
     @classmethod
