@@ -140,7 +140,6 @@ scheduler_events = {
 # Testing
 # -------
 
-# before_tests = "shopee_open_api.tests.before_tests.before_tests"
 before_tests = "erpnext.setup.utils.before_tests"
 
 # Overriding Methods
