@@ -36,7 +36,6 @@ class ShopeeShop(Document):
         )
 
         new_warehouse.insert()
-        print(new_warehouse)
 
     def get_warehouse_name(self):
         return f"Shopee Shop {self.shop_id}"
