@@ -20,6 +20,13 @@
   "item_name",
   "column_break_10",
   "image",
+  "price_info_section",
+  "current_price",
+  "currency",
+  "column_break_15",
+  "original_price",
+  "product_attributes_section",
+  "attributes",
   "section_break_10",
   "shopee_item_name",
   "package_width",
@@ -28,12 +35,9 @@
   "column_break_16",
   "description",
   "data_27",
-  "price_list",
-  "item_price",
   "item_sale_uom",
   "data_25",
   "column_break_26",
-  "original_price",
   "item_stock",
   "item_detail_section",
   "brand",
@@ -43,7 +47,9 @@
   "shopping_detail_section",
   "weight_uom",
   "logistic_info",
-  "weight"
+  "weight",
+  "stock_info_section",
+  "stock_details"
  ],
  "fields": [
   {
@@ -53,7 +59,6 @@
    "options": "Item"
   },
   {
-   "fetch_from": "item.item_name",
    "fieldname": "item_name",
    "fieldtype": "Data",
    "label": "Item name",
@@ -67,7 +72,6 @@
    "read_only": 1
   },
   {
-   "fetch_from": "item.image",
    "fieldname": "image",
    "fieldtype": "Attach Image",
    "hidden": 1,
@@ -84,7 +88,8 @@
    "fetch_from": "item.brand",
    "fieldname": "brand",
    "fieldtype": "Data",
-   "label": " Brand"
+   "label": " Brand",
+   "read_only": 1
   },
   {
    "fieldname": "item_status",
@@ -96,7 +101,6 @@
    "reqd": 1
   },
   {
-   "fetch_from": "item.item_name",
    "fieldname": "shopee_item_name",
    "fieldtype": "Data",
    "label": "Shopee Item name"
@@ -105,7 +109,6 @@
    "fetch_from": "item.safety_stock",
    "fieldname": "normal_stock",
    "fieldtype": "Data",
-   "in_list_view": 1,
    "label": "Normal Stock unit",
    "read_only": 1
   },
@@ -113,11 +116,6 @@
    "fieldname": "section_break_10",
    "fieldtype": "Section Break",
    "label": "Basic Info"
-  },
-  {
-   "fieldname": "original_price",
-   "fieldtype": "Data",
-   "label": "Original Price "
   },
   {
    "fieldname": "description",
@@ -189,16 +187,6 @@
    "fieldtype": "Column Break"
   },
   {
-   "fieldname": "price_list",
-   "fieldtype": "Data",
-   "label": "Price List"
-  },
-  {
-   "fieldname": "item_price",
-   "fieldtype": "Data",
-   "label": "Item Price"
-  },
-  {
    "fieldname": "item_sale_uom",
    "fieldtype": "Data",
    "label": "Item Sale UOM"
@@ -261,12 +249,64 @@
    "label": "Shopee Model Id",
    "read_only": 1,
    "reqd": 1
+  },
+  {
+   "fieldname": "attributes",
+   "fieldtype": "Table",
+   "label": "Attributes",
+   "options": "Shopee Product Attribute"
+  },
+  {
+   "fieldname": "product_attributes_section",
+   "fieldtype": "Section Break",
+   "label": "Product Attributes",
+   "read_only": 1
+  },
+  {
+   "fieldname": "stock_info_section",
+   "fieldtype": "Section Break",
+   "label": "Stock Info"
+  },
+  {
+   "fieldname": "stock_details",
+   "fieldtype": "Table",
+   "label": "Stock Details",
+   "options": "Shopee Product Stock"
+  },
+  {
+   "fieldname": "currency",
+   "fieldtype": "Link",
+   "label": "Currency",
+   "options": "Currency",
+   "read_only": 1
+  },
+  {
+   "fieldname": "price_info_section",
+   "fieldtype": "Section Break",
+   "label": "Price Info"
+  },
+  {
+   "fieldname": "current_price",
+   "fieldtype": "Float",
+   "in_list_view": 1,
+   "label": "Current Price",
+   "read_only": 1
+  },
+  {
+   "fieldname": "original_price",
+   "fieldtype": "Float",
+   "label": "Original Price",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_15",
+   "fieldtype": "Column Break"
   }
  ],
  "image_field": "image",
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2021-10-30 21:38:56.608530",
+ "modified": "2021-11-12 16:52:06.203743",
  "modified_by": "Administrator",
  "module": "Shopee Open API",
  "name": "Shopee Product",

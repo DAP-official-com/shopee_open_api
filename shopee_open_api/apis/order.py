@@ -28,3 +28,10 @@ def reload_order_details_from_shopee(shop_id, order_sn):
     frappe.db.commit()
 
     return {"message": "ok"}
+
+
+@frappe.whitelist()
+def create_sales_order_from_shopee_order(order_sn: str):
+    order = frappe.get_doc("Shopee Order", order_sn)
+    sales_order = order.create_sales_order()
+    return sales_order

@@ -8,7 +8,11 @@
  "field_order": [
   "partner_id",
   "partner_key",
-  "live_mode"
+  "live_mode",
+  "automation_settings_section",
+  "create_sales_order_after_shopee_order_has_been_created",
+  "security_section",
+  "prevent_making_changes_on_shopee_portal"
  ],
  "fields": [
   {
@@ -31,12 +35,36 @@
    "fieldtype": "Check",
    "label": "Live Mode",
    "reqd": 1
+  },
+  {
+   "fieldname": "automation_settings_section",
+   "fieldtype": "Section Break",
+   "label": "Automation Settings"
+  },
+  {
+   "default": "0",
+   "fieldname": "create_sales_order_after_shopee_order_has_been_created",
+   "fieldtype": "Check",
+   "label": "Create Sales Order After Shopee Order Has Been Created",
+   "reqd": 1
+  },
+  {
+   "fieldname": "security_section",
+   "fieldtype": "Section Break",
+   "label": "Security"
+  },
+  {
+   "default": "1",
+   "fieldname": "prevent_making_changes_on_shopee_portal",
+   "fieldtype": "Check",
+   "label": "Prevent Making Changes on Shopee Portal",
+   "reqd": 1
   }
  ],
  "index_web_pages_for_search": 1,
  "issingle": 1,
  "links": [],
- "modified": "2021-10-12 21:10:04.219005",
+ "modified": "2021-11-15 22:17:40.907594",
  "modified_by": "Administrator",
  "module": "Shopee Open API",
  "name": "Shopee API Settings",

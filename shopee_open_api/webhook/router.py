@@ -6,6 +6,16 @@ router = {
     1: lambda _: True,
     2: lambda _: True,
     3: handle_order_status_update,
+    4: lambda _: True,
+    5: lambda _: True,
+    6: lambda _: True,
+    7: lambda _: True,
+    8: lambda _: True,
+    9: lambda _: True,
+    10: lambda _: True,
+    11: lambda _: True,
+    12: lambda _: True,
+    13: lambda _: True,
 }
 
 

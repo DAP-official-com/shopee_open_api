@@ -8,6 +8,7 @@
  "field_order": [
   "order_summary_section",
   "order_sn",
+  "order_status_description",
   "order_status",
   "shopee_shop",
   "cancel_reason",
@@ -51,13 +52,45 @@
   "recipient_zipcode",
   "buyer_section",
   "buyer_user_id",
-  "buyer_username"
+  "buyer_username",
+  "fees_and_other_details_section",
+  "escrow_amount",
+  "buyer_total_amount",
+  "original_price",
+  "seller_discount",
+  "shopee_discount",
+  "voucher_from_seller",
+  "voucher_from_shopee",
+  "coins",
+  "buyer_paid_shipping_fee",
+  "buyer_transaction_fee",
+  "cross_border_tax",
+  "payment_promotion",
+  "commission_fee",
+  "service_fee",
+  "seller_transaction_fee",
+  "column_break_62",
+  "seller_lost_compensation",
+  "seller_coin_cash_back",
+  "escrow_tax",
+  "final_shipping_fee",
+  "escrow_actual_shipping_fee",
+  "escrow_estimated_shipping_fee",
+  "shopee_shipping_rebate",
+  "shipping_fee_discount_from_3pl",
+  "seller_shipping_discount",
+  "drc_adjustable_refund",
+  "cost_of_goods_sold",
+  "original_cost_of_goods_sold",
+  "original_shopee_discount",
+  "seller_return_refund",
+  "related_documents_section",
+  "sales_order"
  ],
  "fields": [
   {
    "fieldname": "order_sn",
    "fieldtype": "Data",
-   "in_list_view": 1,
    "label": "Order SN",
    "read_only": 1,
    "reqd": 1,
@@ -67,23 +100,27 @@
   {
    "fieldname": "region",
    "fieldtype": "Data",
-   "label": "Region"
+   "label": "Region",
+   "read_only": 1
   },
   {
    "fieldname": "currency",
    "fieldtype": "Data",
-   "label": "Currency"
+   "label": "Currency",
+   "read_only": 1
   },
   {
    "default": "0",
    "fieldname": "cod",
    "fieldtype": "Check",
-   "label": "COD"
+   "label": "COD",
+   "read_only": 1
   },
   {
    "fieldname": "total_amount",
    "fieldtype": "Float",
-   "label": "Total Amount"
+   "label": "Total Amount",
+   "read_only": 1
   },
   {
    "fieldname": "order_status",
@@ -91,12 +128,14 @@
    "in_list_view": 1,
    "label": "Order Status",
    "options": "Shopee Order Status",
+   "read_only": 1,
    "reqd": 1
   },
   {
    "fieldname": "checkout_shipping_carrier",
    "fieldtype": "Data",
-   "label": "Checkout Shipping Carrier"
+   "label": "Checkout Shipping Carrier",
+   "read_only": 1
   },
   {
    "fieldname": "buyer_cancel_reason",
@@ -107,66 +146,77 @@
   {
    "fieldname": "credit_card_number",
    "fieldtype": "Data",
-   "label": "Credit Card Number"
+   "label": "Credit Card Number",
+   "read_only": 1
   },
   {
    "fieldname": "days_to_ship",
    "fieldtype": "Int",
-   "label": "Days to Ship"
+   "label": "Days to Ship",
+   "read_only": 1
   },
   {
    "fieldname": "message_to_seller",
    "fieldtype": "Data",
-   "label": "Message to Seller"
+   "label": "Message to Seller",
+   "read_only": 1
   },
   {
    "fieldname": "note",
    "fieldtype": "Data",
-   "label": "Note"
+   "label": "Note",
+   "read_only": 1
   },
   {
    "fieldname": "pay_time",
    "fieldtype": "Datetime",
-   "label": "Pay Time"
+   "label": "Pay Time",
+   "read_only": 1
   },
   {
    "fieldname": "payment_method",
    "fieldtype": "Data",
-   "label": "Payment Method"
+   "label": "Payment Method",
+   "read_only": 1
   },
   {
    "fieldname": "pickup_done_time",
    "fieldtype": "Datetime",
-   "label": "Pickup Done Time"
+   "label": "Pickup Done Time",
+   "read_only": 1
   },
   {
    "fieldname": "ship_by_date",
    "fieldtype": "Datetime",
-   "label": "Ship by Date"
+   "label": "Ship by Date",
+   "read_only": 1
   },
   {
    "fieldname": "shipping_carrier",
    "fieldtype": "Data",
-   "label": "Shipping Carrier"
+   "label": "Shipping Carrier",
+   "read_only": 1
   },
   {
    "default": "0",
    "fieldname": "split_up",
    "fieldtype": "Check",
-   "label": "Split Up"
+   "label": "Split Up",
+   "read_only": 1
   },
   {
    "fieldname": "create_time",
    "fieldtype": "Datetime",
    "in_list_view": 1,
    "label": "Create Time",
+   "read_only": 1,
    "reqd": 1
   },
   {
    "fieldname": "update_time",
    "fieldtype": "Datetime",
-   "in_list_view": 1,
    "label": "Update Time",
+   "read_only": 1,
    "reqd": 1
   },
   {
@@ -181,6 +231,7 @@
    "fieldtype": "Link",
    "label": "Shopee Shop",
    "options": "Shopee Shop",
+   "read_only": 1,
    "reqd": 1
   },
   {
@@ -234,6 +285,7 @@
   {
    "fieldname": "buyer_username",
    "fieldtype": "Data",
+   "in_list_view": 1,
    "label": "Buyer Username",
    "read_only": 1
   },
@@ -325,11 +377,215 @@
   {
    "fieldname": "column_break_4",
    "fieldtype": "Column Break"
+  },
+  {
+   "fetch_from": "order_status.description",
+   "fieldname": "order_status_description",
+   "fieldtype": "Data",
+   "label": "Order Status Description",
+   "read_only": 1
+  },
+  {
+   "collapsible": 1,
+   "fieldname": "fees_and_other_details_section",
+   "fieldtype": "Section Break",
+   "label": "Fees and Other Details"
+  },
+  {
+   "fieldname": "escrow_amount",
+   "fieldtype": "Float",
+   "label": "Escrow Amount",
+   "read_only": 1
+  },
+  {
+   "fieldname": "buyer_total_amount",
+   "fieldtype": "Float",
+   "label": "Buyer Total Amount",
+   "read_only": 1
+  },
+  {
+   "fieldname": "original_price",
+   "fieldtype": "Float",
+   "label": "Original Price",
+   "read_only": 1
+  },
+  {
+   "fieldname": "seller_discount",
+   "fieldtype": "Float",
+   "label": "Seller Discount",
+   "read_only": 1
+  },
+  {
+   "fieldname": "shopee_discount",
+   "fieldtype": "Float",
+   "label": "Shopee Discount",
+   "read_only": 1
+  },
+  {
+   "fieldname": "voucher_from_seller",
+   "fieldtype": "Float",
+   "label": "Voucher from Seller",
+   "read_only": 1
+  },
+  {
+   "fieldname": "voucher_from_shopee",
+   "fieldtype": "Float",
+   "label": "Voucher from Shopee",
+   "read_only": 1
+  },
+  {
+   "fieldname": "coins",
+   "fieldtype": "Float",
+   "label": "Coins",
+   "read_only": 1
+  },
+  {
+   "fieldname": "buyer_paid_shipping_fee",
+   "fieldtype": "Float",
+   "label": "Buyer Paid Shipping Fee",
+   "read_only": 1
+  },
+  {
+   "fieldname": "buyer_transaction_fee",
+   "fieldtype": "Float",
+   "label": "Buyer Transaction Fee",
+   "read_only": 1
+  },
+  {
+   "fieldname": "cross_border_tax",
+   "fieldtype": "Float",
+   "label": "Cross Border Tax",
+   "read_only": 1
+  },
+  {
+   "fieldname": "payment_promotion",
+   "fieldtype": "Float",
+   "label": "Payment Promotion",
+   "read_only": 1
+  },
+  {
+   "fieldname": "commission_fee",
+   "fieldtype": "Float",
+   "label": "Commission Fee",
+   "read_only": 1
+  },
+  {
+   "fieldname": "service_fee",
+   "fieldtype": "Float",
+   "label": "Service Fee",
+   "read_only": 1
+  },
+  {
+   "fieldname": "seller_transaction_fee",
+   "fieldtype": "Float",
+   "label": "Seller Transaction Fee",
+   "read_only": 1
+  },
+  {
+   "fieldname": "seller_lost_compensation",
+   "fieldtype": "Float",
+   "label": "Seller Lost Compensation",
+   "read_only": 1
+  },
+  {
+   "fieldname": "seller_coin_cash_back",
+   "fieldtype": "Float",
+   "label": "Seller Coin Cash Back",
+   "read_only": 1
+  },
+  {
+   "fieldname": "escrow_tax",
+   "fieldtype": "Float",
+   "label": "Escrow Tax",
+   "read_only": 1
+  },
+  {
+   "fieldname": "final_shipping_fee",
+   "fieldtype": "Float",
+   "label": "Final Shipping Fee",
+   "read_only": 1
+  },
+  {
+   "fieldname": "escrow_actual_shipping_fee",
+   "fieldtype": "Float",
+   "label": "Escrow Actual Shipping Fee",
+   "read_only": 1
+  },
+  {
+   "fieldname": "shopee_shipping_rebate",
+   "fieldtype": "Float",
+   "label": "Shopee Shipping Rebate",
+   "read_only": 1
+  },
+  {
+   "fieldname": "shipping_fee_discount_from_3pl",
+   "fieldtype": "Float",
+   "label": "Shipping Fee Discount from 3PL",
+   "read_only": 1
+  },
+  {
+   "fieldname": "seller_shipping_discount",
+   "fieldtype": "Float",
+   "label": "Seller Shipping Discount",
+   "read_only": 1
+  },
+  {
+   "fieldname": "drc_adjustable_refund",
+   "fieldtype": "Float",
+   "label": "DRC Adjustable Refund",
+   "read_only": 1
+  },
+  {
+   "fieldname": "cost_of_goods_sold",
+   "fieldtype": "Float",
+   "label": "Cost of Goods Sold",
+   "read_only": 1
+  },
+  {
+   "fieldname": "original_cost_of_goods_sold",
+   "fieldtype": "Float",
+   "label": "Original Cost of Goods Sold",
+   "read_only": 1
+  },
+  {
+   "fieldname": "original_shopee_discount",
+   "fieldtype": "Float",
+   "label": "Original Shopee Discount",
+   "read_only": 1
+  },
+  {
+   "fieldname": "seller_return_refund",
+   "fieldtype": "Float",
+   "label": "Seller Return Refund",
+   "read_only": 1
+  },
+  {
+   "fieldname": "escrow_estimated_shipping_fee",
+   "fieldtype": "Float",
+   "label": "Escrow Estimated Shipping Fee",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_62",
+   "fieldtype": "Column Break",
+   "read_only": 1
+  },
+  {
+   "fieldname": "sales_order",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Sales Order",
+   "options": "Sales Order"
+  },
+  {
+   "fieldname": "related_documents_section",
+   "fieldtype": "Section Break",
+   "label": "Related Documents"
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2021-10-28 15:42:12.311409",
+ "modified": "2021-11-15 15:47:52.933376",
  "modified_by": "Administrator",
  "module": "Shopee Open API",
  "name": "Shopee Order",

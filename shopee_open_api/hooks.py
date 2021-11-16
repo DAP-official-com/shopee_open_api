@@ -16,7 +16,7 @@ required_apps = ["erpnext"]
 # app_include_css = "/assets/shopee_open_api/css/shopee_open_api.css"
 
 # << include customize doctype js to desk>>
-app_include_js = "/assets/shopee_open_api/js/branch_modification.js"
+# app_include_js = "/assets/shopee_open_api/js/branch_modification.js"
 
 # include js, css files in header of web template
 # web_include_css = "/assets/shopee_open_api/css/shopee_open_api.css"
@@ -34,7 +34,7 @@ app_include_js = "/assets/shopee_open_api/js/branch_modification.js"
 
 # include js in doctype views
 # doctype_js = {"branch" : "public/js/branch_modification.js"}
-# doctype_list_js = {"branch" : "public/js/branch_list.js"}
+doctype_list_js = {"Branch": "public/js/branch_modification.js"}
 # doctype_tree_js = {"doctype" : "public/js/doctype_tree.js"}
 # doctype_calendar_js = {"doctype" : "public/js/doctype_calendar.js"}
 
@@ -62,7 +62,6 @@ fixtures = [
     "Shopee Order Status",
     "Shopee Return Status",
     "Shopee Cancel Reason",
-    "Shopee Product Category",
 ]
 
 # Installation
@@ -104,13 +103,12 @@ fixtures = [
 # << custom tricker event in form for doctype (overide/extend)>>
 doc_events = {
     # "*": {
-    # 	"on_update": "method",
-    # 	"on_cancel": "method",
-    # 	"on_trash": "method"
-    # }
+    #     "on_update": "shopee_open_api.controllers.test.on_all_events",
+    #     "after_insert": "shopee_open_api.controllers.test.on_all_events",
+    # },
     "Shopee Shop": {
         "before_save": "shopee_open_api.controllers.shopee_shop.update_profile",
-    }
+    },
 }
 # << Events for running tasks periodically in the background >>
 # Scheduled Tasks
@@ -118,7 +116,7 @@ doc_events = {
 
 scheduler_events = {
     "cron": {
-        "* * * * *": [
+        "0 */4 * * *": [
             "shopee_open_api.scheduled_tasks.tasks.update_products",
         ]
     },
@@ -142,7 +140,7 @@ scheduler_events = {
 # Testing
 # -------
 
-# before_tests = "shopee_open_api.install.before_tests"
+before_tests = "erpnext.setup.utils.before_tests"
 
 # Overriding Methods
 # ------------------------------

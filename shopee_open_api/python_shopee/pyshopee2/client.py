@@ -234,7 +234,7 @@ class Client(object, metaclass=ClientMeta):
 
     def execute(self, uri, method, body=None, files=None):
 
-        if not self.test_env and self.only_get_allowed and method.lower() != "get":
+        if self.only_get_allowed and method.lower() != "get":
             raise OnlyGetMethodAllowedError(
                 "Only get method is allowed by default to prevent changing client's data. Call client's allow_all_method method to change this behavior"
             )

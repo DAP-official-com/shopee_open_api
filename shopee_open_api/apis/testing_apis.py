@@ -5,8 +5,109 @@ from shopee_open_api.utils.client import (
 )
 from tqdm import tqdm
 from shopee_open_api.shopee_models.product import Product
+from shopee_open_api.shopee_models.order import Order
+import uuid
 
-import os, json
+
+@frappe.whitelist()
+def test_get_client():
+
+    shops = frappe.db.get_all("Shopee Shop")
+    shop_id = shops[1].name
+
+    client = get_client_from_shop_id(shop_id)
+
+    return client.__dict__
+
+
+@frappe.whitelist()
+def test_create_sales_order_from_shopee_order():
+
+    order = frappe.get_doc("Shopee Order", "211103HHF2HJ42")
+
+    order.create_sales_order()
+
+    frappe.db.commit()
+
+    return order
+
+
+@frappe.whitelist()
+def test_apis():
+
+    shops = frappe.db.get_all("Shopee Shop")
+    shop_id = shops[0].name
+
+    client = get_client_from_shop_id(shop_id)
+
+    product_apis = [
+        attr for attr in client.payment.__dir__() if not attr.startswith("__")
+    ]
+
+    for api in product_apis:
+        if callable(getattr(client.payment, api)):
+            try:
+                r = getattr(client.payment, api)()
+                if r.get("error"):
+                    print(f"{api} {r.get('message')}")
+                else:
+                    print(f"{api} is working")
+            except Exception as e:
+                print(api, "cannot be called")
+
+    return product_apis
+
+
+@frappe.whitelist()
+def test_get_payout_detail():
+
+    shops = frappe.db.get_all("Shopee Shop")
+    shop_id = shops[0].name
+
+    client = get_client_from_shop_id(shop_id)
+
+    order_detail_response = client.order.get_order_detail(
+        order_sn_list="210701RR6EPHR7",
+        response_optional_fields="buyer_user_id,buyer_username,estimated_shipping_fee,recipient_address,actual_shipping_fee,goods_to_declare,note,note_update_time,item_list,pay_time,dropshipper,credit_card_number,dropshipper_phone,split_up,buyer_cancel_reason",
+    )
+
+    order = Order(
+        order_detail_response["response"]["order_list"][0],
+        shop_id=shop_id,
+    )
+
+    return order.get_payment_escrow().to_json()
+
+
+@frappe.whitelist()
+def test_order_detail():
+
+    shops = frappe.db.get_all("Shopee Shop")
+    shop_id = shops[0].name
+
+    client = get_client_from_shop_id(shop_id)
+
+    r = client.order.get_order_detail(
+        order_sn_list="2110307WJJED6R",
+        response_optional_fields="buyer_user_id,buyer_username,estimated_shipping_fee,recipient_address,actual_shipping_fee,goods_to_declare,note,note_update_time,item_list,pay_time,dropshipper,credit_card_number,dropshipper_phone,split_up,buyer_cancel_reason,cancel_by,cancel_reason,actual_shipping_fee_confirmed,buyer_cpf_id,fulfillment_flag,pickup_done_time,package_list,shipping_carrier,payment_method,total_amount,buyer_username,invoice_data,checkout_shipping_carrier,reverse_shipping_fee",
+    )
+
+    return r
+
+
+@frappe.whitelist()
+def test_tracking_info():
+
+    shops = frappe.db.get_all("Shopee Shop")
+    shop_id = shops[0].name
+
+    client = get_client_from_shop_id(shop_id)
+
+    r = client.logistics.get_tracking_info(
+        order_sn="211102GC0R9731",
+    )
+
+    return r
 
 
 @frappe.whitelist()

@@ -4,5 +4,5 @@
 # import frappe
 import unittest
 
-class TestShoppeProductAttributes(unittest.TestCase):
+class TestShopeeProductAttribute(unittest.TestCase):
 	pass

@@ -43,19 +43,19 @@
   {
    "hidden": 0,
    "is_query_report": 0,
-   "label": "Order Status",
-   "link_to": "Shopee Order Status",
-   "link_type": "DocType",
-   "onboard": 0,
-   "type": "Link"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 0,
    "label": "Product",
    "link_type": "DocType",
    "onboard": 0,
    "type": "Card Break"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Shopee Orders",
+   "link_to": "Shopee Order",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
   },
   {
    "hidden": 0,
@@ -144,7 +144,7 @@
    "type": "Card Break"
   }
  ],
- "modified": "2021-10-22 09:06:06.515855",
+ "modified": "2021-11-04 17:36:18.547732",
  "modified_by": "Administrator",
  "module": "Shopee Open API",
  "name": "Shopee Integration",
