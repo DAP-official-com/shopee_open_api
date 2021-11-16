@@ -180,3 +180,16 @@ _Original Package Source code_
 
 _Shopee Open API Documentation_  
  https://open.shopee.com/documents?module=87&type=2&id=64&version=2
+
+## Run Tests
+
+```console
+## Create a new site for testing.
+bench new-site {sitename} --install-app shopee_open_api
+
+## Set config to allow testing
+bench --site {sitename} set-config allow_tests true
+
+## Run tests
+bench --site {sitename} run-tests --app shopee_open_api --skip-test-records
+```
