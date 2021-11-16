@@ -2,6 +2,7 @@ import frappe
 from unittest import mock, TestCase
 from shopee_open_api.utils.client import get_shopless_client
 from shopee_open_api.python_shopee.pyshopee2.client import Client
+from shopee_open_api.python_shopee.pyshopee2.exceptions import OnlyGetMethodAllowedError
 
 
 class ClientTest(TestCase):
@@ -20,3 +21,17 @@ class ClientTest(TestCase):
         )
 
         self.assertIn(auth_redirect_url, auth_url)
+
+    def test_only_allow_get(self):
+
+        frappe.db.set_value(
+            "Shopee API Settings",
+            "Shopee API Settings",
+            "prevent_making_changes_on_shopee_portal",
+            1,
+        )
+
+        client = get_shopless_client()
+
+        with self.assertRaises(OnlyGetMethodAllowedError):
+            client.product.reply_comment()
