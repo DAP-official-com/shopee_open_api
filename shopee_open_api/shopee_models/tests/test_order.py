@@ -207,7 +207,7 @@ class ShopeeProductTest(TestCase):
             lambda: order.update_or_insert_with_items(),
         )
 
-        self.assertIsNone(
+        self.assertIsNotNone(
             self.order.update_or_insert_with_items(ignore_permissions=True)
         )
 

@@ -16,7 +16,7 @@ class Customer(ShopeeResponseBaseClass):
         "username",
         "user_id",
         "shopee_user_id",
-        # "mobile_no",
+        # "mobile_no", # ignore mobile number for now. when creating a new customer, if mobile number is provided, a Contact is also created, but we cannot override the permission
     )
 
     @classmethod
