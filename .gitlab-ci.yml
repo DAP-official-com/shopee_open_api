@@ -116,7 +116,7 @@ build_shopee_open_api_nginx:
   script:
     - echo "$CI_JOB_STAGE"
 #    - export VERSION=$(git tag --list --sort=-version:refname | sed -n 1p | sed -e 's#.*@\(\)#\1#')
-    - docker build --pull --build-arg=FRAPPE_BRANCH=v13.12.1 --build-arg=ERPNEXT_BRANCH=v13.12.1 -t nginx -f docker/nginx/Dockerfile .
+    - docker build --pull --build-arg=FRAPPE_BRANCH=v13.12.1 --build-arg=ERPNEXT_BRANCH=v13.12.1 --build-arg=GIT_REPO="$CI_REPOSITORY_URL" -t nginx -f docker/nginx/Dockerfile .
     - docker tag nginx "$CI_REGISTRY/$CI_PROJECT_NAMESPACE/shopee_open_api/nginx:$VERSION"
     - docker push "$CI_REGISTRY/$CI_PROJECT_NAMESPACE/shopee_open_api/nginx:$VERSION"
   only:
