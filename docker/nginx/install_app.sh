@@ -40,4 +40,4 @@ echo "rsync -a --delete /var/www/html/assets/frappe /assets" >/rsync
 echo "rsync -a --delete /var/www/html/assets/${APP_NAME} /assets" >>/rsync
 chmod +x /rsync
 
-rm sites/apps.txt
+rm /home/frappe/frappe-bench/sites/apps.txt
