@@ -39,9 +39,9 @@ stages:
 # NOTE : In Frappe framework application CD stage will run in frappe-docker CI/CD
 
 variables:
-  IMAGE_TAG: $CI_REGISTRY_IMAGE/shopee_open_api:$CI_COMMIT_SHORT_SHA
-  DOCKER_HOST: tcp://docker:2376
-  DOCKER_TLS_CERTDIR: "/certs"
+#  IMAGE_TAG: $CI_REGISTRY_IMAGE/shopee_open_api:$CI_COMMIT_SHORT_SHA
+#  DOCKER_HOST: tcp://docker:2376
+#  DOCKER_TLS_CERTDIR: "/certs"
 
 image: docker:latest
 
@@ -50,7 +50,8 @@ services:
 
 before_script:
   - apk add git
-  - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN registry.gitlab.com
+  #- docker login -u gitlab-ci-token -p $CI_JOB_TOKEN registry.gitlab.com
+  - docker login git.arterypartner.com:5555
   # Use TLS https://docs.gitlab.com/ee/ci/docker/using_docker_build.html#tls-enabled
 
 
@@ -92,8 +93,9 @@ build_shopee_open_api_nginx:
   only:
     - tags
   script:
-    - git clone https://github.com/castlecraft/cfe --depth 1 repos/castlecraft
-    - export VERSION=$(git tag --list --sort=-version:refname | sed -n 1p | sed -e 's#.*@\(\)#\1#')
+    - echo "$CI_JOB_STAGE"
+#    - git clone https://github.com/castlecraft/cfe --depth 1 repos/castlecraft
+#    - export VERSION=$(git tag --list --sort=-version:refname | sed -n 1p | sed -e 's#.*@\(\)#\1#')
     - docker build --build-arg=FRAPPE_BRANCH=v13.12.1 --build-arg=ERPNEXT_BRANCH=v13.12.1 -t nginx -f docker/nginx/Dockerfile .
     - docker tag nginx "$CI_REGISTRY/$CI_PROJECT_NAMESPACE/shopee_open_api/nginx:$VERSION"
     - docker push "$CI_REGISTRY/$CI_PROJECT_NAMESPACE/shopee_open_api/nginx:$VERSION"
@@ -103,49 +105,49 @@ build_shopee_open_api_worker:
   only:
     - tags
   script:
-    - git clone https://github.com/castlecraft/cfe --depth 1 repos/castlecraft
-    - export VERSION=$(git tag --list --sort=-version:refname | sed -n 1p | sed -e 's#.*@\(\)#\1#')
+#    - git clone https://github.com/castlecraft/cfe --depth 1 repos/castlecraft
+#    - export VERSION=$(git tag --list --sort=-version:refname | sed -n 1p | sed -e 's#.*@\(\)#\1#')
     - docker build --build-arg=ERPNEXT_BRANCH=v13.12.1 -t worker -f docker/worker/Dockerfile .
     - docker tag worker "$CI_REGISTRY/$CI_PROJECT_NAMESPACE/shopee_open_api/worker:$VERSION"
     - docker push "$CI_REGISTRY/$CI_PROJECT_NAMESPACE/shopee_open_api/worker:$VERSION"
 
-build_staging_shopee_open_api_nginx:
-  stage: build
-  only:
-    refs:
-      - main
-  script:
-    - git clone https://github.com/castlecraft/cfe --depth 1 repos/castlecraft
-    - docker build --build-arg=FRAPPE_BRANCH=v13.12.1 --build-arg=ERPNEXT_BRANCH=v13.12.1 -t nginx -f docker/nginx/Dockerfile .
-    - docker tag nginx "$CI_REGISTRY/$CI_PROJECT_NAMESPACE/shopee_open_api/nginx:latest"
-    - docker push "$CI_REGISTRY/$CI_PROJECT_NAMESPACE/shopee_open_api/nginx:latest"
-
-build_staging_shopee_open_api_worker:
-  stage: build
-  only:
-    refs:
-      - main
-  script:
-    - git clone https://github.com/castlecraft/cfe --depth 1 repos/castlecraft
-    - docker build --build-arg=ERPNEXT_BRANCH=v13.12.1 -t worker -f docker/worker/Dockerfile .
-    - docker tag worker "$CI_REGISTRY/$CI_PROJECT_NAMESPACE/shopee_open_api/worker:latest"
-    - docker push "$CI_REGISTRY/$CI_PROJECT_NAMESPACE/shopee_open_api/worker:latest"
-
-deploy_staging:
-  image: alpine:latest
-  stage: deploy
-  only:
-    refs:
-      - main
-  before_script:
-    - apk add curl bash
-  script:
-    - curl -s -X POST $NGINX_UPDATE_KEY -o /dev/null
-    - curl -s -X POST $GUNICORN_UPDATE_KEY -o /dev/null
-    - curl -s -X POST $DEFAULT_WORKER_UPDATE_KEY -o /dev/null
-    - curl -s -X POST $SHORT_WORKER_UPDATE_KEY -o /dev/null
-    - curl -s -X POST $LONG_WORKER_UPDATE_KEY -o /dev/null
-    - curl -s -X POST $SCHEDULER_UPDATE_KEY -o /dev/null
-    - curl -s -X POST $SOCKETIO_UPDATE_KEY -o /dev/null
-    - curl -s -X POST $MIGRATE_SITE_KEY -o /dev/null
+#build_staging_shopee_open_api_nginx:
+##  stage: build
+#  only:
+#    refs:
+#      - main
+#  script:
+#    - git clone https://github.com/castlecraft/cfe --depth 1 repos/castlecraft
+#    - docker build --build-arg=FRAPPE_BRANCH=v13.12.1 --build-arg=ERPNEXT_BRANCH=v13.12.1 -t nginx -f docker/nginx/Dockerfile .
+#    - docker tag nginx "$CI_REGISTRY/$CI_PROJECT_NAMESPACE/shopee_open_api/nginx:latest"
+#    - docker push "$CI_REGISTRY/$CI_PROJECT_NAMESPACE/shopee_open_api/nginx:latest"
+#
+#build_staging_shopee_open_api_worker:
+#  stage: build
+#  only:
+#    refs:
+#      - main
+#  script:
+#    - git clone https://github.com/castlecraft/cfe --depth 1 repos/castlecraft
+#    - docker build --build-arg=ERPNEXT_BRANCH=v13.12.1 -t worker -f docker/worker/Dockerfile .
+#    - docker tag worker "$CI_REGISTRY/$CI_PROJECT_NAMESPACE/shopee_open_api/worker:latest"
+#    - docker push "$CI_REGISTRY/$CI_PROJECT_NAMESPACE/shopee_open_api/worker:latest"
+#
+#deploy_staging:
+#  image: alpine:latest
+#  stage: deploy
+#  only:
+#    refs:
+#      - main
+#  before_script:
+#    - apk add curl bash
+#  script:
+#    - curl -s -X POST $NGINX_UPDATE_KEY -o /dev/null
+#    - curl -s -X POST $GUNICORN_UPDATE_KEY -o /dev/null
+#    - curl -s -X POST $DEFAULT_WORKER_UPDATE_KEY -o /dev/null
+#    - curl -s -X POST $SHORT_WORKER_UPDATE_KEY -o /dev/null
+#    - curl -s -X POST $LONG_WORKER_UPDATE_KEY -o /dev/null
+#    - curl -s -X POST $SCHEDULER_UPDATE_KEY -o /dev/null
+#    - curl -s -X POST $SOCKETIO_UPDATE_KEY -o /dev/null
+#    - curl -s -X POST $MIGRATE_SITE_KEY -o /dev/null
 
