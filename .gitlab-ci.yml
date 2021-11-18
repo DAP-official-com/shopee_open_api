@@ -1,0 +1,150 @@
+### ArteryPartner.co,.ltd. ###
+
+# SECTION : Basic Info 
+
+# ANCHOR: using Docker Executor
+
+# TODO : Create Test Stage for develop branch
+# TODO : Set up pre-define Environment variable
+# TODO : using gitlab CI variable 
+
+# REVIEW : Environment VAR
+# !SECTION
+
+# SECTION : Read ME 
+
+# Environment variable 
+# https://docs.gitlab.com/ee/ci/variables/
+
+# Predefined environment variables
+# https://docs.gitlab.com/ee/ci/variables/predefined_variables.html 
+
+# Using docker images
+# https://docs.gitlab.com/ee/ci/docker/using_docker_images.html
+
+# .gitlab-ci.yml reference
+# https://docs.gitlab.com/ee/ci/yaml/
+
+# Container registry reference (authenticating, etc.)
+# https://gitlab.com/help/user/packages/container_registry/index
+# !SECTION 
+
+# SECTION :CI-Header
+# ANCHOR : Define CI stage & Share variable
+
+stages:
+  - build
+  #- test
+
+# NOTE : In Frappe framework application CD stage will run in frappe-docker CI/CD
+
+variables:
+#  IMAGE_TAG: $CI_REGISTRY_IMAGE/shopee_open_api:$CI_COMMIT_SHORT_SHA
+#  DOCKER_HOST: tcp://docker:2376
+#  DOCKER_TLS_CERTDIR: "/certs"
+  VERSION: version-13
+
+image: docker:latest
+
+services:
+  - docker:dind
+
+before_script:
+  - apk add git
+  #- docker login -u gitlab-ci-token -p $CI_JOB_TOKEN registry.gitlab.com
+  - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
+  # Use TLS https://docs.gitlab.com/ee/ci/docker/using_docker_build.html#tls-enabled
+
+
+# !SECTION
+
+# SECTION : Define a job in each stage
+# ANCHOR : Test Stage for python (lint & unit Test)
+
+#lint_test:
+#  image: python:3.8.0-slim
+#  stage: test
+#  before_script:
+#    - pip install flake8-html
+#  script:
+#    - flake8 --format=html --htmldir=flake_reports/
+#  artifacts:
+#    when: always
+#    paths:
+#      - flake_reports/
+
+#pytest:
+#  image: python:3.8.0-slim
+#  stage: test
+#  before_script:
+   # - pip install pytest-html
+  #  - pip install -r requirements.txt
+#  script:
+  #  - pytest --html=pytest_reports/pytest-report.html --self-contained-html
+#  artifacts:
+#    when: always
+#    paths:
+ #     - pytest_reports/
+
+# ANCHOR : Build Stage
+# NOTE : Frappe framework run build stage to build two image (nginx & worker)
+
+build_shopee_open_api_nginx:
+  stage: build
+  script:
+    - echo "$CI_JOB_STAGE"
+#    - git clone https://github.com/castlecraft/cfe --depth 1 repos/castlecraft
+#    - export VERSION=$(git tag --list --sort=-version:refname | sed -n 1p | sed -e 's#.*@\(\)#\1#')
+    - docker build --build-arg=FRAPPE_BRANCH=v13.12.1 --build-arg=ERPNEXT_BRANCH=v13.12.1 --build-arg=GIT_REPO="$CI_REPOSITORY_URL" -t nginx -f docker/nginx/Dockerfile .
+    - docker tag nginx "$CI_REGISTRY/$CI_PROJECT_NAMESPACE/shopee_open_api/nginx:$VERSION"
+    - docker push "$CI_REGISTRY/$CI_PROJECT_NAMESPACE/shopee_open_api/nginx:$VERSION"
+
+build_shopee_open_api_worker:
+  stage: build
+  script:
+#    - git clone https://github.com/castlecraft/cfe --depth 1 repos/castlecraft
+#    - export VERSION=$(git tag --list --sort=-version:refname | sed -n 1p | sed -e 's#.*@\(\)#\1#')
+    - docker build --build-arg=ERPNEXT_BRANCH=v13.12.1 -t worker -f docker/worker/Dockerfile .
+    - docker tag worker "$CI_REGISTRY/$CI_PROJECT_NAMESPACE/shopee_open_api/worker:$VERSION"
+    - docker push "$CI_REGISTRY/$CI_PROJECT_NAMESPACE/shopee_open_api/worker:$VERSION"
+
+#build_staging_shopee_open_api_nginx:
+##  stage: build
+#  only:
+#    refs:
+#      - main
+#  script:
+#    - git clone https://github.com/castlecraft/cfe --depth 1 repos/castlecraft
+#    - docker build --build-arg=FRAPPE_BRANCH=v13.12.1 --build-arg=ERPNEXT_BRANCH=v13.12.1 -t nginx -f docker/nginx/Dockerfile .
+#    - docker tag nginx "$CI_REGISTRY/$CI_PROJECT_NAMESPACE/shopee_open_api/nginx:latest"
+#    - docker push "$CI_REGISTRY/$CI_PROJECT_NAMESPACE/shopee_open_api/nginx:latest"
+#
+#build_staging_shopee_open_api_worker:
+#  stage: build
+#  only:
+#    refs:
+#      - main
+#  script:
+#    - git clone https://github.com/castlecraft/cfe --depth 1 repos/castlecraft
+#    - docker build --build-arg=ERPNEXT_BRANCH=v13.12.1 -t worker -f docker/worker/Dockerfile .
+#    - docker tag worker "$CI_REGISTRY/$CI_PROJECT_NAMESPACE/shopee_open_api/worker:latest"
+#    - docker push "$CI_REGISTRY/$CI_PROJECT_NAMESPACE/shopee_open_api/worker:latest"
+#
+#deploy_staging:
+#  image: alpine:latest
+#  stage: deploy
+#  only:
+#    refs:
+#      - main
+#  before_script:
+#    - apk add curl bash
+#  script:
+#    - curl -s -X POST $NGINX_UPDATE_KEY -o /dev/null
+#    - curl -s -X POST $GUNICORN_UPDATE_KEY -o /dev/null
+#    - curl -s -X POST $DEFAULT_WORKER_UPDATE_KEY -o /dev/null
+#    - curl -s -X POST $SHORT_WORKER_UPDATE_KEY -o /dev/null
+#    - curl -s -X POST $LONG_WORKER_UPDATE_KEY -o /dev/null
+#    - curl -s -X POST $SCHEDULER_UPDATE_KEY -o /dev/null
+#    - curl -s -X POST $SOCKETIO_UPDATE_KEY -o /dev/null
+#    - curl -s -X POST $MIGRATE_SITE_KEY -o /dev/null
+
