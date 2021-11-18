@@ -18,7 +18,7 @@ echo -ne "frappe\n${APP_NAME}" >sites/apps.txt
 # make Erpnext app directory in apps directory and get-app from git repo
 git clone --depth 1 -b "${FRAPPE_BRANCH}" https://github.com/frappe/frappe apps/frappe
 # shellcheck disable=SC2086
-git clone --depth 1 -b ${BRANCH} ${APP_REPO} apps/${APP_NAME}
+git clone --depth 1 ${BRANCH} ${APP_REPO} apps/${APP_NAME}
 
 # install node dependency 
 echo "Install frappe NodeJS dependencies . . ."
