@@ -35,14 +35,27 @@
 stages:
   - build
   #- test
+  #- release
+  #- deploy
+  #- clear
 
 # NOTE : In Frappe framework application CD stage will run in frappe-docker CI/CD
 
+# ANCHOR : Golbal Variable
 variables:
-#  IMAGE_TAG: $CI_REGISTRY_IMAGE/shopee_open_api:$CI_COMMIT_SHORT_SHA
+# REVIEW : Gitlab $CI_veariable for generate Image tag   
+#  GIT_REPO: $CI_REPOSITORY_URL
+#  GIT_PROJECT_NAME: $CI_PROJECT_NAME
+
+#  IMAGE_TAG: $CI_REGISTRY_IMAGE/$CI_PROJECT_NAME(shopee_open_api):$CI_COMMIT_SHORT_SHA
+
 #  DOCKER_HOST: tcp://docker:2376
 #  DOCKER_TLS_CERTDIR: "/certs"
-  VERSION: version-13
+
+#  CONTAINER_TEST_IMAGE: $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG
+#  CONTAINER_RELEASE_IMAGE: $CI_REGISTRY_IMAGE:latest
+
+# NOTE : To send gitlab VARIABLE To Docker command add `"$VAR"` 
 
 image: docker:latest
 
@@ -51,15 +64,24 @@ services:
 
 before_script:
   - apk add git
-  #- docker login -u gitlab-ci-token -p $CI_JOB_TOKEN registry.gitlab.com
+
+  ## ANCHOR : Registry Auth
+  # NOTE: Job Token Auth.
+  #- docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
+  # NOTE CI VAR Auth
   - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
-  # Use TLS https://docs.gitlab.com/ee/ci/docker/using_docker_build.html#tls-enabled
+  # NOTE : Deploy key Auth
+  #  docker login -u $CI_DEPLOY_USER -p $CI_DEPLOY_PASSWORD $CI_REGISTRY
+  # NOTE : Personal Access Token Auth 
+  # docker login -u <username> -p <access_token> $CI_REGISTRY
 
-
+  # NOTE : Use TLS https://docs.gitlab.com/ee/ci/docker/using_docker_build.html#tls-enabled
 # !SECTION
 
 # SECTION : Define a job in each stage
+
 # ANCHOR : Test Stage for python (lint & unit Test)
+# TODO : Using Docker to run test command as a script
 
 #lint_test:
 #  image: python:3.8.0-slim
@@ -93,20 +115,22 @@ build_shopee_open_api_nginx:
   stage: build
   script:
     - echo "$CI_JOB_STAGE"
-#    - git clone https://github.com/castlecraft/cfe --depth 1 repos/castlecraft
 #    - export VERSION=$(git tag --list --sort=-version:refname | sed -n 1p | sed -e 's#.*@\(\)#\1#')
-    - docker build --build-arg=FRAPPE_BRANCH=v13.12.1 --build-arg=ERPNEXT_BRANCH=v13.12.1 --build-arg=GIT_REPO="$CI_REPOSITORY_URL" -t nginx -f docker/nginx/Dockerfile .
+    - docker build --pull --build-arg=FRAPPE_BRANCH=v13.12.1 --build-arg=ERPNEXT_BRANCH=v13.12.1 -t nginx -f docker/nginx/Dockerfile .
     - docker tag nginx "$CI_REGISTRY/$CI_PROJECT_NAMESPACE/shopee_open_api/nginx:$VERSION"
     - docker push "$CI_REGISTRY/$CI_PROJECT_NAMESPACE/shopee_open_api/nginx:$VERSION"
+  only:
+      - master
 
 build_shopee_open_api_worker:
   stage: build
   script:
-#    - git clone https://github.com/castlecraft/cfe --depth 1 repos/castlecraft
 #    - export VERSION=$(git tag --list --sort=-version:refname | sed -n 1p | sed -e 's#.*@\(\)#\1#')
-    - docker build --build-arg=ERPNEXT_BRANCH=v13.12.1 -t worker -f docker/worker/Dockerfile .
+    - docker build --pull --build-arg=ERPNEXT_BRANCH=v13.12.1 -t worker -f docker/worker/Dockerfile .
     - docker tag worker "$CI_REGISTRY/$CI_PROJECT_NAMESPACE/shopee_open_api/worker:$VERSION"
     - docker push "$CI_REGISTRY/$CI_PROJECT_NAMESPACE/shopee_open_api/worker:$VERSION"
+  only:
+      - master
 
 #build_staging_shopee_open_api_nginx:
 ##  stage: build
@@ -114,7 +138,6 @@ build_shopee_open_api_worker:
 #    refs:
 #      - main
 #  script:
-#    - git clone https://github.com/castlecraft/cfe --depth 1 repos/castlecraft
 #    - docker build --build-arg=FRAPPE_BRANCH=v13.12.1 --build-arg=ERPNEXT_BRANCH=v13.12.1 -t nginx -f docker/nginx/Dockerfile .
 #    - docker tag nginx "$CI_REGISTRY/$CI_PROJECT_NAMESPACE/shopee_open_api/nginx:latest"
 #    - docker push "$CI_REGISTRY/$CI_PROJECT_NAMESPACE/shopee_open_api/nginx:latest"
@@ -125,11 +148,11 @@ build_shopee_open_api_worker:
 #    refs:
 #      - main
 #  script:
-#    - git clone https://github.com/castlecraft/cfe --depth 1 repos/castlecraft
 #    - docker build --build-arg=ERPNEXT_BRANCH=v13.12.1 -t worker -f docker/worker/Dockerfile .
 #    - docker tag worker "$CI_REGISTRY/$CI_PROJECT_NAMESPACE/shopee_open_api/worker:latest"
 #    - docker push "$CI_REGISTRY/$CI_PROJECT_NAMESPACE/shopee_open_api/worker:latest"
 #
+# ANCHOR : Deply Stage
 #deploy_staging:
 #  image: alpine:latest
 #  stage: deploy
