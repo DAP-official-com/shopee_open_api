@@ -35,9 +35,8 @@ RUN chmod +x /install_app && \
   # Cleanup for production
   /prepare_production
 
-FROM frappe/erpnext-nginx:${ERPNEXT_BRANCH}
 # NOTE To Use Private Registry Image use command below
-# FROM ${DOCKER_REGISTRY_PREFIX}/frappe-nginx:${IMAGE_TAG}
+ FROM ${DOCKER_REGISTRY_PREFIX}/frappe-nginx:${IMAGE_TAG}
 
 
 COPY --from=builder /home/frappe/frappe-bench/sites/ /var/www/html/
