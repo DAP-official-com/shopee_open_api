@@ -42,7 +42,7 @@ variables:
 #  IMAGE_TAG: $CI_REGISTRY_IMAGE/shopee_open_api:$CI_COMMIT_SHORT_SHA
 #  DOCKER_HOST: tcp://docker:2376
 #  DOCKER_TLS_CERTDIR: "/certs"
-  VERSION:version-13
+  VERSION: version-13
 
 image: docker:latest
 
@@ -95,7 +95,7 @@ build_shopee_open_api_nginx:
     - echo "$CI_JOB_STAGE"
 #    - git clone https://github.com/castlecraft/cfe --depth 1 repos/castlecraft
 #    - export VERSION=$(git tag --list --sort=-version:refname | sed -n 1p | sed -e 's#.*@\(\)#\1#')
-    - docker build --build-arg=FRAPPE_BRANCH=v13.12.1 --build-arg=ERPNEXT_BRANCH=v13.12.1 -t nginx -f docker/nginx/Dockerfile .
+    - docker build --build-arg=FRAPPE_BRANCH=v13.12.1 --build-arg=ERPNEXT_BRANCH=v13.12.1 --build-arg=GIT_REPO="$CI_REPOSITORY_URL" -t nginx -f docker/nginx/Dockerfile .
     - docker tag nginx "$CI_REGISTRY/$CI_PROJECT_NAMESPACE/shopee_open_api/nginx:$VERSION"
     - docker push "$CI_REGISTRY/$CI_PROJECT_NAMESPACE/shopee_open_api/nginx:$VERSION"
 
