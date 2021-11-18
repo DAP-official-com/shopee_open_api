@@ -51,7 +51,7 @@ services:
 before_script:
   - apk add git
   #- docker login -u gitlab-ci-token -p $CI_JOB_TOKEN registry.gitlab.com
-  - docker login git.arterypartner.com:5555
+  - docker docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
   # Use TLS https://docs.gitlab.com/ee/ci/docker/using_docker_build.html#tls-enabled
 
 
