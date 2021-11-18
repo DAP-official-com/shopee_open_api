@@ -90,8 +90,6 @@ before_script:
 
 build_shopee_open_api_nginx:
   stage: build
-  only:
-    - tags
   script:
     - echo "$CI_JOB_STAGE"
 #    - git clone https://github.com/castlecraft/cfe --depth 1 repos/castlecraft
@@ -102,8 +100,6 @@ build_shopee_open_api_nginx:
 
 build_shopee_open_api_worker:
   stage: build
-  only:
-    - tags
   script:
 #    - git clone https://github.com/castlecraft/cfe --depth 1 repos/castlecraft
 #    - export VERSION=$(git tag --list --sort=-version:refname | sed -n 1p | sed -e 's#.*@\(\)#\1#')
