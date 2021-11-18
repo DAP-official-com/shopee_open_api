@@ -46,8 +46,9 @@ variables:
 # REVIEW : Gitlab $CI_veariable for generate Image tag   
 #  GIT_REPO: $CI_REPOSITORY_URL
 #  GIT_PROJECT_NAME: $CI_PROJECT_NAME
+#  CI_COMMIT_TAG: $CI_COMMIT_TAG
 
-#  IMAGE_TAG: $CI_REGISTRY_IMAGE/$CI_PROJECT_NAME(shopee_open_api):$CI_COMMIT_SHORT_SHA
+  IMAGE_TAG: $CI_REGISTRY_IMAGE/$CI_PROJECT_NAME:$CI_COMMIT_SHORT_SHA
 
 #  DOCKER_HOST: tcp://docker:2376
 #  DOCKER_TLS_CERTDIR: "/certs"
@@ -115,10 +116,13 @@ build_shopee_open_api_nginx:
   stage: build
   script:
     - echo "$CI_JOB_STAGE"
+    - echo "$CI_COMMIT_TAG"
+    - echo "$CI_PROJECT_NAME"
+    - echo "$IMAGE_TAG"
 #    - export VERSION=$(git tag --list --sort=-version:refname | sed -n 1p | sed -e 's#.*@\(\)#\1#')
     - docker build --pull --build-arg=FRAPPE_BRANCH=v13.12.1 --build-arg=ERPNEXT_BRANCH=v13.12.1 --build-arg=GIT_REPO="$CI_REPOSITORY_URL" -t nginx -f docker/nginx/Dockerfile .
-    - docker tag nginx "$CI_REGISTRY/$CI_PROJECT_NAMESPACE/shopee_open_api/nginx:$VERSION"
-    - docker push "$CI_REGISTRY/$CI_PROJECT_NAMESPACE/shopee_open_api/nginx:$VERSION"
+    - docker tag "$CI_PROJECT_NAME"-nginx "$CI_REGISTRY/$CI_PROJECT_NAMESPACE/$CI_PROJECT_NAME/$CI_PROJECT_NAME-nginx:$VERSION"
+    - docker push "$CI_REGISTRY/$CI_PROJECT_NAMESPACE/$CI_PROJECT_NAME/$CI_PROJECT_NAME-nginx:$VERSION"
   only:
       - master
 
@@ -127,8 +131,8 @@ build_shopee_open_api_worker:
   script:
 #    - export VERSION=$(git tag --list --sort=-version:refname | sed -n 1p | sed -e 's#.*@\(\)#\1#')
     - docker build --pull --build-arg=ERPNEXT_BRANCH=v13.12.1 -t worker -f docker/worker/Dockerfile .
-    - docker tag worker "$CI_REGISTRY/$CI_PROJECT_NAMESPACE/shopee_open_api/worker:$VERSION"
-    - docker push "$CI_REGISTRY/$CI_PROJECT_NAMESPACE/shopee_open_api/worker:$VERSION"
+    - docker tag "$CI_PROJECT_NAME"-worker "$CI_REGISTRY/$CI_PROJECT_NAMESPACE/$CI_PROJECT_NAME/$CI_PROJECT_NAME-worker:$VERSION"
+    - docker push "$CI_REGISTRY/$CI_PROJECT_NAMESPACE/$CI_PROJECT_NAME/$CI_PROJECT_NAME-worker:$VERSION"
   only:
       - master
 
