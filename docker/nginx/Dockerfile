@@ -25,8 +25,7 @@ RUN apt-get update \
 COPY ./docker/nginx/install_frappe.sh /install_frappe
 COPY ./docker/nginx/install_app.sh /install_app
 COPY ./docker/nginx/prepare_production.sh /prepare_production
-COPY . /home/frappe/frappe-bench/apps/audit_documents
-COPY ./repos/castlecraft /home/frappe/frappe-bench/apps/castlecraft
+
 
 # ANCHOR Run install script to install app with change install script
 # to executable mode
