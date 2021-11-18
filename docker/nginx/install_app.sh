@@ -15,6 +15,7 @@ cd /home/frappe/frappe-bench
 mkdir -p apps "sites/assets/${APP_NAME}"
 cd /home/frappe/frappe-bench/sites
 echo -ne "frappe\n${APP_NAME}" >apps.txt
+cd /home/frappe/frappe-bench
 
 # make Erpnext app directory in apps directory and get-app from git repo
 git clone --depth 1 -b "${FRAPPE_BRANCH}" https://github.com/frappe/frappe apps/frappe
