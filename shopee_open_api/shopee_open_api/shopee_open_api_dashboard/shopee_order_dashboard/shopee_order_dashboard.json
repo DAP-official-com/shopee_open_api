@@ -1,0 +1,29 @@
+{
+ "cards": [
+  {
+   "card": "Total Revenue"
+  }
+ ],
+ "charts": [
+  {
+   "chart": "Daily Revenue",
+   "width": "Half"
+  },
+  {
+   "chart": "Top Cancel Reasons",
+   "width": "Half"
+  }
+ ],
+ "creation": "2021-11-18 09:43:18.100099",
+ "dashboard_name": "Shopee order dashboard",
+ "docstatus": 0,
+ "doctype": "Dashboard",
+ "idx": 0,
+ "is_default": 1,
+ "is_standard": 1,
+ "modified": "2021-11-19 07:19:34.800911",
+ "modified_by": "Administrator",
+ "module": "Shopee Open API",
+ "name": "Shopee order dashboard",
+ "owner": "Administrator"
+}
