@@ -152,3 +152,18 @@ class ShopeeOrder(Document):
         customer.add_address(address, ignore_permissions=True)
         self.customer = customer.get_primary_key()
         self.address = address.get_primary_key()
+
+    def before_insert(self):
+        self.create_cancel_reason()
+
+    def create_cancel_reason(self):
+        print("Saving cancel reason")
+        if not self.cancel_reason:
+            return
+
+        if frappe.db.exists("Shopee Cancel Reason", self.cancel_reason):
+            return
+
+        cancel_reason = frappe.new_doc("Shopee Cancel Reason")
+        cancel_reason.cancel_status = self.cancel_reason
+        cancel_reason.insert(ignore_permissions=True)
