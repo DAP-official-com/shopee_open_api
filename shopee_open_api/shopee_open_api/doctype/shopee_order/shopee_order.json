@@ -239,8 +239,9 @@
   },
   {
    "fieldname": "cancel_reason",
-   "fieldtype": "Data",
+   "fieldtype": "Link",
    "label": "Cancel Reason",
+   "options": "Shopee Cancel Reason",
    "read_only": 1
   },
   {
@@ -602,7 +603,7 @@
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2021-11-18 22:12:39.280094",
+ "modified": "2021-11-19 06:28:39.912592",
  "modified_by": "Administrator",
  "module": "Shopee Open API",
  "name": "Shopee Order",
