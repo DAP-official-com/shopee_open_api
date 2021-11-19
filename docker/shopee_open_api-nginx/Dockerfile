@@ -22,8 +22,8 @@ RUN apt-get update \
 
 # ANCHOR Copy install application script as shell script 
 # NOTE Copy install_frappe.sh in build directory and update linux package
-COPY ./docker/nginx/install_app.sh /install_app
-COPY ./docker/nginx/prepare_production.sh /prepare_production
+COPY ./docker/shopee_open_api-nginx/install_app.sh /install_app
+COPY ./docker/shopee_open_api-nginx/prepare_production.sh /prepare_production
 
 
 # ANCHOR Run install script to install app with change install script
