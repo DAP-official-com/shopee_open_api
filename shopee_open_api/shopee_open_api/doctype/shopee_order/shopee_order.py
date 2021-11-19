@@ -155,9 +155,9 @@ class ShopeeOrder(Document):
 
     def before_insert(self):
         self.create_cancel_reason()
+        self.create_payment_method()
 
     def create_cancel_reason(self):
-        print("Saving cancel reason")
         if not self.cancel_reason:
             return
 
@@ -167,3 +167,14 @@ class ShopeeOrder(Document):
         cancel_reason = frappe.new_doc("Shopee Cancel Reason")
         cancel_reason.cancel_status = self.cancel_reason
         cancel_reason.insert(ignore_permissions=True)
+
+    def create_payment_method(self):
+        if not self.payment_method:
+            return
+
+        if frappe.db.exists("Shopee Payment Method", self.payment_method):
+            return
+
+        payment_method = frappe.new_doc("Shopee Payment Method")
+        payment_method.payment_type = self.payment_method
+        payment_method.insert(ignore_permissions=True)
