@@ -1,4 +1,5 @@
 {
+ "_comments": "[]",
  "actions": [],
  "autoname": "field:order_sn",
  "creation": "2021-10-20 13:56:18.893803",
@@ -85,7 +86,9 @@
   "original_shopee_discount",
   "seller_return_refund",
   "related_documents_section",
-  "sales_order"
+  "sales_order",
+  "customer",
+  "address"
  ],
  "fields": [
   {
@@ -581,11 +584,25 @@
    "fieldname": "related_documents_section",
    "fieldtype": "Section Break",
    "label": "Related Documents"
+  },
+  {
+   "fieldname": "customer",
+   "fieldtype": "Link",
+   "label": "Customer",
+   "options": "Customer",
+   "read_only": 1
+  },
+  {
+   "fieldname": "address",
+   "fieldtype": "Link",
+   "label": "Address",
+   "options": "Address",
+   "read_only": 1
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2021-11-15 15:47:52.933376",
+ "modified": "2021-11-18 22:12:39.280094",
  "modified_by": "Administrator",
  "module": "Shopee Open API",
  "name": "Shopee Order",

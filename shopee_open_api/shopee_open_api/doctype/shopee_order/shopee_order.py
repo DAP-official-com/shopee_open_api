@@ -117,14 +117,15 @@ class ShopeeOrder(Document):
                 )
 
     def pre_create_sales_order(self, ignore_permissions=False):
-        """Perform actions before creating a sales order, e.g. creating a customer and address"""
+        """Perform actions before creating a sales order, e.g. creating a customer and address, if none exists"""
 
-        self.create_customer_document(ignore_permissions=ignore_permissions)
-        self.create_address_document(ignore_permissions=ignore_permissions)
+        if not self.customer:
+            self.create_customer_document(ignore_permissions=ignore_permissions)
+            self.create_address_document(ignore_permissions=ignore_permissions)
 
-        customer = self.get_customer_instance()
-        address = self.get_address_instance()
-        customer.add_address(address)
+            customer = self.get_customer_instance()
+            address = self.get_address_instance()
+            customer.add_address(address)
 
     def create_customer_document(self, ignore_permissions=False):
         """Create a new customer or update current customer document for the order's buyer"""
@@ -139,3 +140,15 @@ class ShopeeOrder(Document):
         self.get_address_instance().update_or_insert(
             ignore_permissions=ignore_permissions
         )
+
+    def before_save(self):
+
+        self.create_customer_document(ignore_permissions=True)
+        self.create_address_document(ignore_permissions=True)
+
+        customer = self.get_customer_instance()
+        address = self.get_address_instance()
+
+        customer.add_address(address, ignore_permissions=True)
+        self.customer = customer.get_primary_key()
+        self.address = address.get_primary_key()
