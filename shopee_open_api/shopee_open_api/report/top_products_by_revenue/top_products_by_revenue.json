@@ -1,0 +1,27 @@
+{
+ "add_total_row": 0,
+ "columns": [],
+ "creation": "2021-11-20 19:32:31.512509",
+ "disable_prepared_report": 0,
+ "disabled": 0,
+ "docstatus": 0,
+ "doctype": "Report",
+ "filters": [],
+ "idx": 0,
+ "is_standard": "Yes",
+ "json": "{\"filters\":[[\"Shopee Order\",\"order_status\",\"!=\",\"CANCELLED\",false]],\"fields\":[[\"shopee_product\",\"Shopee Order Item\"],[\"_aggregate_column\",\"Shopee Order Item\"]],\"order_by\":\"`tabShopee Order`.`create_time` desc\",\"add_totals_row\":0,\"page_length\":20,\"column_widths\":{\"Shopee Order Item:shopee_product\":389,\"_aggregate_column\":200},\"group_by\":{\"group_by\":\"`tabShopee Order Item`.`shopee_product`\",\"aggregate_function\":\"sum\",\"aggregate_on\":\"`tabShopee Order Item`.`model_discounted_price`\"}}",
+ "modified": "2021-11-20 19:33:17.487689",
+ "modified_by": "Administrator",
+ "module": "Shopee Open API",
+ "name": "Top Products by Revenue",
+ "owner": "Administrator",
+ "prepared_report": 0,
+ "ref_doctype": "Shopee Order",
+ "report_name": "Top Products by Revenue",
+ "report_type": "Report Builder",
+ "roles": [
+  {
+   "role": "System Manager"
+  }
+ ]
+}
