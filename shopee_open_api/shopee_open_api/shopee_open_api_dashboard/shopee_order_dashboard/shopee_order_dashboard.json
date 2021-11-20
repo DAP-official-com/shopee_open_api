@@ -1,17 +1,19 @@
 {
  "cards": [
   {
-   "card": "Total Revenue"
+   "card": "This Month Revenue"
+  },
+  {
+   "card": "No. of Orders"
+  },
+  {
+   "card": "Average Order Value"
   }
  ],
  "charts": [
   {
    "chart": "Daily Revenue",
-   "width": "Half"
-  },
-  {
-   "chart": "Top Cancel Reasons",
-   "width": "Half"
+   "width": "Full"
   }
  ],
  "creation": "2021-11-18 09:43:18.100099",
@@ -21,7 +23,7 @@
  "idx": 0,
  "is_default": 1,
  "is_standard": 1,
- "modified": "2021-11-19 07:19:34.800911",
+ "modified": "2021-11-20 19:17:04.336266",
  "modified_by": "Administrator",
  "module": "Shopee Open API",
  "name": "Shopee order dashboard",
