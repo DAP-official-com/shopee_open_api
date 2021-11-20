@@ -1,0 +1,23 @@
+{
+ "add_total_row": 0,
+ "columns": [],
+ "creation": "2021-11-20 19:36:37.019179",
+ "disable_prepared_report": 0,
+ "disabled": 0,
+ "docstatus": 0,
+ "doctype": "Report",
+ "filters": [],
+ "idx": 0,
+ "is_standard": "Yes",
+ "modified": "2021-11-20 19:52:48.348157",
+ "modified_by": "Administrator",
+ "module": "Shopee Open API",
+ "name": "Top Products by Revenue Query",
+ "owner": "Administrator",
+ "prepared_report": 0,
+ "query": "SELECT\n    `tabShopee Product`.item_name AS product_name,\n    SUM(`tabShopee Order Item`.qty) AS qty,\n    SUM(`tabShopee Order Item`.model_discounted_price * `tabShopee Order Item`.qty) AS total_revenue\nFROM \n    `tabShopee Order Item` INNER JOIN\n    `tabShopee Order` ON `tabShopee Order Item`.parent = `tabShopee Order`.name INNER JOIN \n    `tabShopee Product` ON `tabShopee Order Item`.shopee_product = `tabShopee Product`.name\nGROUP BY\n    `tabShopee Product`.item_name\nORDER BY total_revenue DESC\n;",
+ "ref_doctype": "Shopee Order Item",
+ "report_name": "Top Products by Revenue Query",
+ "report_type": "Query Report",
+ "roles": []
+}
