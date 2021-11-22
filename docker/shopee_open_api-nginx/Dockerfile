@@ -11,7 +11,7 @@ ARG GIT_BRANCH=version-13
 ARG FRAPPE_BRANCH=version-13
 ARG ERPNEXT_BRANCH=version-13
 
-# ANCHOR Update linux package & install Requirement lib
+# ANCHOR --> Update linux package & install Requirement lib
 RUN apt-get update \
     && apt-get install --no-install-recommends -y \
     python2 \
@@ -20,13 +20,13 @@ RUN apt-get update \
     ca-certificates \
     && rm -rf /var/lib/apt/lists/*
 
-# ANCHOR Copy install application script as shell script 
-# NOTE Copy install_frappe.sh in build directory and update linux package
+# ANCHOR --> Copy install application script as shell script 
+# NOTE --> Copy install_app.sh in build directory and update linux package
 COPY ./docker/shopee_open_api-nginx/install_app.sh /install_app
 COPY ./docker/shopee_open_api-nginx/prepare_production.sh /prepare_production
 
 
-# ANCHOR Run install script to install app with change install script
+# ANCHOR --> Run install script to install app with change install script
 # to executable mode
 RUN chmod +x /install_app && \
   chmod +x /prepare_production && \
