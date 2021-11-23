@@ -19,23 +19,24 @@ def execute(filters=None):
         if default_filters["date_end"] < default_filters["date_start"]:
             frappe.throw("The end date cannot be earlier than the start date")
 
-    # sales_data = frappe.db.sql(
-    #     """
-    #     SELECT
-    #         DATE(shopee_order.create_time) AS date_order,
-    #         SUM(shopee_order.total_amount) AS total
-    #     FROM
-    #         `tabShopee Order` AS shopee_order
-    #     WHERE
-    #         (%(date_start)s IS NULL OR DATE(shopee_order.create_time) >= %(date_start)s) AND
-    #         (%(date_end)s IS NULL OR DATE(shopee_order.create_time) <= %(date_end)s)
-    #         (%(order_status)s IS NULL OR shopee_order.order_status = %(order_status)s) AND
-    #         shopee_order.order_status != 'CANCELLED'
-    #     GROUP BY
-    #         DATE(shopee_order.create_time)
-    #     """,
-    #     values=default_filters,
-    # )
+    sales_data = frappe.db.sql(
+        """
+        SELECT
+            DATE(shopee_order.create_time) AS date_order,
+            COUNT(shopee_order.name) AS number_of_orders,
+            SUM(shopee_order.total_amount) AS total_revenue
+        FROM
+            `tabShopee Order` AS shopee_order
+        WHERE
+            (%(date_start)s IS NULL OR DATE(shopee_order.create_time) >= %(date_start)s) AND
+            (%(date_end)s IS NULL OR DATE(shopee_order.create_time) <= %(date_end)s) AND
+            (%(order_status)s IS NULL OR shopee_order.order_status = %(order_status)s) AND
+            shopee_order.order_status != 'CANCELLED'
+        GROUP BY
+            DATE(shopee_order.create_time)
+        """,
+        values=default_filters,
+    )
 
     top_products_data = frappe.db.sql(
         """
@@ -68,4 +69,37 @@ def execute(filters=None):
 
     data = top_products_data
 
-    return columns, data
+    total_revenue = sum([row[2] for row in sales_data])
+    number_of_orders = sum([row[1] for row in sales_data])
+
+    average_order_value_result = frappe.db.sql(
+        """
+        SELECT AVG(total_amount) AS average_order_value FROM `tabShopee Order`
+        WHERE
+            (%(date_start)s IS NULL OR DATE(create_time) >= %(date_start)s) AND
+            (%(date_end)s IS NULL OR DATE(create_time) <= %(date_end)s) AND
+            (%(order_status)s IS NULL OR order_status = %(order_status)s) AND
+            order_status != 'CANCELLED'
+        """,
+        values=default_filters,
+        as_dict=True,
+    )
+    average_order_value = (
+        0
+        if not average_order_value_result
+        else average_order_value_result[0].get("average_order_value")
+    )
+
+    report_summary = [
+        {
+            "label": "Total Revenue",
+            "value": f"{frappe.db.get_default('Currency')} {total_revenue:,}",
+        },
+        {"label": "No. of Orders", "value": f"{number_of_orders:,}"},
+        {
+            "label": "Avg. Order Value",
+            "value": f"{frappe.db.get_default('Currency')} {average_order_value:,.2f}",
+        },
+    ]
+
+    return columns, data, None, None, report_summary
