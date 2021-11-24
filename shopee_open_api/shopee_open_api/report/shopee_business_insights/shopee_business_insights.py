@@ -33,7 +33,7 @@ def execute(filters=None):
             (%(date_end)s IS NULL OR DATE(shopee_order.create_time) <= %(date_end)s) AND
 
             -- select order status that match or select all except cancelled
-            ((shopee_order.order_status = %(order_status)s) OR
+            ((%(order_status)s IS NOT NULL AND shopee_order.order_status = %(order_status)s) OR
             (%(order_status)s IS NULL AND shopee_order.order_status != 'CANCELLED'))
         GROUP BY
             month_order
@@ -71,7 +71,7 @@ def execute(filters=None):
             (%(date_end)s IS NULL OR DATE(shopee_order.create_time) <= %(date_end)s) AND
 
             -- select order status that match or select all except cancelled
-            ((shopee_order.order_status = %(order_status)s) OR -- 
+            ((%(order_status)s IS NOT NULL AND shopee_order.order_status = %(order_status)s) OR
             (%(order_status)s IS NULL AND shopee_order.order_status != 'CANCELLED'))
         GROUP BY
             product.image,
@@ -103,7 +103,7 @@ def execute(filters=None):
             (%(date_end)s IS NULL OR DATE(create_time) <= %(date_end)s) AND
 
             -- select order status that match or select all except cancelled
-            ((order_status = %(order_status)s) OR
+            ((%(order_status)s IS NOT NULL AND order_status = %(order_status)s) OR
             (%(order_status)s IS NULL AND order_status != 'CANCELLED'))
         """,
         values=default_filters,
@@ -148,7 +148,7 @@ def execute(filters=None):
     message += (
         f"(order status: {default_filters.get('order_status')})"
         if default_filters.get("order_status")
-        else ""
+        else "(excluding cancelled orders)"
     )
 
     return columns, data, message, chart, report_summary
