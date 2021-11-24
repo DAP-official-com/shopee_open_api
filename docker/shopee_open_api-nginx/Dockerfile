@@ -10,6 +10,7 @@ ARG GIT_BRANCH=version-13
 
 ARG FRAPPE_BRANCH=version-13
 ARG ERPNEXT_BRANCH=version-13
+ECHO GIT_BRANCH
 
 # ANCHOR Update linux package & install Requirement lib
 RUN apt-get update \
