@@ -100,6 +100,7 @@ before_script:
 
 # SECTION : Define a job in each stage
 
+
 # ANCHOR --> Test Stage for python (lint & unit Test)
 # TODO --> Using Docker to run test command as a script
 
@@ -161,7 +162,6 @@ build_shopee_open_api_worker:
 
   only:
    - develop
-   - tags
 
 #build_master_shopee_open_api_nginx:
 ##  stage: build
