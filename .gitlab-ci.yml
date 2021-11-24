@@ -159,6 +159,7 @@ build_shopee_open_api_worker:
 
   only:
    - develop
+   - tags
 
 #build_master_shopee_open_api_nginx:
 ##  stage: build
