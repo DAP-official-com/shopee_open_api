@@ -78,6 +78,8 @@ before_script:
   - apk add git
   - echo "$GIT_REPO"
   - echo "$GIT_BRANCH"
+  - echo "$CI_COMMIT_BRANCH"
+  - echo "$CI_COMMIT_REF_NAME"
   - echo "$CI_COMMIT_TAG"
   - echo "$NGINX_IMAGE"
   - echo "$NGINX_DOCKERFILE"
