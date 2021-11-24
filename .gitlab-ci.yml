@@ -44,7 +44,7 @@ stages:
 # ANCHOR --> Golbal Variable
 variables:
 # REVIEW : Gitlab $CI_veariable for generate Image tag   
-#  GIT_REPO: $CI_REPOSITORY_URL
+  GIT_REPO: $CI_REPOSITORY_URL
 #  GIT_PROJECT_NAME: $CI_PROJECT_NAME
 #  CI_COMMIT_TAG: $CI_COMMIT_TAG
 #  CI_COMMIT_SHORT_SHA: $CI_COMMIT_SHORT_SHA
@@ -55,6 +55,7 @@ variables:
 #  DOCKER_TLS_CERTDIR: "/certs"
 
 #  CONTAINER_TEST_IMAGE: $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG
+#  CONTAINER_RELEASE_IMAGE: $CI_REGISTRY_IMAGE:latest
 #  CONTAINER_RELEASE_IMAGE: $CI_REGISTRY_IMAGE:latest
 
 # NOTE --> To send gitlab VARIABLE To Docker command add `"$VAR"` 
@@ -115,12 +116,16 @@ before_script:
 
 build_shopee_open_api_nginx:
   stage: build
+  only:
+    - master
   script:
     - echo "$CI_JOB_STAGE"
+    - echo "$GIT_REPO"
     - echo "$CI_COMMIT_TAG"
     - echo "$CI_PROJECT_NAME"
     - echo "$IMAGE_TAG"
     - echo "$VERSION"
+    - echo "$CI_COMMIT_REF_SLUG"
 #    - export VERSION=$(git tag --list --sort=-version:refname | sed -n 1p | sed -e 's#.*@\(\)#\1#')
     - docker build --pull --build-arg=FRAPPE_BRANCH=v13.12.1 --build-arg=ERPNEXT_BRANCH=v13.12.1 --build-arg=GIT_REPO="$CI_REPOSITORY_URL" -t "$CI_PROJECT_NAME"-nginx -f docker/$CI_PROJECT_NAME-nginx/Dockerfile .
     - docker tag "$CI_PROJECT_NAME"-nginx "$CI_REGISTRY/$CI_PROJECT_NAMESPACE/$CI_PROJECT_NAME/$CI_PROJECT_NAME-nginx:$VERSION"
@@ -128,24 +133,22 @@ build_shopee_open_api_nginx:
     - docker tag "$CI_PROJECT_NAME"-nginx "$CI_REGISTRY/$CI_PROJECT_NAMESPACE/$CI_PROJECT_NAME/$CI_PROJECT_NAME-nginx:edge"
     - docker tag "$CI_PROJECT_NAME"-nginx "$CI_REGISTRY/$CI_PROJECT_NAMESPACE/$CI_PROJECT_NAME/$CI_PROJECT_NAME-nginx:latest"
     - docker push "$CI_REGISTRY/$CI_PROJECT_NAMESPACE/$CI_PROJECT_NAME/$CI_PROJECT_NAME-nginx:$VERSION"
-  only:
-      - master
 
 build_shopee_open_api_worker:
   stage: build
+  only:
+    - master
   script:
 #    - export VERSION=$(git tag --list --sort=-version:refname | sed -n 1p | sed -e 's#.*@\(\)#\1#')
     - docker build --pull --build-arg=ERPNEXT_BRANCH=v13.12.1 -t "$CI_PROJECT_NAME"-worker -f docker/"$CI_PROJECT_NAME"-worker/Dockerfile .
     - docker tag "$CI_PROJECT_NAME"-worker "$CI_REGISTRY/$CI_PROJECT_NAMESPACE/$CI_PROJECT_NAME/$CI_PROJECT_NAME-worker:$VERSION"
     - docker push "$CI_REGISTRY/$CI_PROJECT_NAMESPACE/$CI_PROJECT_NAME/$CI_PROJECT_NAME-worker:$VERSION"
-  only:
-      - master
+
 
 #build_staging_shopee_open_api_nginx:
-##  stage: build
+#  stage: build
 #  only:
-#    refs:
-#      - main
+#   - 
 #  script:
 #    - docker build --build-arg=FRAPPE_BRANCH=v13.12.1 --build-arg=ERPNEXT_BRANCH=v13.12.1 -t nginx -f docker/nginx/Dockerfile .
 #    - docker tag nginx "$CI_REGISTRY/$CI_PROJECT_NAMESPACE/shopee_open_api/nginx:latest"
