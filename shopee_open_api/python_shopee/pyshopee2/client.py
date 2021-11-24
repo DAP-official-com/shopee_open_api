@@ -236,7 +236,7 @@ class Client(object, metaclass=ClientMeta):
 
         if self.only_get_allowed and method.lower() != "get":
             raise OnlyGetMethodAllowedError(
-                "Only get method is allowed by default to prevent changing client's data. Call client's allow_all_method method to change this behavior"
+                "Only get method is allowed by default to prevent changing client's data. Update Shopee Open API Settings to change this behaviour"
             )
 
         """defalut timeout value will be 10 seconds"""
