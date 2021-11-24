@@ -6,7 +6,7 @@ FROM node:${NODE_IMAGE_TAG} as builder
 
 
 ARG GIT_REPO=git@git.arterypartner.com:artery/ap-application/shopee_open_api.git
-ARG GIT_BRANCH=versio
+ARG GIT_BRANCH=version-13
 
 ARG FRAPPE_BRANCH=version-13
 ARG ERPNEXT_BRANCH=version-13
