@@ -50,7 +50,7 @@ variables:
 #  CI_COMMIT_SHORT_SHA: $CI_COMMIT_SHORT_SHA
   VERSION: version-13
   IMAGE_TAG: $CI_REGISTRY_IMAGE/$CI_PROJECT_NAME:$CI_COMMIT_SHORT_SHA
-
+  NGINX_IMAGE: "$CI_REGISTRY/$CI_PROJECT_NAMESPACE/$CI_PROJECT_NAME/$CI_PROJECT_NAME-nginx"
 #  DOCKER_HOST: tcp://docker:2376
 #  DOCKER_TLS_CERTDIR: "/certs"
 
@@ -66,7 +66,7 @@ services:
 
 before_script:
   - apk add git
-
+  - echo "$NGINX_IMAGE"
   ## ANCHOR --> Registry Auth
   # NOTE --> Job Token Auth.
   #- docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
@@ -121,7 +121,7 @@ build_shopee_open_api_nginx:
     - docker tag "$CI_PROJECT_NAME"-nginx "$CI_REGISTRY/$CI_PROJECT_NAMESPACE/$CI_PROJECT_NAME/$CI_PROJECT_NAME-nginx:develop"
     - docker tag "$CI_PROJECT_NAME"-nginx "$CI_REGISTRY/$CI_PROJECT_NAMESPACE/$CI_PROJECT_NAME/$CI_PROJECT_NAME-nginx:edge"
     - docker tag "$CI_PROJECT_NAME"-nginx "$CI_REGISTRY/$CI_PROJECT_NAMESPACE/$CI_PROJECT_NAME/$CI_PROJECT_NAME-nginx:latest"
-    - docker push "$CI_REGISTRY/$CI_PROJECT_NAMESPACE/$CI_PROJECT_NAME/$CI_PROJECT_NAME-nginx:$VERSION"
+    - docker push "$NGINX_IMAGE_":"$VERSION"
   only:
    - develop
 
