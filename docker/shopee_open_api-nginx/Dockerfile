@@ -4,12 +4,13 @@ ARG DOCKER_REGISTRY_PREFIX=frappe
 ARG IMAGE_TAG=develop
 FROM node:${NODE_IMAGE_TAG} as builder
 
-
+ARG APP_NAME=shopee_open_api
 ARG GIT_REPO=git@git.arterypartner.com:artery/ap-application/shopee_open_api.git
 ARG GIT_BRANCH=version-13
 
 ARG FRAPPE_BRANCH=version-13
 ARG ERPNEXT_BRANCH=version-13
+
 
 # ANCHOR Update linux package & install Requirement lib
 RUN apt-get update \
@@ -26,12 +27,12 @@ COPY ./docker/shopee_open_api-nginx/install_app.sh /install_app
 COPY ./docker/shopee_open_api-nginx/prepare_production.sh /prepare_production
 
 
-# ANCHOR Run install script to install app with change install script
+# ANCHOR --> Run install script to install app with change install script
 # to executable mode
 RUN chmod +x /install_app && \
   chmod +x /prepare_production && \
   # Install apps
-  /install_app shopee_open_api ${GIT_REPO} ${GIT_BRANCH} ${FRAPPE_BRANCH} && \
+  /install_app ${APP_NAME} ${GIT_REPO} ${GIT_BRANCH} ${FRAPPE_BRANCH} && \
   # Cleanup for production
   /prepare_production
 
