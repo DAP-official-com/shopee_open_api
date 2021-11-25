@@ -218,5 +218,45 @@
   "parent": null,
   "parentfield": null,
   "parenttype": null
+ },
+ {
+  "cancel_status": "Others / change of mind",
+  "docstatus": 0,
+  "doctype": "Shopee Cancel Reason",
+  "modified": "2021-11-19 06:35:33.973981",
+  "name": "Others / change of mind",
+  "parent": null,
+  "parentfield": null,
+  "parenttype": null
+ },
+ {
+  "cancel_status": "Seller asks me to cancel",
+  "docstatus": 0,
+  "doctype": "Shopee Cancel Reason",
+  "modified": "2021-11-19 06:35:34.126409",
+  "name": "Seller asks me to cancel",
+  "parent": null,
+  "parentfield": null,
+  "parenttype": null
+ },
+ {
+  "cancel_status": "Seller is not responsive to my inquiries",
+  "docstatus": 0,
+  "doctype": "Shopee Cancel Reason",
+  "modified": "2021-11-19 06:35:34.135830",
+  "name": "Seller is not responsive to my inquiries",
+  "parent": null,
+  "parentfield": null,
+  "parenttype": null
+ },
+ {
+  "cancel_status": "Need to change delivery address",
+  "docstatus": 0,
+  "doctype": "Shopee Cancel Reason",
+  "modified": "2021-11-19 06:35:34.145742",
+  "name": "Need to change delivery address",
+  "parent": null,
+  "parentfield": null,
+  "parenttype": null
  }
 ]

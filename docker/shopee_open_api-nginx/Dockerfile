@@ -4,14 +4,15 @@ ARG DOCKER_REGISTRY_PREFIX=frappe
 ARG IMAGE_TAG=develop
 FROM node:${NODE_IMAGE_TAG} as builder
 
-
+ARG APP_NAME=shopee_open_api
 ARG GIT_REPO=git@git.arterypartner.com:artery/ap-application/shopee_open_api.git
 ARG GIT_BRANCH=version-13
 
 ARG FRAPPE_BRANCH=version-13
 ARG ERPNEXT_BRANCH=version-13
 
-# ANCHOR --> Update linux package & install Requirement lib
+
+# ANCHOR Update linux package & install Requirement lib
 RUN apt-get update \
     && apt-get install --no-install-recommends -y \
     python2 \
@@ -20,8 +21,8 @@ RUN apt-get update \
     ca-certificates \
     && rm -rf /var/lib/apt/lists/*
 
-# ANCHOR --> Copy install application script as shell script 
-# NOTE --> Copy install_app.sh in build directory and update linux package
+# ANCHOR Copy install application script as shell script 
+# NOTE Copy install_frappe.sh in build directory and update linux package
 COPY ./docker/shopee_open_api-nginx/install_app.sh /install_app
 COPY ./docker/shopee_open_api-nginx/prepare_production.sh /prepare_production
 
@@ -31,7 +32,7 @@ COPY ./docker/shopee_open_api-nginx/prepare_production.sh /prepare_production
 RUN chmod +x /install_app && \
   chmod +x /prepare_production && \
   # Install apps
-  /install_app shopee_open_api ${GIT_REPO} ${GIT_BRANCH} ${FRAPPE_BRANCH} && \
+  /install_app ${APP_NAME} ${GIT_REPO} ${GIT_BRANCH} ${FRAPPE_BRANCH} && \
   # Cleanup for production
   /prepare_production
 

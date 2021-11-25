@@ -16,7 +16,7 @@ class Customer(ShopeeResponseBaseClass):
         "username",
         "user_id",
         "shopee_user_id",
-        # "mobile_no",
+        # "mobile_no", # ignore mobile number for now. when creating a new customer, if mobile number is provided, a Contact is also created, but we cannot override the permission
     )
 
     @classmethod
@@ -71,7 +71,7 @@ class Customer(ShopeeResponseBaseClass):
     def customer_detail(self) -> dict:
         return {attribute: getattr(self, attribute) for attribute in self.DATA_FIELDS}
 
-    def add_address(self, address: Address) -> None:
+    def add_address(self, address: Address, ignore_permissions=False) -> None:
         if not self.has_address(address):
             address_link = frappe.get_doc(
                 {
@@ -86,7 +86,7 @@ class Customer(ShopeeResponseBaseClass):
                 }
             )
 
-            address_link.insert()
+            address_link.insert(ignore_permissions=ignore_permissions)
 
     def has_address(self, address: Address) -> bool:
         return bool(

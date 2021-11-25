@@ -39,6 +39,8 @@ class Order(ShopeeResponseBaseClass):
 
         self.update_products_stock(ignore_permissions=ignore_permissions)
 
+        return frappe.get_doc("Shopee Order", self.make_primary_key())
+
     def create_sales_order(self, ignore_permissions=False) -> None:
         """
         Create sales order from shopee order. It is called here instead of after_insert
@@ -185,6 +187,8 @@ class Order(ShopeeResponseBaseClass):
         order.escrow_amount = self.get_order_income().get("escrow_amount")
 
         order.save(ignore_permissions=ignore_permissions)
+
+        return order
 
     @property
     def is_existing_in_database(self):

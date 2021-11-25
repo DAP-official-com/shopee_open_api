@@ -1,0 +1,21 @@
+{
+ "creation": "2021-11-23 15:37:58.183755",
+ "docstatus": 0,
+ "doctype": "Number Card",
+ "document_type": "Shopee Order",
+ "filters_json": "[[\"Shopee Order\",\"order_status\",\"=\",\"UNPAID\",false]]",
+ "function": "Count",
+ "idx": 0,
+ "is_public": 1,
+ "is_standard": 1,
+ "label": "Pending Payments",
+ "modified": "2021-11-23 15:57:45.007918",
+ "modified_by": "Administrator",
+ "module": "Shopee Open API",
+ "name": "Pending Payments",
+ "owner": "Administrator",
+ "report_function": "Sum",
+ "show_percentage_stats": 1,
+ "stats_time_interval": "Daily",
+ "type": "Document Type"
+}

@@ -19,11 +19,9 @@ def reload_order_details_from_shopee(shop_id, order_sn):
             f"{order_detail_response.get('error')} {order_detail_response.get('message')}"
         )
 
-    order_details = order_detail_response["response"]["order_list"][0]
-
-    order = Order(order_details, shop_id=shop_id)
-
-    order.update_or_insert_with_items()
+    for order_details in order_detail_response["response"]["order_list"]:
+        order = Order(order_details, shop_id=shop_id)
+        order.update_or_insert_with_items()
 
     frappe.db.commit()
 

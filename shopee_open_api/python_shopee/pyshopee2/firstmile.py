@@ -2,26 +2,25 @@ from .base import BaseModule
 
 
 class FirstMile(BaseModule):
-
     def get_unbind_order_list(self, **kwargs):
         """
-        Use this api to get unbind order list.
-.
-        :param kwargs:
-         - cursor
-         - page_size
-         - response_optional_fields
+                Use this api to get unbind order list.
+        .
+                :param kwargs:
+                 - cursor
+                 - page_size
+                 - response_optional_fields
 
         """
         return self.client.execute("first_mile/get_unbind_order_list", "GET", kwargs)
 
     def get_detail(self, **kwargs):
         """
-        Use this api to get first mile detail.
-.
-        :param kwargs:
-         - first_mile_tracking_number Required
-         - cursor
+                Use this api to get first mile detail.
+        .
+                :param kwargs:
+                 - first_mile_tracking_number Required
+                 - cursor
         """
         return self.client.execute("first_mile/get_detail", "GET", kwargs)
 
@@ -39,7 +38,9 @@ class FirstMile(BaseModule):
             - region Required
             - phone Required
         """
-        return self.client.execute("first_mile/generate_first_mile_tracking_number", "POST", kwargs)
+        return self.client.execute(
+            "first_mile/generate_first_mile_tracking_number", "POST", kwargs
+        )
 
     def bind_first_mile_tracking_number(self, **kwargs):
         """
@@ -59,7 +60,9 @@ class FirstMile(BaseModule):
             - order_sn Required
             - package_number
         """
-        return self.client.execute("first_mile/bind_first_mile_tracking_number", "POST", kwargs)
+        return self.client.execute(
+            "first_mile/bind_first_mile_tracking_number", "POST", kwargs
+        )
 
     def unbind_first_mile_tracking_number(self, **kwargs):
         """
@@ -71,7 +74,9 @@ class FirstMile(BaseModule):
             - order_sn Required
             - package_number
         """
-        return self.client.execute("first_mile/unbind_first_mile_tracking_number", "POST", kwargs)
+        return self.client.execute(
+            "first_mile/unbind_first_mile_tracking_number", "POST", kwargs
+        )
 
     def get_tracking_number_list(self, **kwargs):
         """
@@ -92,7 +97,7 @@ class FirstMile(BaseModule):
         :param kwargs:
         - first_mile_tracking_number_list Required
         """
-        return self.client.execute("first_mile/get_waybill", "GET", kwargs)
+        return self.client.execute("first_mile/get_waybill", "POST", kwargs)
 
     def get_channel_list(self, **kwargs):
         """
