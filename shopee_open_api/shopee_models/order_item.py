@@ -5,15 +5,17 @@ import frappe
 
 
 class OrderItem(ShopeeResponseBaseClass):
+    """
+    This class represents each order item in the order. Very much like ERPNext's order item.
+    """
+
     DOCTYPE = "Shopee Order Item"
     PRODUCT_DOCTYPE = "Shopee Product"
     ORDER_DOCTYPE = "Shopee Order"
     PARENT_FIELD = "shopee_order_items"
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-
     def update_or_insert(self, ignore_permissions=False):
+        """Update or insert the Shopee Order Item document in the database"""
 
         self.insert_product_if_not_existing(ignore_permissions=ignore_permissions)
 
@@ -36,12 +38,19 @@ class OrderItem(ShopeeResponseBaseClass):
         order_item.save(ignore_permissions=ignore_permissions)
 
     def insert_product_if_not_existing(self, ignore_permissions=False):
+        """Insert Shopee Product document (not Shopee Product Item document) first if not existing"""
 
         if not self.is_product_existing_in_database:
             product_instance = self.get_product_instance()
             product_instance.update_or_insert(ignore_permissions=ignore_permissions)
 
     def get_product_instance(self):
+        """
+        Get Shopee Product object from Shopee Api.
+
+        This needs to be done because the data returned from Shopee's order api is mininmal and not enough
+        to create a Shopee Product or Shopee Order Item document
+        """
 
         r = self.client.product.get_item_base_info(item_id_list=self.get_product_id())
 
@@ -52,6 +61,8 @@ class OrderItem(ShopeeResponseBaseClass):
 
     @property
     def is_existing_in_database(self):
+        """Check if order item exists in database"""
+
         return frappe.db.exists(
             self.DOCTYPE,
             {
@@ -62,6 +73,8 @@ class OrderItem(ShopeeResponseBaseClass):
 
     @property
     def is_product_existing_in_database(self):
+        """Check if Shopee Product document exists in the database"""
+
         return frappe.db.exists(self.PRODUCT_DOCTYPE, self.make_product_primary_key())
 
     def get_shop_id(self):
@@ -74,6 +87,7 @@ class OrderItem(ShopeeResponseBaseClass):
         return self.item_id
 
     def get_model_id(self):
+        """If the order item is a product without a variants, model_id value is 0"""
         return self.model_id
 
     def make_product_primary_key(self):
@@ -89,4 +103,6 @@ class OrderItem(ShopeeResponseBaseClass):
         return self.model_quantity_purchased
 
     def get_primary_key(self):
+        """This is a child table and the primary key is generated. frappe.db.exists returns the primary key if found, not boolean"""
+
         return self.is_existing_in_database
