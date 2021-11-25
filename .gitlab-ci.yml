@@ -27,7 +27,7 @@
 stages:
   #- test
   - build
-  #- release
+  - release
   #- deploy staging
   #- test staging
   #- clear
@@ -146,7 +146,6 @@ build_shopee_open_api_nginx:
       
   only:
    - develop
-   - tags
 
 build_shopee_open_api_worker:
   stage: build
@@ -164,38 +163,40 @@ build_shopee_open_api_worker:
 
   only:
    - develop
+
+build_release_shopee_open_api_nginx:
+  stage: release
+  script:
+    - echo "build '$CI_PROJECT_NAME'-nginx with build arg:'$GIT_BRANCH' ,'$GIT_REPO' and '$FRAPPE_BRANCH'"
+    - docker build 
+      --pull 
+      --build-arg=$FRAPPE_BRANCH 
+      --build-arg=$GIT_REPO 
+      --build-arg=$GIT_BRANCH 
+      -t $CI_PROJECT_NAME-nginx 
+      -f $NGINX_DOCKERFILE .
+    - docker tag "$CI_PROJECT_NAME"-nginx "$NGINX_IMAGE"${tag}
+    - docker push "$NGINX_IMAGE"${tag}
+      
+  only:
+   - master
    - tags
 
-#build_release_shopee_open_api_nginx:
-##  stage: release
-#  only:
-#    - tags
-#  script:
-#    - docker build --build-arg=FRAPPE_BRANCH=v13.12.1 --build-arg=ERPNEXT_BRANCH=v13.12.1 -t nginx -f docker/nginx/Dockerfile .
-#    - docker tag nginx "$CI_REGISTRY/$CI_PROJECT_NAMESPACE/shopee_open_api/nginx:latest"
-#    - docker push "$CI_REGISTRY/$CI_PROJECT_NAMESPACE/shopee_open_api/nginx:latest"
-#    
-#    - |
-#      if [[ "$CI_COMMIT_BRANCH" == "$CI_DEFAULT_BRANCH" ]]; then
-#        tag=""
-#        echo "Running on default branch '$CI_DEFAULT_BRANCH': tag = 'latest'"
-#      else
-#        tag=":$CI_COMMIT_REF_SLUG"
-#        echo "Running on branch '$CI_COMMIT_BRANCH': tag = $tag"
-#      fi
-#    - docker build --pull -t "$CI_REGISTRY_IMAGE${tag}" .
-#    - docker push "$CI_REGISTRY_IMAGE${tag}"
+build_release_shopee_open_api_worker:
+  stage: release
+  script:
+    - echo "build '$CI_PROJECT_NAME'-worker with build arg:'$FRAPPE_BRANCH'"
+    - docker build 
+      --pull 
+      --build-arg="$FRAPPE_BRANCH" 
+      -t "$CI_PROJECT_NAME"-worker 
+      -f "$WORKER_DOCKERFILE" .
+    - docker tag "$CI_PROJECT_NAME"-worker "$WORKER_IMAGE"${tag}
+    - docker push "$WORKER_IMAGE"${tag}
 
-#build_release_shopee_open_api_worker:
-#  stage: release
-#  only:
-#    refs:
-#      - main
-#  script:
-#    - docker build --build-arg=ERPNEXT_BRANCH=v13.12.1 -t worker -f docker/worker/Dockerfile .
-#    - docker tag worker "$CI_REGISTRY/$CI_PROJECT_NAMESPACE/shopee_open_api/worker:latest"
-#    - docker push "$CI_REGISTRY/$CI_PROJECT_NAMESPACE/shopee_open_api/worker:latest"
-#
+  only:
+   - master
+   - tags
 
 ## ANCHOR --> Deply Staging
 ## TODO --> using Doctl docker to send command for deploy & setup application 
