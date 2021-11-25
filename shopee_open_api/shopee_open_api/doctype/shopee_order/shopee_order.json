@@ -1,5 +1,4 @@
 {
- "_comments": "[]",
  "actions": [],
  "autoname": "field:order_sn",
  "creation": "2021-10-20 13:56:18.893803",
@@ -323,6 +322,7 @@
    "fieldname": "recipient_name",
    "fieldtype": "Data",
    "label": "Recipient Name",
+   "permlevel": 1,
    "read_only": 1
   },
   {
@@ -604,7 +604,7 @@
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2021-11-19 06:59:48.814165",
+ "modified": "2021-11-25 14:22:24.700318",
  "modified_by": "Administrator",
  "module": "Shopee Open API",
  "name": "Shopee Order",
@@ -619,6 +619,36 @@
    "read": 1,
    "report": 1,
    "role": "System Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Sales User",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Sales Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Sales Master Manager",
    "share": 1,
    "write": 1
   }
