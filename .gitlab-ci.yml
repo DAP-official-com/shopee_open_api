@@ -1,17 +1,6 @@
 ### ArteryPartner.co,.ltd. ###
 
-# SECTION : Basic Info 
-
-# ANCHOR: using Docker Executor
-
-# TODO : Create Test Stage for develop branch
-# TODO : Set up pre-define Environment variable
-# TODO : using gitlab CI variable 
-
-# REVIEW : Environment VAR
-# !SECTION
-
-# SECTION : Read ME 
+## SECTION : Read ME 
 
 # Environment variable 
 # https://docs.gitlab.com/ee/ci/variables/
@@ -27,81 +16,87 @@
 
 # Container registry reference (authenticating, etc.)
 # https://gitlab.com/help/user/packages/container_registry/index
-# !SECTION 
+## !SECTION 
 
-# SECTION :CI-Header
-# ANCHOR --> Define CI stage & Share variable
+## SECTION :CI-Header
+## ANCHOR --> Define CI stage & Share variable
 
 stages:
   - build
   #- test
   #- release
-  #- deploy
+  #- deploy staging
+  #- test staging
   #- clear
 
-# NOTE --> In Frappe framework application CD stage will run in frappe-docker CI/CD
+## NOTE --> In Frappe framework application CD stage will run in frappe-docker CI/CD
 
-# ANCHOR --> Golbal Variable
-variables:
-# REVIEW : Gitlab $CI_veariable for generate Image tag   
+## ANCHOR --> Golbal Variable
+variables: 
 
-  FRAPPE_BRANCH: FRAPPE_BRANCH=v13.12.1
-  ERPNEXT_BRANCH: ERPNEXT_BRANCH=v13.12.1
+## NOTE --> variable for docker build-arg 
+  FRAPPE_BRANCH: FRAPPE_BRANCH=develop
+  ERPNEXT_BRANCH: ERPNEXT_BRANCH=develop
+ 
   APP_NAME: APP_NAME=$CI_PROJECT_NAME
   GIT_REPO: GIT_REPO=$CI_REPOSITORY_URL
   GIT_BRANCH: GIT_BRANCH=$CI_COMMIT_REF_NAME
-#  GIT_PROJECT_NAME: $CI_PROJECT_NAME
-#  CI_COMMIT_SHORT_SHA: $CI_COMMIT_SHORT_SHA
+
   VERSION: version-13
 
-  IMAGE_TAG: $CI_REGISTRY_IMAGE/$CI_PROJECT_NAME:$CI_COMMIT_SHORT_SHA
+## NOTE --> Variable for docker
   NGINX_IMAGE: "$CI_REGISTRY/$CI_PROJECT_NAMESPACE/$CI_PROJECT_NAME/$CI_PROJECT_NAME-nginx"
   NGINX_DOCKERFILE: docker/$CI_PROJECT_NAME-nginx/Dockerfile
 
   WORKER_IMAGE: "$CI_REGISTRY/$CI_PROJECT_NAMESPACE/$CI_PROJECT_NAME/$CI_PROJECT_NAME-worker"
   WORKER_DOCKERFILE: docker/$CI_PROJECT_NAME-worker/Dockerfile
+
 #  DOCKER_HOST: tcp://docker:2376
 #  DOCKER_TLS_CERTDIR: "/certs"
 
+## NOTE --> Variable for Deployment
 #  CONTAINER_TEST_IMAGE: $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG
 #  CONTAINER_RELEASE_IMAGE: $CI_REGISTRY_IMAGE:latest
 
-# NOTE --> To send gitlab VARIABLE To Docker command add `"$VAR"` 
-
 image: docker:latest
-
 services:
   - docker:dind
-
 before_script:
   - apk add git
-  - echo "$GIT_REPO"
-  - echo "$GIT_BRANCH"
-  - echo "$CI_COMMIT_BRANCH"
+  - echo 'Running pipeline from REPO:"$GIT_REPO" --branch:"$CI_COMMIT_BRANCH" for app:"$CI_PROJECT_NAME"'
+#    - |
+#      if [[ "$CI_COMMIT_BRANCH" == "$CI_DEFAULT_BRANCH" ]]; then
+#        tag=""
+#        echo "Running on default branch '$CI_DEFAULT_BRANCH': tag = 'latest'"
+#      else
+#        tag=":$CI_COMMIT_REF_SLUG"
+#        echo "Running on branch '$CI_COMMIT_BRANCH': tag = $tag"
+#      fi
+  - echo "$CI_REGISTRY_IMAGE"
   - echo "$CI_COMMIT_REF_NAME"
   - echo "$CI_COMMIT_TAG"
-  - echo "$NGINX_IMAGE"
+  - echo To build"$NGINX_IMAGE"
   - echo "$NGINX_DOCKERFILE"
   - echo "$WORKER_IMAGE"
   - echo "$WORKER_DOCKERFILE"
-  ## ANCHOR --> Registry Auth
-  # NOTE --> Job Token Auth.
+
+## ANCHOR --> Registry Auth
+## NOTE --> Job Token Auth.
   #- docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
-  # NOTE --> CI VAR Auth
+## NOTE --> CI VAR Auth
   - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
-  # NOTE --> Deploy key Auth
+## NOTE --> Deploy key Auth
   #  docker login -u $CI_DEPLOY_USER -p $CI_DEPLOY_PASSWORD $CI_REGISTRY
-  # NOTE --> Personal Access Token Auth 
+## NOTE --> Personal Access Token Auth 
   # docker login -u <username> -p <access_token> $CI_REGISTRY
 
   # NOTE --> Use TLS https://docs.gitlab.com/ee/ci/docker/using_docker_build.html#tls-enabled
-# !SECTION
+## !SECTION
 
-# SECTION : Define a job in each stage
+## SECTION : Define a job in each stage
 
-
-# ANCHOR --> Test Stage for python (lint & unit Test)
-# TODO --> Using Docker to run test command as a script
+## ANCHOR --> Test Stage for python (lint & unit Test)
+## TODO --> Using Docker to run test command as a script
 
 #lint_test:
 #  image: python:3.8.0-slim
@@ -128,7 +123,7 @@ before_script:
 #    paths:
  #     - pytest_reports/
 
-# ANCHOR --> Build Stage
+## ANCHOR --> Build Stage
 build_shopee_open_api_nginx:
   stage: build
   script:
@@ -157,7 +152,7 @@ build_shopee_open_api_worker:
   only:
    - develop
 
-#build_master_shopee_open_api_nginx:
+#build_release_shopee_open_api_nginx:
 ##  stage: build
 #  only:
 #    - tags
@@ -165,8 +160,19 @@ build_shopee_open_api_worker:
 #    - docker build --build-arg=FRAPPE_BRANCH=v13.12.1 --build-arg=ERPNEXT_BRANCH=v13.12.1 -t nginx -f docker/nginx/Dockerfile .
 #    - docker tag nginx "$CI_REGISTRY/$CI_PROJECT_NAMESPACE/shopee_open_api/nginx:latest"
 #    - docker push "$CI_REGISTRY/$CI_PROJECT_NAMESPACE/shopee_open_api/nginx:latest"
-#
-#build_staging_shopee_open_api_worker:
+#    
+#    - |
+#      if [[ "$CI_COMMIT_BRANCH" == "$CI_DEFAULT_BRANCH" ]]; then
+#        tag=""
+#        echo "Running on default branch '$CI_DEFAULT_BRANCH': tag = 'latest'"
+#      else
+#        tag=":$CI_COMMIT_REF_SLUG"
+#        echo "Running on branch '$CI_COMMIT_BRANCH': tag = $tag"
+#      fi
+#    - docker build --pull -t "$CI_REGISTRY_IMAGE${tag}" .
+#    - docker push "$CI_REGISTRY_IMAGE${tag}"
+
+#build_release_shopee_open_api_worker:
 #  stage: build
 #  only:
 #    refs:
@@ -176,14 +182,17 @@ build_shopee_open_api_worker:
 #    - docker tag worker "$CI_REGISTRY/$CI_PROJECT_NAMESPACE/shopee_open_api/worker:latest"
 #    - docker push "$CI_REGISTRY/$CI_PROJECT_NAMESPACE/shopee_open_api/worker:latest"
 #
-# ANCHOR --> Deply Stage
 
+## ANCHOR --> Deply Staging
+## TODO --> using Doctl docker to send command for deploy & setup application 
 #deploy_staging:
 #  image: alpine:latest
-#  stage: deploy
+#  stage: deploy staging
 #  only:
 #    refs:
-#      - develop
+#      - tags
+#      - release
+
 #  before_script:
 #    - apk add curl bash
 #  script:
@@ -196,3 +205,5 @@ build_shopee_open_api_worker:
 #    - curl -s -X POST $SOCKETIO_UPDATE_KEY -o /dev/null
 #    - curl -s -X POST $MIGRATE_SITE_KEY -o /dev/null
 
+## ANCHOR --> Testing Staging
+## TODO --> using Doctl docker to send command for testing staging application
