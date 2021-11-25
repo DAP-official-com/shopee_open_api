@@ -69,7 +69,7 @@ before_script:
   - echo "Running pipeline from REPO:'$GIT_REPO' --branch:'$CI_COMMIT_BRANCH' for app:'$CI_PROJECT_NAME'"
   - |
     if [[ "$CI_COMMIT_BRANCH" == "$CI_DEFAULT_BRANCH" ]]; then
-    tag=""\
+    tag=""
     echo "Running on default branch '$CI_DEFAULT_BRANCH': tag = 'latest'"
     else
     tag=":$CI_COMMIT_REF_SLUG"
