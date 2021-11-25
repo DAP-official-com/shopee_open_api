@@ -306,7 +306,7 @@
  "image_field": "image",
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2021-11-12 16:52:06.203743",
+ "modified": "2021-11-25 15:24:58.898827",
  "modified_by": "Administrator",
  "module": "Shopee Open API",
  "name": "Shopee Product",
@@ -344,6 +344,17 @@
    "read": 1,
    "report": 1,
    "role": "Sales User",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Sales Master Manager",
    "share": 1,
    "write": 1
   }
