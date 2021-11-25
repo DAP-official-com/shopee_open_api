@@ -51,7 +51,7 @@ variables:
   NGINX_IMAGE: "$CI_REGISTRY/$CI_PROJECT_NAMESPACE/$CI_PROJECT_NAME/$CI_PROJECT_NAME-nginx"
   NGINX_DOCKERFILE: docker/$CI_PROJECT_NAME-nginx/Dockerfile
 
-  WORKER_IMAGE: "$CI_REGISTRY/$CI_PROJECT_NAMESPACE/$CI_PROJECT_NAME/$CI_PROJECT_NAME-worker"
+  WORKER_IMAGE: "$CI_REGISTRY_IMAGE-worker"
   WORKER_DOCKERFILE: docker/$CI_PROJECT_NAME-worker/Dockerfile
 
 #  DOCKER_HOST: tcp://docker:2376
@@ -139,7 +139,7 @@ build_shopee_open_api_nginx:
       --build-arg=$GIT_BRANCH 
       -t $CI_PROJECT_NAME-nginx 
       -f $NGINX_DOCKERFILE .
-    - docker tag "$CI_PROJECT_NAME"-nginx "$NGINX_IMAGE":${tag}
+    - docker tag "$CI_PROJECT_NAME"-nginx "$NGINX_IMAGE"${tag}
     - docker tag "$CI_PROJECT_NAME"-nginx "$NGINX_IMAGE":develop
     - docker tag "$CI_PROJECT_NAME"-nginx "$NGINX_IMAGE":edge
     - docker tag "$CI_PROJECT_NAME"-nginx "$NGINX_IMAGE":latest
