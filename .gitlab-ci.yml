@@ -48,10 +48,10 @@ variables:
   VERSION: version-13
 
 ## NOTE --> Variable for docker
-  NGINX_IMAGE: "$CI_REGISTRY/$CI_PROJECT_NAMESPACE/$CI_PROJECT_NAME/$CI_PROJECT_NAME-nginx"
+  NGINX_IMAGE: "$CI_REGISTRY_IMAGE/$CI_PROJECT_NAME-nginx"
   NGINX_DOCKERFILE: docker/$CI_PROJECT_NAME-nginx/Dockerfile
 
-  WORKER_IMAGE: "$CI_REGISTRY_IMAGE-worker"
+  WORKER_IMAGE: "$CI_REGISTRY_IMAGE/$CI_PROJECT_NAME-worker"
   WORKER_DOCKERFILE: docker/$CI_PROJECT_NAME-worker/Dockerfile
 
 #  DOCKER_HOST: tcp://docker:2376
@@ -140,10 +140,9 @@ build_shopee_open_api_nginx:
       -t $CI_PROJECT_NAME-nginx 
       -f $NGINX_DOCKERFILE .
     - docker tag "$CI_PROJECT_NAME"-nginx "$NGINX_IMAGE"${tag}
-    - docker tag "$CI_PROJECT_NAME"-nginx "$NGINX_IMAGE":develop
     - docker tag "$CI_PROJECT_NAME"-nginx "$NGINX_IMAGE":edge
     - docker tag "$CI_PROJECT_NAME"-nginx "$NGINX_IMAGE":latest
-    - docker push "$NGINX_IMAGE":develop
+    - docker push "$NGINX_IMAGE"${tag}
     - docker push "$NGINX_IMAGE":latest
     - docker push "$NGINX_IMAGE":edge
       
@@ -169,7 +168,7 @@ build_shopee_open_api_worker:
    - develop
 
 #build_release_shopee_open_api_nginx:
-##  stage: build
+##  stage: release
 #  only:
 #    - tags
 #  script:
@@ -189,7 +188,7 @@ build_shopee_open_api_worker:
 #    - docker push "$CI_REGISTRY_IMAGE${tag}"
 
 #build_release_shopee_open_api_worker:
-#  stage: build
+#  stage: release
 #  only:
 #    refs:
 #      - main
