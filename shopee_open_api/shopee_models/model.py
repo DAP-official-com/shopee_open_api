@@ -4,6 +4,10 @@ import frappe
 
 
 class Model(ShopeeResponseBaseClass):
+    """
+    This class represents each model of Shopee product. A product without variants does not have a model.
+    One model is treated as one Shopee Product document.
+    """
 
     DOCTYPE = "Shopee Product"
 
@@ -16,17 +20,24 @@ class Model(ShopeeResponseBaseClass):
         return f"{self.product.get_product_id()}-{self.get_model_id()}"
 
     def make_variant_string(self):
+        """Make a variant string. E.g. long,brown, long,grey"""
         return ",".join(
             [variant["variation"]["option"] for variant in self.get_variations()]
         )
 
     def get_variations(self):
+        """Get all the variations of the product"""
+
         return self.variations
 
     def make_product_name(self):
+        """Make a primary key (name) for this model"""
+
         return f"{self.product.item_name} ({self.make_variant_string()})"
 
     def update_or_insert(self, ignore_permissions=False):
+        """Update existing document or insert a new Shopee Product to the database"""
+
         if self.is_existing_in_database:
             shopee_product = frappe.get_doc(
                 self.DOCTYPE,
@@ -59,6 +70,8 @@ class Model(ShopeeResponseBaseClass):
 
     @property
     def is_existing_in_database(self):
+        """Check if the model is already in the database"""
+
         return 0 < frappe.db.count(
             self.DOCTYPE,
             {
@@ -71,9 +84,16 @@ class Model(ShopeeResponseBaseClass):
         return f"{super().__str__()} {self.make_product_name()}"
 
     def get_model_id(self) -> str:
+        """Get a model id as a string, since the field type in the Doctype is data."""
+
         return str(self.model_id)
 
     def get_attributes(self):
+        """
+        Get all the attributes for this product and update the attributes with a model id to
+        create or update each product's attributes
+        """
+
         attributes = self.product.get_attributes()
 
         for attribute in attributes:
@@ -82,18 +102,27 @@ class Model(ShopeeResponseBaseClass):
         return attributes
 
     def get_inventories(self):
+        """Get the inventories of current model."""
+
         return [Stock(inventory, product=self.product) for inventory in self.stock_info]
 
     def get_currency(self):
+        """Get currency code provided by Shopee, or fallback to the site's default currency"""
+
         return self.price_info[0].get("currency", frappe.db.get_default("Currency"))
 
     def get_original_price(self):
+        """Get the original price of the model. If there is no discount, current price and origianal price are the same"""
+
         return float(self.price_info[0].get("original_price"))
 
     def get_current_price(self):
+        """Get currently selling price of the model."""
+
         return float(self.price_info[0].get("current_price"))
 
     def update_product_stock(self, product_object):
+        """Update the stock level of the model."""
 
         current_stocks = product_object.get("stock_details", [])
         shopee_stocks = self.get_inventories()
