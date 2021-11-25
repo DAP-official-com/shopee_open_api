@@ -25,8 +25,8 @@
 ## ANCHOR --> Define CI stage & Share variable
 
 stages:
-  - build
   #- test
+  - build
   #- release
   #- deploy staging
   #- test staging
@@ -57,7 +57,7 @@ variables:
 #  DOCKER_HOST: tcp://docker:2376
 #  DOCKER_TLS_CERTDIR: "/certs"
 
-## NOTE --> Variable for Deployment
+## NOTE --> Variable for Deploy stageing
 #  CONTAINER_TEST_IMAGE: $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG
 #  CONTAINER_RELEASE_IMAGE: $CI_REGISTRY_IMAGE:latest
 
@@ -66,7 +66,10 @@ services:
   - docker:dind
 before_script:
   - apk add git
-  - echo "Running pipeline from REPO:'$GIT_REPO' --branch:'$CI_COMMIT_BRANCH' for app:'$CI_PROJECT_NAME'"
+  - |
+    echo "Running pipeline:'$CI_PIPELINE_ID' using Runner '$CI_RUNNER_DESCRIPTION'
+    for Git Repo:'$GIT_REPO' --branch:'$CI_COMMIT_REF_NAME' for App:'$CI_PROJECT_NAME'
+    "
 
 ## NOTE --> check branch name to generate image tag  
   - |
@@ -74,11 +77,10 @@ before_script:
     tag=""
     echo "Running on default branch '$CI_DEFAULT_BRANCH': tag = 'latest'"
     else
-    tag=":$CI_COMMIT_REF_SLUG"
+    tag=":$CI_COMMIT_REF_NAME"
     echo "Running on branch '$CI_COMMIT_BRANCH': tag = $tag"
     fi
-    
-  - echo "$CI_REGISTRY_IMAGE"
+
   - echo "$CI_COMMIT_REF_NAME"
   - echo "$CI_COMMIT_TAG"
 
@@ -144,6 +146,7 @@ build_shopee_open_api_nginx:
       
   only:
    - develop
+   - tags
 
 build_shopee_open_api_worker:
   stage: build
@@ -161,6 +164,7 @@ build_shopee_open_api_worker:
 
   only:
    - develop
+   - tags
 
 #build_release_shopee_open_api_nginx:
 ##  stage: release
