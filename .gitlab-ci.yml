@@ -14,6 +14,9 @@
 # .gitlab-ci.yml reference
 # https://docs.gitlab.com/ee/ci/yaml/
 
+# gitlab-ci Template development
+# https://gitlab.com/gitlab-org/gitlab-foss/-/blob/master/doc/development/cicd/templates.md
+
 # Container registry reference (authenticating, etc.)
 # https://gitlab.com/help/user/packages/container_registry/index
 ## !SECTION 
@@ -63,15 +66,16 @@ services:
   - docker:dind
 before_script:
   - apk add git
-  - echo 'Running pipeline from REPO:"$GIT_REPO" --branch:"$CI_COMMIT_BRANCH" for app:"$CI_PROJECT_NAME"'
-#    - |
-#      if [[ "$CI_COMMIT_BRANCH" == "$CI_DEFAULT_BRANCH" ]]; then
-#        tag=""
-#        echo "Running on default branch '$CI_DEFAULT_BRANCH': tag = 'latest'"
-#      else
-#        tag=":$CI_COMMIT_REF_SLUG"
-#        echo "Running on branch '$CI_COMMIT_BRANCH': tag = $tag"
-#      fi
+  - echo "Running pipeline from REPO:'$GIT_REPO' --branch:'$CI_COMMIT_BRANCH' for app:'$CI_PROJECT_NAME'"
+  - |
+    if [[ "$CI_COMMIT_BRANCH" == "$CI_DEFAULT_BRANCH" ]]; then
+    tag=""\
+    echo "Running on default branch '$CI_DEFAULT_BRANCH': tag = 'latest'"
+    else
+    tag=":$CI_COMMIT_REF_SLUG"
+    echo "Running on branch '$CI_COMMIT_BRANCH': tag = $tag"
+    fi
+
   - echo "$CI_REGISTRY_IMAGE"
   - echo "$CI_COMMIT_REF_NAME"
   - echo "$CI_COMMIT_TAG"
@@ -127,7 +131,15 @@ before_script:
 build_shopee_open_api_nginx:
   stage: build
   script:
-    - docker build --pull --build-arg="$FRAPPE_BRANCH" --build-arg="$ERPNEXT_BRANCH" --build-arg="$GIT_REPO" --build-arg="$GIT_BRANCH" -t "$CI_PROJECT_NAME"-nginx -f "$NGINX_DOCKERFILE" .
+    - |
+      docker build --pull 
+      --build-arg="$FRAPPE_BRANCH" 
+      --build-arg="$ERPNEXT_BRANCH" 
+      --build-arg="$GIT_REPO" 
+      --build-arg="$GIT_BRANCH" 
+      -t "$CI_PROJECT_NAME"-nginx 
+      -f "$NGINX_DOCKERFILE" .
+
     - docker tag "$CI_PROJECT_NAME"-nginx "$NGINX_IMAGE":develop
     - docker tag "$CI_PROJECT_NAME"-nginx "$NGINX_IMAGE":edge
     - docker tag "$CI_PROJECT_NAME"-nginx "$NGINX_IMAGE":latest
