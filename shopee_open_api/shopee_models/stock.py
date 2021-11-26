@@ -2,6 +2,7 @@ from .base import ShopeeResponseBaseClass
 
 
 class Stock(ShopeeResponseBaseClass):
+    """This class represents each stock row in Shopee API."""
 
     STOCK_TYPES = {
         1: "Shope Warehouse Stock",
