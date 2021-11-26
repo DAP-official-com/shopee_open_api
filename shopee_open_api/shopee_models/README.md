@@ -21,7 +21,7 @@ client  = get_client_from_shop(shop)
 
 ### Order class
 
-An order class contains a list of OrderItem objects, a PaymentEscrow object, and a list of Product objects.
+An order class contains a list of _**OrderItem**_ objects, a _**PaymentEscrow**_ object, and a list of _**Product**_ objects.
 
 ```python
 from shopee_open_api.shopee_models.order import Order
