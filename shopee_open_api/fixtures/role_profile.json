@@ -1,0 +1,32 @@
+[
+ {
+  "docstatus": 0,
+  "doctype": "Role Profile",
+  "modified": "2021-11-26 11:56:07.256543",
+  "name": "Shopee Seller",
+  "parent": null,
+  "parentfield": null,
+  "parenttype": null,
+  "role_profile": "Shopee Seller",
+  "roles": [
+   {
+    "parent": "Shopee Seller",
+    "parentfield": "roles",
+    "parenttype": "Role Profile",
+    "role": "Sales User"
+   },
+   {
+    "parent": "Shopee Seller",
+    "parentfield": "roles",
+    "parenttype": "Role Profile",
+    "role": "Sales Master Manager"
+   },
+   {
+    "parent": "Shopee Seller",
+    "parentfield": "roles",
+    "parenttype": "Role Profile",
+    "role": "Sales Manager"
+   }
+  ]
+ }
+]
