@@ -11,7 +11,11 @@ ITEM_STATUSES = ["NORMAL", "BANNED", "DELETED", "UNLIST"]
 
 
 class Product(ShopeeResponseBaseClass):
-    """This class represents a shopee product with additional methods"""
+    """
+    This class represents a shopee product. If this is a singular product, the class represents the product itself.
+    If this is a product with variants, the class will contain the details such as attributes, and the Model class will
+    represent each product variant.
+    """
 
     DOCTYPE = "Shopee Product"
 
@@ -31,6 +35,10 @@ class Product(ShopeeResponseBaseClass):
         return response
 
     def update_or_insert(self, ignore_permissions=False):
+        """
+        If this is a product with variants, update or insert all the variants to the database.
+        If this is a singular product, save and update all the details.
+        """
 
         if self.has_model and self.get_models():
             for model in self.get_models():
@@ -69,6 +77,9 @@ class Product(ShopeeResponseBaseClass):
 
     @property
     def is_existing_in_database(self) -> bool:
+        """
+        Check if this product exists in the database. For product with models, check that all variants exist in the database.
+        """
 
         if (
             frappe.db.count(
@@ -98,12 +109,17 @@ class Product(ShopeeResponseBaseClass):
     @property
     def client(self):
         """Get Shopee client"""
+
         return get_client_from_shop_id(self.get_shop_id())
 
     def reset_product_attributes(self, product_object) -> None:
+        """Removeing all the variants of this product"""
+
         product_object.attributes = []
 
     def add_product_attributes(self, product_object) -> None:
+        """Add all the variants and their values to the database"""
+
         for attribute in self.get_attributes():
             new_attribute = product_object.append("attributes", {})
             new_attribute.attribute_id = attribute.get_attribute_id()
@@ -123,14 +139,15 @@ class Product(ShopeeResponseBaseClass):
         self.models = self.model_details["model"]
 
     def get_models(self):
-        """Getter method for variant models"""
+        """Getter method for variant models. If there is no model data, retreive from Shopee API and create Model instances"""
+
         if self.has_model and not hasattr(self, "models"):
             self.instantiate_models()
 
         return getattr(self, "models", [])
 
     def instantiate_models(self) -> None:
-        """Instantiate all models for current product."""
+        """Instantiate all models for current product. Does nothing if the product is singular"""
 
         if not self.has_model:
             return
@@ -190,6 +207,7 @@ class Product(ShopeeResponseBaseClass):
         return [Stock(inventory, product=self) for inventory in self.stock_info]
 
     def get_attributes(self):
+        """Get all the attributes of this product."""
 
         if not hasattr(self, "attribute_list"):
             return []
@@ -202,6 +220,7 @@ class Product(ShopeeResponseBaseClass):
         return attributes
 
     def update_product_stock(self, product_object):
+        """Sync the stock information with the data on Shopee API."""
 
         current_stocks = product_object.get("stock_details", [])
         shopee_stocks = self.get_inventories()
