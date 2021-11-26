@@ -7,4 +7,6 @@ from frappe.model.document import Document
 
 class ShopeeOrderItem(Document):
     def get_shopee_product(self):
+        """Get Shopee Product instance"""
+
         return frappe.get_doc("Shopee Product", self.shopee_product)

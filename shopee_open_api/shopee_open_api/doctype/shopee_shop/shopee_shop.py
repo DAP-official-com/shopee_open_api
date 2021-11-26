@@ -57,6 +57,8 @@ class ShopeeShop(Document):
         frappe.get_doc("Warehouse", warehouse_name).delete()
 
     def get_warehouse(self):
+        """Get an instance of a warehouse for this shop."""
+
         default_company = frappe.get_doc("Company", frappe.db.get_default("Company"))
         company_abbr = default_company.abbr
 
