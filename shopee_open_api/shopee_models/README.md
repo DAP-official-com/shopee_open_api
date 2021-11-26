@@ -4,7 +4,7 @@ Classes in this directory represent each object in Shopee API, not the doctype i
 
 ## How to use
 
-First, get the client for a shop. There are [other ways](https://git.arterypartner.com/artery/ap-application/shopee_open_api/-/blob/develop/shopee_open_api/utils/client.py) to get a client as well.
+First, get the client for a shop. There are [other ways](/shopee_open_api/utils/client.py) to get a client as well.
 
 ```python
 import frappe
