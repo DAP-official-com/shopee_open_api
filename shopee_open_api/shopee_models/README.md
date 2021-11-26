@@ -17,8 +17,6 @@ shop = frappe.get_last_doc("Shopee Shop")
 client  = get_client_from_shop(shop)
 ```
 
-## How to use
-
 ### Order class
 
 An order class contains a list of _**OrderItem**_ objects, a _**PaymentEscrow**_ object, and a list of _**Product**_ objects.
@@ -38,10 +36,10 @@ orders = [Order(order_details, shop_id=shop_id) for order_details in order_list]
 orders[0].update_or_insert_with_items(ignore_permissions=False)
 
 # Get the order items
-orders[0].order_items
+orders[0].order_items # return List[OrderItem]
 
-# Get the products in the order
-orders[0].get_shopee_products() # Calls Shopee API to retrieve the products' data
+# Get the products in the order by calling Shopee API to retrieve the products' data.
+orders[0].get_shopee_products() # return List[Product]
 
 ```
 
@@ -76,6 +74,11 @@ multi_variants_products = [product for product in products if product.has_model]
 
 # Update existing or insert new product.
 singular_products[0].update_or_insert(ignore_permissions=False)
+
+# Get product's attributes
+singular_products[0].get_attributes() # return List[ProductAttribute]
+
+
 ```
 
 Please note that a singular product has all the data neccessary by calling get_item_base_info, but a product with varaints needs to send another requests by calling get_model_list, which accepts only one product at a time. Therefore, updating or inserting a list of singular products are much faster than products with variants
@@ -86,4 +89,23 @@ Please note that a singular product has all the data neccessary by calling get_i
 
 # This is slow, because each product needs to call an additional api to retrieve model details.
 [product.update_or_insert() for product in multi_variants_products]
+```
+
+### Customer and Address
+
+The _**Customer**_ and _**Address**_ class represent the customer and the shipping address in an order. They are not the same as _**ERPNext**_'s Customer and Address doctype classes, but only interact with them.
+
+```python
+# From Shopee Order document
+
+shopee_order = frappe.get_doc("Shopee Order", order_sn)
+
+customer = shopee_order.get_customer_instance() # Shopee Customer instance, not ERPNext's Customer.
+address = shopee_order.get_address_instance() # Shopee Address instance, not ERPNext's Address.
+
+customer.update_or_insert()
+address.update_or_insert()
+
+customer.add_address(address)
+
 ```
