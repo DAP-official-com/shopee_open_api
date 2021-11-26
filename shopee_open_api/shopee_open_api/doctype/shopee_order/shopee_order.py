@@ -13,14 +13,16 @@ from typing import List
 
 class ShopeeOrder(Document):
     def get_shopee_shop_instance(self):
+        """Get an object of Shopee Shop doctype this order belongs to."""
+
         return frappe.get_doc("Shopee Shop", self.shopee_shop)
 
     @property
     def customer_detail(self) -> dict:
+        # Get the data for Customer Doctype
 
         customer = {}
 
-        # data for Customer Doctype
         customer["customer_type"] = "Individual"
         customer["customer_group"] = "Individual"
         customer["customer_name"] = self.recipient_name
@@ -34,10 +36,13 @@ class ShopeeOrder(Document):
 
     def get_customer_instance(self) -> Customer:
         """Get an instance of a customer (shopee customer, not erpnext customer)"""
+
         return Customer.from_shopee_customer(**self.customer_detail)
 
     @property
     def address_detail(self) -> dict:
+        """Get the data for Address doctype"""
+
         address = {}
 
         address["city"] = self.recipient_city
@@ -54,6 +59,7 @@ class ShopeeOrder(Document):
 
     def get_address_instance(self) -> Address:
         """Get an instance of an address (shopee address, not erpnext address)"""
+
         return Address.from_shopee_address(**self.address_detail)
 
     def create_sales_order(self, ignore_permissions=False):
@@ -91,6 +97,8 @@ class ShopeeOrder(Document):
 
     @property
     def order_items(self) -> List[ShopeeOrderItem]:
+        """Get a list of Shopee Order Items belonging to this order."""
+
         return self.get("shopee_order_items")
 
     def create_sales_order_validate(self):
@@ -142,6 +150,7 @@ class ShopeeOrder(Document):
         )
 
     def before_save(self):
+        """Controller: Update or insert a Customer document along with the Address"""
 
         self.create_customer_document(ignore_permissions=True)
         self.create_address_document(ignore_permissions=True)
@@ -154,10 +163,14 @@ class ShopeeOrder(Document):
         self.address = address.get_primary_key()
 
     def before_insert(self):
+        """Create linked documents if neccessary"""
+
         self.create_cancel_reason()
         self.create_payment_method()
 
     def create_cancel_reason(self):
+        """Create cancel reason if not exists in the database."""
+
         if not self.cancel_reason:
             return
 
@@ -169,6 +182,8 @@ class ShopeeOrder(Document):
         cancel_reason.insert(ignore_permissions=True)
 
     def create_payment_method(self):
+        """Create payment method if not exists in the database."""
+
         if not self.payment_method:
             return
 
