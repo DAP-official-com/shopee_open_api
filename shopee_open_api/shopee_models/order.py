@@ -7,6 +7,10 @@ from shopee_open_api.utils.datetime import datetime_string_from_unix
 
 
 class Order(ShopeeResponseBaseClass):
+    """
+    This class represents a Shopee order. Each order item is treated as an OrderItem object.
+    And the payment escrow is treated as a PaymentEscrow object.
+    """
 
     DOCTYPE = "Shopee Order"
 
@@ -25,6 +29,9 @@ class Order(ShopeeResponseBaseClass):
         return self.order_sn
 
     def update_or_insert_with_items(self, ignore_permissions=False):
+        """
+        Update existing order or insert a new one if none exists, including all the order items.
+        """
 
         self.update_or_insert(ignore_permissions=ignore_permissions)
 
@@ -46,6 +53,7 @@ class Order(ShopeeResponseBaseClass):
         Create sales order from shopee order. It is called here instead of after_insert
         since creating a new sales order requires order items, which are created after the order has been created
         """
+
         order = frappe.get_doc(self.DOCTYPE, self.make_primary_key())
 
         try:
@@ -58,9 +66,15 @@ class Order(ShopeeResponseBaseClass):
             return
 
     def get_item_list_ids(self):
+        """Get a list of item ids in this order"""
+
         return [item["item_id"] for item in self.item_list]
 
     def get_shopee_products(self):
+        """
+        Get a list of Product instances. This is not the same as OrderItem instance.
+        The products' data is the latest from Shopee Server
+        """
 
         items = self.client.product.get_item_base_info(
             item_id_list=",".join(
@@ -73,11 +87,13 @@ class Order(ShopeeResponseBaseClass):
         return products
 
     def update_products_stock(self, ignore_permissions=False):
+        """Calls Product's update_or_insert method, which updates the stock as well"""
 
         products = self.get_shopee_products()
         [product.update_or_insert(ignore_permissions) for product in products]
 
     def update_or_insert(self, ignore_permissions=False):
+        """Update or insert current order, but does not update the order items"""
 
         if self.is_existing_in_database:
             order = frappe.get_doc(
@@ -192,12 +208,16 @@ class Order(ShopeeResponseBaseClass):
 
     @property
     def is_existing_in_database(self):
+        """Check if this order is already in the database"""
+
         return frappe.db.exists(
             self.DOCTYPE,
             self.make_primary_key(),
         )
 
     def get_shop_id(self):
+        """Get shop_id as string. The shop id is saved as Data field."""
+
         return str(self.shop_id)
 
     def get_order_status(self):
@@ -321,6 +341,7 @@ class Order(ShopeeResponseBaseClass):
         return self.recipient_address.get("zipcode")
 
     def get_payment_escrow(self):
+        """Get the payment details of this order"""
 
         if self.payment_escrow is None:
             escrow_response = self.client.payment.get_escrow_detail(
@@ -332,4 +353,6 @@ class Order(ShopeeResponseBaseClass):
         return self.payment_escrow
 
     def get_order_income(self):
+        """Get the order income is an object within a payment escrow object"""
+
         return self.get_payment_escrow().order_income
