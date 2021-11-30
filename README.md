@@ -10,7 +10,7 @@ $ bench get-app shopee_open_api git@github.com:DAP-official-com/shopee_open_api.
 
 ## Usage
 
-_For further usages, such as creating a shopee order, products, etc., please read [this readme](/shopee_open_api/shopee_models/README.md)._
+_For further usages, such as creating a shopee order, products, etc., please read [this readme](/shopee_open_api/shopee_models)._
 
 Make sure to have Shopee's App ID and App Key [(can be obtained here after logging in)](https://open.shopee.com/myconsole/management/app/detail?id=204203&bgIndex=0&name=DAP%20API) are set in the Shopee API Settings doctype before connecting to the client. Currently, authorization can be done from /app/branch.
 
