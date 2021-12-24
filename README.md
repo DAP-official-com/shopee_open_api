@@ -5,7 +5,10 @@ This application contains submodule [DAP's Python-Shopee](https://github.com/DAP
 ## Installation
 
 ```shell
-$ bench get-app shopee_open_api git@github.com:DAP-official-com/shopee_open_api.git
+bench get-app shopee_open_api git@github.com:DAP-official-com/shopee_open_api.git
+
+## or install from a branch
+bench get-app --branch develop shopee_open_api git@github.com:DAP-official-com/shopee_open_api.git
 ```
 
 ## Usage
