@@ -26,7 +26,8 @@ class ShopeeProduct(Document):
 
         item = frappe.new_doc("Item")
         item.item_code = self.get_item_primary_key()
-        item.item_name = self.item_name
+        item.item_name = self.item_name[:140]
+        item.shopee_item_name = self.item_name
         item.standard_rate = self.current_price
         item.item_group = "Products"
 

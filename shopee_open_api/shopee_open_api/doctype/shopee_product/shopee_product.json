@@ -60,7 +60,7 @@
   },
   {
    "fieldname": "item_name",
-   "fieldtype": "Data",
+   "fieldtype": "Text",
    "label": "Item name",
    "read_only": 1
   },
@@ -306,7 +306,7 @@
  "image_field": "image",
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2021-11-25 15:24:58.898827",
+ "modified": "2022-01-05 19:19:29.548631",
  "modified_by": "Administrator",
  "module": "Shopee Open API",
  "name": "Shopee Product",
