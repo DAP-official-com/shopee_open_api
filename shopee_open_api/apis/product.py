@@ -2,6 +2,8 @@ import frappe
 from shopee_open_api.exceptions import BadRequestError
 from shopee_open_api.utils.client import get_client_from_shop_id
 from shopee_open_api.shopee_models.product import Product
+from shopee_open_api.scheduled_tasks.tasks import resync_products
+from frappe import enqueue
 
 
 @frappe.whitelist()
@@ -33,3 +35,9 @@ def create_new_item_and_add_to_product(product_primary_key):
     product.create_new_item_and_add_to_product()
 
     return {"message": "ok"}
+
+
+@frappe.whitelist()
+def sync_products():
+    enqueue("shopee_open_api.scheduled_tasks.product_tasks.sync_all_products")
+    return
