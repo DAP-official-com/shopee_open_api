@@ -11,9 +11,20 @@ def execute(filters=None):
         "date_start": None,
         "date_end": None,
         "order_status": None,
+        "timeline_group": "Daily",
+    }
+
+    DATE_FORMAT_GROUPS = {
+        "Daily": "%Y-%m-%d",
+        "Monthly": "%Y-%m",
+        "Annually": "%Y",
     }
 
     default_filters.update(filters)
+
+    default_filters["date_format"] = DATE_FORMAT_GROUPS[
+        default_filters["timeline_group"]
+    ]
 
     if default_filters.get("date_start") and default_filters.get("date_end"):
         if default_filters["date_end"] < default_filters["date_start"]:
@@ -23,7 +34,7 @@ def execute(filters=None):
     sales_data = frappe.db.sql(
         """
         SELECT
-            CONCAT(YEAR(shopee_order.create_time), '-', MONTH(shopee_order.create_time)) AS month_order,
+            DATE_FORMAT(shopee_order.create_time, %(date_format)s) AS time_order,
             COUNT(shopee_order.name) AS number_of_orders,
             SUM(shopee_order.total_amount) AS total_revenue
         FROM
@@ -36,7 +47,7 @@ def execute(filters=None):
             ((%(order_status)s IS NOT NULL AND shopee_order.order_status = %(order_status)s) OR
             (%(order_status)s IS NULL AND shopee_order.order_status != 'CANCELLED'))
         GROUP BY
-            month_order
+            time_order
         ORDER BY
             DATE(shopee_order.create_time) ASC
         """,
