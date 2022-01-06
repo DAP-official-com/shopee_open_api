@@ -2,7 +2,6 @@ import frappe
 from shopee_open_api.exceptions import BadRequestError
 from shopee_open_api.utils.client import get_client_from_shop_id
 from shopee_open_api.shopee_models.product import Product
-from shopee_open_api.scheduled_tasks.tasks import resync_products
 from frappe import enqueue
 
 
