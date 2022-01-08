@@ -159,13 +159,13 @@
   },
   {
    "fieldname": "message_to_seller",
-   "fieldtype": "Data",
+   "fieldtype": "Text",
    "label": "Message to Seller",
    "read_only": 1
   },
   {
    "fieldname": "note",
-   "fieldtype": "Data",
+   "fieldtype": "Text",
    "label": "Note",
    "read_only": 1
   },
@@ -604,7 +604,7 @@
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2021-11-25 14:22:24.700318",
+ "modified": "2022-01-07 21:34:47.494207",
  "modified_by": "Administrator",
  "module": "Shopee Open API",
  "name": "Shopee Order",
