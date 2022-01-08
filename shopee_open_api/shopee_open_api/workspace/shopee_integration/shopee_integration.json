@@ -1,5 +1,5 @@
 {
- "cards_label": "Docunment Link",
+ "cards_label": "Document Link",
  "category": "Domains",
  "charts": [],
  "creation": "2021-10-16 14:47:04.663223",
@@ -144,14 +144,21 @@
    "type": "Card Break"
   }
  ],
- "modified": "2021-11-04 17:36:18.547732",
+ "modified": "2022-01-08 07:58:43.439984",
  "modified_by": "Administrator",
  "module": "Shopee Open API",
  "name": "Shopee Integration",
- "onboarding": "Shopee ",
+ "onboarding": "Shopee",
  "owner": "Administrator",
  "pin_to_bottom": 1,
  "pin_to_top": 0,
- "shortcuts": [],
- "shortcuts_label": "Shotcut"
+ "shortcuts": [
+  {
+   "doc_view": "Dashboard",
+   "label": "Business Insights",
+   "link_to": "Shopee Business Insights",
+   "type": "Report"
+  }
+ ],
+ "shortcuts_label": "Shortcuts"
 }
