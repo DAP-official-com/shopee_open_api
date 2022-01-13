@@ -5,11 +5,10 @@ from .router import get_webhook_handler
 import traceback
 
 
-PARTNER_KEY = frappe.db.get_single_value("Shopee API Settings", "partner_key")
-
-
 @frappe.whitelist(allow_guest=True)
 def listener():
+
+    PARTNER_KEY = frappe.db.get_single_value("Shopee API Settings", "partner_key")
 
     authorization_header = frappe.request.headers.get("Authorization")
     host = frappe.request.headers.get("Host")
