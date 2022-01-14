@@ -202,6 +202,9 @@ class Order(ShopeeResponseBaseClass):
         order.seller_return_refund = self.get_order_income().get("seller_return_refund")
         order.escrow_amount = self.get_order_income().get("escrow_amount")
 
+        order.create_cancel_reason()
+        order.create_payment_method()
+
         order.save(ignore_permissions=ignore_permissions)
 
         return order
