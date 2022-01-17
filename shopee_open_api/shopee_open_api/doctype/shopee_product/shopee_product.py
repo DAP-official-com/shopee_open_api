@@ -41,7 +41,10 @@ class ShopeeProduct(Document):
         return frappe.get_doc("Item", self.get_item_primary_key())
 
     def get_item_primary_key(self) -> str:
-        """Get a primary key for the new ERPNext item."""
+        """Get a primary key for ERPNext item. Return current item name if the product is matched with an item, otherwise return a new name"""
+
+        if self.item:
+            return self.item
 
         return f"SH-{self.shopee_product_id}-{self.shopee_model_id}"
 
