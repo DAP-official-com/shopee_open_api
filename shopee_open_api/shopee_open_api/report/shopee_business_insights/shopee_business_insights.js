@@ -24,5 +24,12 @@ frappe.query_reports['Shopee Business Insights'] = {
 			fieldtype: 'Link',
 			options: 'Shopee Order Status',
 		},
+		{
+			fieldname: 'timeline_group',
+			label: 'Date Group',
+			fieldtype: 'Select',
+			default: 'Monthly',
+			options: 'Daily\nMonthly\nAnnually',
+		},
 	],
 };

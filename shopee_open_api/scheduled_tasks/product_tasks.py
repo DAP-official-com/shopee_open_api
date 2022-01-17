@@ -121,3 +121,33 @@ def update_products():
                 "last_product_update": int(time.time()),
             },
         )
+
+
+def sync_all_products():
+
+    shops = frappe.db.get_all(
+        "Shopee Shop",
+        filters={"authorized": True},
+        fields=[
+            "shop_id",
+        ],
+    )
+
+    for shop in shops:
+
+        task_arguments = {}
+        task_arguments["shop_id"] = shop["shop_id"]
+        task_arguments["offset"] = 0
+
+        for item_status in ITEM_STATUSES:
+            task_arguments["item_status"] = item_status
+
+            start_pulling_products(**task_arguments)
+
+        frappe.db.set_value(
+            "Shopee Shop",
+            shop["shop_id"],
+            {
+                "last_product_update": int(time.time()),
+            },
+        )

@@ -12,12 +12,11 @@ UNAUTHORIZE_REDIRECT_URL = (
     f"{frappe.utils.get_url()}/api/method/shopee_open_api.auth.unauthorize_callback"
 )
 
-client = get_shopless_client()
-
 
 @frappe.whitelist()
 def authorize():
 
+    client = get_shopless_client()
     url = client.shop_authorization(redirect_url=client.redirect_url)
 
     frappe.local.response["type"] = "redirect"
@@ -27,6 +26,7 @@ def authorize():
 @frappe.whitelist()
 def authorize_callback():
 
+    client = get_shopless_client()
     code = frappe.request.args.getlist("code")[0]
     shop_id = frappe.request.args.getlist("shop_id")[0]
 
@@ -104,6 +104,7 @@ def authorize_callback():
 @frappe.whitelist()
 def unauthorize():
 
+    client = get_shopless_client()
     sign, unauth_url = client.auth_url("/api/v2/shop/cancel_auth_partner")
     unauth_url += f"&redirect={UNAUTHORIZE_REDIRECT_URL}"
 
@@ -138,6 +139,7 @@ def unauthorize_callback():
 @frappe.whitelist()
 def get_authorize_url():
 
+    client = get_shopless_client()
     url = client.shop_authorization(redirect_url=client.redirect_url)
 
     return url
@@ -146,6 +148,7 @@ def get_authorize_url():
 @frappe.whitelist()
 def get_unauthorize_url():
 
+    client = get_shopless_client()
     sign, unauth_url = client.auth_url("/api/v2/shop/cancel_auth_partner")
     unauth_url += f"&redirect={UNAUTHORIZE_REDIRECT_URL}"
 

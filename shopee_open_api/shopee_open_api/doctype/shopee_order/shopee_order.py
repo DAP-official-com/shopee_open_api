@@ -149,6 +149,11 @@ class ShopeeOrder(Document):
             ignore_permissions=ignore_permissions
         )
 
+    def save(self, *args, **kwargs):
+        self.create_cancel_reason()
+        self.create_payment_method()
+        super().save(*args, **kwargs)
+
     def before_save(self):
         """Controller: Update or insert a Customer document along with the Address"""
 

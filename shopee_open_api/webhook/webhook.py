@@ -2,13 +2,13 @@ import frappe
 import json
 import hmac, time, requests, hashlib
 from .router import get_webhook_handler
-
-
-PARTNER_KEY = frappe.db.get_single_value("Shopee API Settings", "partner_key")
+import traceback
 
 
 @frappe.whitelist(allow_guest=True)
 def listener():
+
+    PARTNER_KEY = frappe.db.get_single_value("Shopee API Settings", "partner_key")
 
     authorization_header = frappe.request.headers.get("Authorization")
     host = frappe.request.headers.get("Host")
@@ -27,6 +27,14 @@ def listener():
 
     webhook_code = data.get("code", False)
 
-    get_webhook_handler(webhook_code)(data)
+    try:
+        get_webhook_handler(webhook_code)(data)
+    except:
+        shopee_error = frappe.new_doc("Shopee Order Update Error")
+        shopee_error.raw_data = str(data)
+        shopee_error.error = str(traceback.format_exc())
+        shopee_error.insert(ignore_permissions=True)
+        frappe.db.commit()
+        raise
 
     return
