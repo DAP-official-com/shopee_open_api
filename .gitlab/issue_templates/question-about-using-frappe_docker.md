@@ -1,5 +1,5 @@
 ---
-name: Question about using Frappe/Frappe Apps
+name: Question about using shopee_open_api Apps
 about: Ask how to do something
 labels: question
 ---

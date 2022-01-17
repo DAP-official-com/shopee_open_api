@@ -1,11 +1,11 @@
 ---
 name: Feature request
-about: Suggest an idea to improve frappe_docker
+about: Suggest an idea to improve shopee_open_api
 labels: enhancement
 ---
 
 <!--
-Welcome to the Frappe Framework issue tracker! Before creating an issue, please heed the following:
+Welcome to the shopee_open_api issue tracker! Before creating an issue, please read the following:
 1. Use the search function before creating a new issue. Duplicates will be closed and directed to the original discussion.
 2. When making a feature request, make sure to be as verbose as possible. The better you convey your message, the greater the drive to make it happen.
 -->
