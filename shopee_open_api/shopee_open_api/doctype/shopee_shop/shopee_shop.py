@@ -37,6 +37,10 @@ class ShopeeShop(Document):
 
         new_warehouse.insert()
 
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+        self.update_or_insert_price_list()
+
     def get_warehouse_name(self):
         return f"Shopee Shop {self.shop_id}"
 
@@ -73,3 +77,40 @@ class ShopeeShop(Document):
         )[0]
 
         return frappe.get_doc("Warehouse", warehouse_name)
+
+    def get_price_list(self):
+
+        self.update_or_insert_price_list()
+
+        price_list_name = frappe.get_all(
+            "Price List",
+            filters={
+                "shopee_shop": self.name,
+            },
+            pluck="name",
+        )[0]
+
+        return frappe.get_doc("Price List", price_list_name)
+
+    def update_or_insert_price_list(self) -> None:
+        """Create a price list for this shop"""
+
+        if self.has_price_list():
+            return
+
+        price_list = frappe.new_doc("Price List")
+        price_list.shopee_shop = self.name
+        price_list.price_list_name = f"{self.shop_name} Price List ({self.name})"
+        price_list.currency = frappe.db.get_default("Currency")
+        price_list.selling = True
+        price_list.save()
+
+    def has_price_list(self) -> bool:
+        return bool(
+            frappe.db.exists(
+                {
+                    "doctype": "Price List",
+                    "shopee_shop": self.name,
+                }
+            )
+        )

@@ -31,6 +31,7 @@ class ShopeeOrder(Document):
         customer["user_id"] = self.buyer_user_id
         customer["shopee_user_id"] = self.buyer_user_id
         customer["mobile_no"] = self.recipient_phone
+        customer["default_price_list"] = self.get_shopee_shop_instance().get_price_list().name
 
         return customer
 
