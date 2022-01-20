@@ -58,6 +58,8 @@ class ShopeeProduct(Document):
         )
 
     def create_item_price(self, item: Item):
+        """Create item price and set shopee_product field"""
+
         item_price = frappe.get_doc(
             {
                 "doctype": "Item Price",
