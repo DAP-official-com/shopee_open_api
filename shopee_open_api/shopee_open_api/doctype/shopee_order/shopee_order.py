@@ -24,14 +24,16 @@ class ShopeeOrder(Document):
         customer = {}
 
         customer["customer_type"] = "Individual"
-        customer["customer_group"] = "Individual"
+        customer["customer_group"] = "Shopee"
         customer["customer_name"] = self.recipient_name
         customer["territory"] = frappe.db.get_default("Country")
         customer["username"] = self.buyer_username
         customer["user_id"] = self.buyer_user_id
         customer["shopee_user_id"] = self.buyer_user_id
         customer["mobile_no"] = self.recipient_phone
-        customer["default_price_list"] = self.get_shopee_shop_instance().get_price_list().name
+        customer["default_price_list"] = (
+            self.get_shopee_shop_instance().get_price_list().name
+        )
 
         return customer
 
