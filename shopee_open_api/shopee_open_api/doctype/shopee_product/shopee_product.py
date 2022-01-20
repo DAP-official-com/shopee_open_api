@@ -1,9 +1,11 @@
 # Copyright (c) 2022, Dap Official and contributors
 # For license information, please see license.txt
 
+import erpnext
 import frappe
-from frappe.model.document import Document
+
 from erpnext.stock.doctype.item.item import Item
+from frappe.model.document import Document
 from shopee_open_api.shopee_open_api.doctype.shopee_shop import shopee_shop
 
 
@@ -30,12 +32,12 @@ class ShopeeProduct(Document):
         item.item_code = self.get_item_primary_key()
         item.item_name = self.item_name[:140]
         item.shopee_item_name = self.item_name
-        item.standard_rate = self.current_price
+        # item.standard_rate = self.current_price
         item.item_group = "Products"
 
-        self.create_item_defaults(item)
-
+        self.create_item_defaults(item=item)
         item.save()
+        self.create_item_price(item=item)
 
         return item
 
@@ -54,6 +56,21 @@ class ShopeeProduct(Document):
                 .name,
             },
         )
+
+    def create_item_price(self, item: Item):
+        item_price = frappe.get_doc(
+            {
+                "doctype": "Item Price",
+                "price_list": self.get_shopee_shop_document().get_price_list().name,
+                "item_code": item.name,
+                "uom": item.stock_uom,
+                "brand": item.brand,
+                "currency": erpnext.get_default_currency(),
+                "price_list_rate": self.current_price,
+                "shopee_product": self.name,
+            }
+        )
+        item_price.insert()
 
     def get_item(self):
         """Get ERPNext Item instance."""
