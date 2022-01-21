@@ -130,6 +130,11 @@ class ShopeeOrder(Document):
                     msg=f"Shopee product {order_item.get_shopee_product()} has not been matched with erpnext item",
                 )
 
+            if not order_item.get_shopee_product().has_item_price():
+                frappe.throw(
+                    msg=f"Could not find an Item Price belonging to the product {order_item.get_shopee_product().name}",
+                )
+
     def pre_create_sales_order(self, ignore_permissions=False):
         """Perform actions before creating a sales order, e.g. creating a customer and address, if none exists"""
 

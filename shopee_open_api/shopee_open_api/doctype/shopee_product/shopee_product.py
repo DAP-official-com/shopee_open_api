@@ -99,6 +99,7 @@ class ShopeeProduct(Document):
         return frappe.get_doc("Shopee Shop", self.shopee_shop)
 
     def get_item_price(self) -> ItemPrice:
+        """Get an instance of an Item Price belonging to this product."""
         return frappe.get_doc(
             "Item Price",
             frappe.get_all(
@@ -108,4 +109,16 @@ class ShopeeProduct(Document):
                 },
                 pluck="name",
             )[0],
+        )
+
+    def has_item_price(self) -> bool:
+        """Check if there is an Item Price document belonging to this product."""
+
+        return bool(
+            frappe.db.exists(
+                {
+                    "doctype": "Item Price",
+                    "shopee_product": self.name,
+                }
+            )
         )
