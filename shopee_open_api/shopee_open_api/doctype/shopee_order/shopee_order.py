@@ -80,6 +80,7 @@ class ShopeeOrder(Document):
         new_sales_order.delivery_date = self.create_time
         new_sales_order.customer_address = self.get_address_instance().get_primary_key()
         new_sales_order.set_warehouse = shop.get_warehouse().name
+        new_sales_order.selling_price_list = shop.get_price_list().name
 
         for order_item in self.order_items:
             shopee_product = order_item.get_shopee_product()
