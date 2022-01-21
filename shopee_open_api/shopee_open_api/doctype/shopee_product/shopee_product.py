@@ -5,6 +5,7 @@ import erpnext
 import frappe
 
 from erpnext.stock.doctype.item.item import Item
+from erpnext.stock.doctype.item_price.item_price import ItemPrice
 from frappe.model.document import Document
 from shopee_open_api.shopee_open_api.doctype.shopee_shop import shopee_shop
 
@@ -96,3 +97,15 @@ class ShopeeProduct(Document):
     def get_shopee_shop_document(self) -> shopee_shop.ShopeeShop:
         """Get an instance of item's shop"""
         return frappe.get_doc("Shopee Shop", self.shopee_shop)
+
+    def get_item_price(self) -> ItemPrice:
+        return frappe.get_doc(
+            "Item Price",
+            frappe.get_all(
+                "Item Price",
+                filters={
+                    "shopee_product": self.name,
+                },
+                pluck="name",
+            )[0],
+        )

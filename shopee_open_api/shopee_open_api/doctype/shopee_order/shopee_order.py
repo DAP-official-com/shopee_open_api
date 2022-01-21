@@ -89,7 +89,9 @@ class ShopeeOrder(Document):
             sales_order_item = new_sales_order.append("items", {})
             sales_order_item.item_code = item.name
             sales_order_item.qty = order_item.qty
-            sales_order_item.rate = order_item.model_discounted_price
+            sales_order_item.rate = (
+                order_item.get_shopee_product().get_item_price().price_list_rate
+            )
 
         new_sales_order.insert(ignore_permissions=ignore_permissions)
 
