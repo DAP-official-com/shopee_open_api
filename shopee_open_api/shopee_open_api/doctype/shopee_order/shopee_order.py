@@ -80,6 +80,7 @@ class ShopeeOrder(Document):
         new_sales_order.delivery_date = self.create_time
         new_sales_order.customer_address = self.get_address_instance().get_primary_key()
         new_sales_order.set_warehouse = shop.get_warehouse().name
+        new_sales_order.selling_price_list = shop.get_price_list().name
 
         for order_item in self.order_items:
             shopee_product = order_item.get_shopee_product()
@@ -88,7 +89,9 @@ class ShopeeOrder(Document):
             sales_order_item = new_sales_order.append("items", {})
             sales_order_item.item_code = item.name
             sales_order_item.qty = order_item.qty
-            sales_order_item.rate = order_item.model_discounted_price
+            sales_order_item.rate = (
+                order_item.get_shopee_product().get_item_price().price_list_rate
+            )
 
         new_sales_order.insert(ignore_permissions=ignore_permissions)
 
@@ -125,6 +128,11 @@ class ShopeeOrder(Document):
             if order_item.get_shopee_product().item is None:
                 frappe.throw(
                     msg=f"Shopee product {order_item.get_shopee_product()} has not been matched with erpnext item",
+                )
+
+            if not order_item.get_shopee_product().has_item_price():
+                frappe.throw(
+                    msg=f"Could not find an Item Price belonging to the product {order_item.get_shopee_product().name}",
                 )
 
     def pre_create_sales_order(self, ignore_permissions=False):
