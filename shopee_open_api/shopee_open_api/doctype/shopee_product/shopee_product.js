@@ -24,7 +24,7 @@ frappe.ui.form.on('Shopee Product', {
 					product_primary_key: frm.doc.name,
 				},
 				callback: function (r) {
-					frm.refresh();
+					window.location.reload();
 				},
 			});
 		});
