@@ -93,9 +93,9 @@ fixtures = [
 # ---------------
 # Override standard doctype classes
 
-# override_doctype_class = {
-# 	"ToDo": "custom_app.overrides.CustomToDo"
-# }
+override_doctype_class = {
+    "Item Price": "shopee_open_api.overrides.item_price.CustomItemPrice"
+}
 
 # Document Events
 # ---------------
