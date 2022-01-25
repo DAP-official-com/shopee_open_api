@@ -1,3 +1,2 @@
 shopee_open_api.patches.v0_1.add_accounting_dimension
-shopee_open_api.patches.v1_3_4.add_shopee_price_list
 shopee_open_api.patches.v1_5_0.add_shopee_customer_group
