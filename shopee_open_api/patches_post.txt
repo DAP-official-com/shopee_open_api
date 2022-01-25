@@ -1,0 +1,1 @@
+shopee_open_api.patches.v1_3_4.add_shopee_price_list
