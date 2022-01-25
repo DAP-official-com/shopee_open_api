@@ -92,6 +92,7 @@ class ShopeeOrder(Document):
             sales_order_item.rate = (
                 order_item.get_shopee_product().get_item_price().price_list_rate
             )
+            sales_order_item.uom = order_item.get_shopee_product().get_item_price().uom
 
         new_sales_order.insert(ignore_permissions=ignore_permissions)
 
