@@ -16,7 +16,11 @@
   "shop_logo",
   "authorized",
   "last_product_update",
-  "warehouse"
+  "warehouse",
+  "automation_settings_section",
+  "create_sales_order_after_shopee_order_has_been_created",
+  "security_section",
+  "prevent_making_changes_on_shopee_portal"
  ],
  "fields": [
   {
@@ -86,12 +90,36 @@
    "options": "Warehouse",
    "read_only": 1,
    "reqd": 1
+  },
+  {
+   "fieldname": "automation_settings_section",
+   "fieldtype": "Section Break",
+   "label": "Automation Settings"
+  },
+  {
+   "default": "0",
+   "fieldname": "create_sales_order_after_shopee_order_has_been_created",
+   "fieldtype": "Check",
+   "label": "Create Sales Order After Shopee Order Has Been Created",
+   "reqd": 1
+  },
+  {
+   "fieldname": "security_section",
+   "fieldtype": "Section Break",
+   "label": "Security"
+  },
+  {
+   "default": "1",
+   "fieldname": "prevent_making_changes_on_shopee_portal",
+   "fieldtype": "Check",
+   "label": "Prevent Making Changes on Shopee Portal",
+   "reqd": 1
   }
  ],
  "image_field": "shop_logo",
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2021-11-25 15:24:15.644395",
+ "modified": "2022-01-26 11:36:17.097043",
  "modified_by": "Administrator",
  "module": "Shopee Open API",
  "name": "Shopee Shop",
