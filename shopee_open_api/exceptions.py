@@ -15,3 +15,7 @@ class NotAuthorizedError(Exception):
 
 class NoShopAuthorizedError(ValidationError):
     pass
+
+
+class AlreadyHasSalesOrderError(ValidationError):
+    pass

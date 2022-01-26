@@ -3,6 +3,7 @@ from .payment_escrow import PaymentEscrow
 from .order_item import OrderItem
 from .product import Product
 import frappe
+from shopee_open_api.exceptions import AlreadyHasSalesOrderError
 from shopee_open_api.utils.datetime import datetime_string_from_unix
 
 
@@ -38,14 +39,20 @@ class Order(ShopeeResponseBaseClass):
         for order_item in self.order_items:
             order_item.update_or_insert(ignore_permissions=ignore_permissions)
 
-        if self.get_shop_document().is_set_to_create_draft_sales_order:
-            self.create_sales_order(ignore_permissions=ignore_permissions)
+        shop = self.get_shop_document()
+
+        if shop.is_set_to_create_draft_sales_order:
+            new_order = self.create_sales_order(ignore_permissions=ignore_permissions)
+
+        if shop.is_set_to_submit_sales_order and new_order is not None:
+            new_order.docstatus = 1
+            new_order.save(ignore_permissions=ignore_permissions)
 
         self.update_products_stock(ignore_permissions=ignore_permissions)
 
         return frappe.get_doc("Shopee Order", self.make_primary_key())
 
-    def create_sales_order(self, ignore_permissions=False) -> None:
+    def create_sales_order(self, ignore_permissions=False):
         """
         Create sales order from shopee order. It is called here instead of after_insert
         since creating a new sales order requires order items, which are created after the order has been created
@@ -55,12 +62,16 @@ class Order(ShopeeResponseBaseClass):
 
         try:
             order.create_sales_order(ignore_permissions=ignore_permissions)
+        except AlreadyHasSalesOrderError as e:
+            return frappe.get_doc("Sales Order", order.sales_order)
         except frappe.exceptions.ValidationError as e:
             """
             This can happen due to shopee product not being matched with erpnext item
             or the order is already matched with a sales order
             """
             return
+
+        return frappe.get_doc("Sales Order", order.sales_order)
 
     def get_item_list_ids(self):
         """Get a list of item ids in this order"""

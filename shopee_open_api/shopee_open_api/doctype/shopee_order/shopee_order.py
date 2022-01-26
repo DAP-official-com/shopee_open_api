@@ -3,8 +3,9 @@
 
 import frappe
 from frappe.model.document import Document
-from shopee_open_api.shopee_models.customer import Customer
 from shopee_open_api.shopee_models.address import Address
+from shopee_open_api.shopee_models.customer import Customer
+from shopee_open_api.exceptions import AlreadyHasSalesOrderError
 from shopee_open_api.shopee_open_api.doctype.shopee_order_item.shopee_order_item import (
     ShopeeOrderItem,
 )
@@ -120,6 +121,7 @@ class ShopeeOrder(Document):
         if self.sales_order:
             frappe.throw(
                 msg=f"Shopee order {self.name} already has a sales order {self.sales_order} matched",
+                exc=AlreadyHasSalesOrderError,
             )
 
     def shopee_order_items_validate(self):
