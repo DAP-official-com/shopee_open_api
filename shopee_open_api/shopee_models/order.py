@@ -38,10 +38,7 @@ class Order(ShopeeResponseBaseClass):
         for order_item in self.order_items:
             order_item.update_or_insert(ignore_permissions=ignore_permissions)
 
-        if frappe.db.get_single_value(
-            "Shopee API Settings",
-            "create_sales_order_after_shopee_order_has_been_created",
-        ):
+        if self.get_shop_document().is_set_to_create_draft_sales_order:
             self.create_sales_order(ignore_permissions=ignore_permissions)
 
         self.update_products_stock(ignore_permissions=ignore_permissions)
@@ -356,3 +353,7 @@ class Order(ShopeeResponseBaseClass):
         """Get the order income is an object within a payment escrow object"""
 
         return self.get_payment_escrow().order_income
+
+    def get_shop_document(self):
+        """Get a Shopee Shop document for this order"""
+        return frappe.get_doc("Shopee Shop", self.get_shop_id())

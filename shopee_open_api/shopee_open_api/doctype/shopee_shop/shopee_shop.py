@@ -114,3 +114,8 @@ class ShopeeShop(Document):
                 }
             )
         )
+
+    @property
+    def is_set_to_create_draft_sales_order(self) -> bool:
+        """Check if create draft sales order is set to True"""
+        return self.create_sales_order_after_shopee_order_has_been_created == 1
