@@ -1,6 +1,6 @@
 import frappe, json
 from datetime import datetime
-from shopee_open_api.utils.client import get_client_from_shop
+from shopee_open_api import utils
 from shopee_open_api.exceptions import BadRequestError
 from shopee_open_api.shopee_models.order import Order
 
@@ -12,7 +12,7 @@ def handle_order_status_update(data: dict):
     order_sn = data.get("data").get("ordersn")
 
     shop = frappe.get_doc("Shopee Shop", str(shop_id))
-    client = get_client_from_shop(shop)
+    client = utils.client.get_client_from_shop(shop)
 
     order_detail_response = client.order.get_order_detail(
         order_sn_list=order_sn,
