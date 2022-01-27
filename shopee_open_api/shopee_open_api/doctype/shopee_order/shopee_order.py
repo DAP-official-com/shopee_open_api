@@ -1,11 +1,13 @@
 # Copyright (c) 2021, Dap Official and contributors
 # For license information, please see license.txt
 
+from erpnext.selling.doctype.sales_order.sales_order import SalesOrder
+
 import frappe
 from frappe.model.document import Document
 from shopee_open_api.shopee_models.address import Address
 from shopee_open_api.shopee_models.customer import Customer
-from shopee_open_api.exceptions import AlreadyHasSalesOrderError
+from shopee_open_api.exceptions import ProductHasNoItemError, ItemHasNoPriceError
 from shopee_open_api.shopee_open_api.doctype.shopee_order_item.shopee_order_item import (
     ShopeeOrderItem,
 )
@@ -66,10 +68,37 @@ class ShopeeOrder(Document):
 
         return Address.from_shopee_address(**self.address_detail)
 
-    def create_sales_order(self, ignore_permissions=False):
+    def run_order_automation(self, ignore_permissions=False):
+        """
+        Perform sales order automation process.
+
+        - Create a sales order draft
+        - Submit a sales order
+        - Create a delery note
+        - Create a sales invoice
+        """
+
+        shop = self.get_shopee_shop_instance()
+
+        if shop.is_set_to_create_draft_sales_order:
+            new_order = self.create_sales_order(ignore_permissions=ignore_permissions)
+
+        if (
+            shop.is_set_to_submit_sales_order
+            and new_order is not None
+            and new_order.docstatus == 0
+        ):
+            new_order.docstatus = 1
+            new_order.save(ignore_permissions=ignore_permissions)
+
+    def create_sales_order(self, ignore_permissions=False) -> SalesOrder:
         """Create Sales Order document from Shopee Order"""
 
+        if self.sales_order:
+            return frappe.get_doc("Sales Order", self.sales_order)
+
         self.create_sales_order_validate()
+
         self.pre_create_sales_order(ignore_permissions=ignore_permissions)
 
         shop = self.get_shopee_shop_instance()
@@ -112,17 +141,7 @@ class ShopeeOrder(Document):
     def create_sales_order_validate(self):
         """Perform validation before creating a new sales order"""
 
-        self.no_sales_order_validate()
         self.shopee_order_items_validate()
-
-    def no_sales_order_validate(self):
-        """Check if current shopee order already has a sales order"""
-
-        if self.sales_order:
-            frappe.throw(
-                msg=f"Shopee order {self.name} already has a sales order {self.sales_order} matched",
-                exc=AlreadyHasSalesOrderError,
-            )
 
     def shopee_order_items_validate(self):
         """Check that all Shopee Order Items are matched with erpnext Item"""
@@ -131,11 +150,13 @@ class ShopeeOrder(Document):
             if order_item.get_shopee_product().item is None:
                 frappe.throw(
                     msg=f"Shopee product {order_item.get_shopee_product()} has not been matched with erpnext item",
+                    exc=ProductHasNoItemError,
                 )
 
             if not order_item.get_shopee_product().has_item_price():
                 frappe.throw(
                     msg=f"Could not find an Item Price belonging to the product {order_item.get_shopee_product().name}",
+                    exc=ItemHasNoPriceError,
                 )
 
     def pre_create_sales_order(self, ignore_permissions=False):

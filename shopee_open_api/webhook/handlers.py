@@ -1,7 +1,7 @@
 import frappe, json
 from datetime import datetime
 from shopee_open_api import utils
-from shopee_open_api.exceptions import BadRequestError
+from shopee_open_api.exceptions import BadRequestError, OrderAutomationProcessingError
 from shopee_open_api.shopee_models.order import Order
 
 
@@ -28,4 +28,7 @@ def handle_order_status_update(data: dict):
 
     order = Order(order_details, shop_id=shop_id)
 
-    order.update_or_insert_with_items(ignore_permissions=True)
+    try:
+        order.update_or_insert_with_items(ignore_permissions=True)
+    except OrderAutomationProcessingError as e:
+        return
