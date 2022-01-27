@@ -20,6 +20,7 @@
   "automation_settings_section",
   "create_sales_order_after_shopee_order_has_been_created",
   "submit_sales_order_automatically",
+  "create_delivery_note_when_status_is_shipped",
   "security_section",
   "prevent_making_changes_on_shopee_portal"
  ],
@@ -122,12 +123,19 @@
    "fieldtype": "Check",
    "label": "Submit Sales Order Automatically",
    "reqd": 1
+  },
+  {
+   "default": "0",
+   "fieldname": "create_delivery_note_when_status_is_shipped",
+   "fieldtype": "Check",
+   "label": "Create Delivery Note When Status Is Shipped",
+   "reqd": 1
   }
  ],
  "image_field": "shop_logo",
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2022-01-26 15:40:13.084095",
+ "modified": "2022-01-27 14:55:38.031764",
  "modified_by": "Administrator",
  "module": "Shopee Open API",
  "name": "Shopee Shop",
