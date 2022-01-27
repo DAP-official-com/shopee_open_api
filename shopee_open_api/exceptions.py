@@ -17,5 +17,17 @@ class NoShopAuthorizedError(ValidationError):
     pass
 
 
-class AlreadyHasSalesOrderError(ValidationError):
+class OrderAutomationProcessingError(ValidationError):
+    pass
+
+
+class AlreadyHasSalesOrderError(OrderAutomationProcessingError):
+    pass
+
+
+class ProductHasNoItemError(OrderAutomationProcessingError):
+    pass
+
+
+class ItemHasNoPriceError(OrderAutomationProcessingError):
     pass
