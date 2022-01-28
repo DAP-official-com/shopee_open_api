@@ -1,7 +1,8 @@
 # Copyright (c) 2021, Dap Official and contributors
 # For license information, please see license.txt
 
-from erpnext.selling.doctype.sales_order.sales_order import SalesOrder
+from erpnext.selling.doctype.sales_order import sales_order
+
 
 import frappe
 from frappe.model.document import Document
@@ -88,10 +89,9 @@ class ShopeeOrder(Document):
             and new_order is not None
             and new_order.docstatus == 0
         ):
-            new_order.docstatus = 1
-            new_order.save(ignore_permissions=ignore_permissions)
+            self.submit_sales_order(ignore_permissions=ignore_permissions)
 
-    def create_sales_order(self, ignore_permissions=False) -> SalesOrder:
+    def create_sales_order(self, ignore_permissions=False) -> sales_order.SalesOrder:
         """Create Sales Order document from Shopee Order"""
 
         if self.sales_order:
@@ -131,6 +131,19 @@ class ShopeeOrder(Document):
         self.save(ignore_permissions=ignore_permissions)
 
         return new_sales_order
+
+    def submit_sales_order(self, ignore_permissions=False):
+        if self.sales_order is None:
+            return
+
+        sales_order = frappe.get_doc("Sales Order", self.sales_order)
+
+        if sales_order.docstatus == 1:
+            return sales_order
+
+        sales_order.docstatus = 1
+        sales_order.save(ignore_permissions=ignore_permissions)
+        return sales_order
 
     @property
     def order_items(self) -> List[ShopeeOrderItem]:
