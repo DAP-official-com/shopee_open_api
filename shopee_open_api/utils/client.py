@@ -11,12 +11,6 @@ def get_shopless_client() -> Client:
     PARTNER_ID = frappe.db.get_single_value("Shopee API Settings", "partner_id")
     PARTNER_KEY = frappe.db.get_single_value("Shopee API Settings", "partner_key")
     TEST_MODE = frappe.db.get_single_value("Shopee API Settings", "live_mode") == 0
-    ONLY_GET_ALLOWED = (
-        frappe.db.get_single_value(
-            "Shopee API Settings", "prevent_making_changes_on_shopee_portal"
-        )
-        == 1
-    )
     AUTHORIZE_REDIRECT_URL = (
         f"{frappe.utils.get_url()}/api/method/shopee_open_api.auth.authorize_callback"
     )
@@ -27,7 +21,6 @@ def get_shopless_client() -> Client:
         partner_key=PARTNER_KEY,
         redirect_url=AUTHORIZE_REDIRECT_URL,
         test_env=TEST_MODE,
-        only_get_allowed=ONLY_GET_ALLOWED,
     )
 
     return client
@@ -50,6 +43,7 @@ def get_client_from_branch(branch: Branch) -> Client:
     client.access_token = token.access_token
     client.refresh_token = token.refresh_token
     client.expiration_unix = token.token_expiration_unix
+    client.only_get_allowed = shop.prevent_making_changes_on_shopee_portal == 1
 
     if client.is_token_almost_expired:
 
@@ -82,6 +76,7 @@ def get_client_from_shop(shop: ShopeeShop) -> Client:
     client.access_token = token.access_token
     client.refresh_token = token.refresh_token
     client.expiration_unix = token.token_expiration_unix
+    client.only_get_allowed = shop.prevent_making_changes_on_shopee_portal == 1
 
     if client.is_token_almost_expired:
 

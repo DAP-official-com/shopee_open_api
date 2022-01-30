@@ -1,7 +1,10 @@
 import frappe, json
+import traceback
+
+from erpnext.stock import stock_ledger
 from datetime import datetime
-from shopee_open_api.utils.client import get_client_from_shop
-from shopee_open_api.exceptions import BadRequestError
+from shopee_open_api import utils
+from shopee_open_api.exceptions import BadRequestError, OrderAutomationProcessingError
 from shopee_open_api.shopee_models.order import Order
 
 
@@ -12,7 +15,7 @@ def handle_order_status_update(data: dict):
     order_sn = data.get("data").get("ordersn")
 
     shop = frappe.get_doc("Shopee Shop", str(shop_id))
-    client = get_client_from_shop(shop)
+    client = utils.client.get_client_from_shop(shop)
 
     order_detail_response = client.order.get_order_detail(
         order_sn_list=order_sn,
@@ -28,4 +31,16 @@ def handle_order_status_update(data: dict):
 
     order = Order(order_details, shop_id=shop_id)
 
-    order.update_or_insert_with_items(ignore_permissions=True)
+    try:
+        order.update_or_insert_with_items()
+    except (OrderAutomationProcessingError, stock_ledger.NegativeStockError) as e:
+
+        frappe.db.rollback()  ## Rollback any actions from the last committed automation step
+
+        shopee_error = frappe.new_doc("Shopee Order Update Error")
+        shopee_error.raw_data = str(data)
+        shopee_error.error = str(traceback.format_exc())
+        shopee_error.insert(ignore_permissions=True)
+        frappe.db.commit()
+
+        pass

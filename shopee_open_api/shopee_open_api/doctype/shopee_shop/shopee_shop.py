@@ -21,6 +21,14 @@ class ShopeeShop(Document):
 
         self.warehouse = f"{self.get_warehouse_name()} - {company_abbr}"
 
+    def before_save(self):
+        if self.submit_sales_order_automatically:
+            self.create_sales_order_after_shopee_order_has_been_created = True
+
+        if self.create_delivery_note_when_status_is_shipped:
+            self.create_sales_order_after_shopee_order_has_been_created = True
+            self.submit_sales_order_automatically = True
+
     def create_warehouse_for_this_shop(self):
 
         default_company = frappe.get_doc("Company", frappe.db.get_default("Company"))
@@ -114,3 +122,18 @@ class ShopeeShop(Document):
                 }
             )
         )
+
+    @property
+    def is_set_to_create_draft_sales_order(self) -> bool:
+        """Check if create draft sales order is set to True"""
+        return self.create_sales_order_after_shopee_order_has_been_created == 1
+
+    @property
+    def is_set_to_submit_sales_order(self) -> bool:
+        """Check if submit sales order is set to True"""
+        return self.submit_sales_order_automatically == 1
+
+    @property
+    def is_set_to_create_delivery_note(self) -> bool:
+        """Check if automatically create delivery note is set to True"""
+        return self.create_delivery_note_when_status_is_shipped == 1

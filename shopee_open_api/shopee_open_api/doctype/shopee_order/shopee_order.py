@@ -2,9 +2,13 @@
 # For license information, please see license.txt
 
 import frappe
+
+from erpnext.selling.doctype.sales_order import sales_order
+
 from frappe.model.document import Document
-from shopee_open_api.shopee_models.customer import Customer
 from shopee_open_api.shopee_models.address import Address
+from shopee_open_api.shopee_models.customer import Customer
+from shopee_open_api.exceptions import ProductHasNoItemError, ItemHasNoPriceError
 from shopee_open_api.shopee_open_api.doctype.shopee_order_item.shopee_order_item import (
     ShopeeOrderItem,
 )
@@ -12,6 +16,16 @@ from typing import List
 
 
 class ShopeeOrder(Document):
+
+    STATUSES_TO_CREATE_SALES_INVOICE = [
+        "COMPLETED",
+    ]
+
+    STATUSES_TO_CREATE_DELIVERY_NOTE = STATUSES_TO_CREATE_SALES_INVOICE.copy() + [
+        "SHIPPED",
+        "TO_CONFIRM_RECEIVE",
+    ]
+
     def get_shopee_shop_instance(self):
         """Get an object of Shopee Shop doctype this order belongs to."""
 
@@ -65,10 +79,46 @@ class ShopeeOrder(Document):
 
         return Address.from_shopee_address(**self.address_detail)
 
-    def create_sales_order(self, ignore_permissions=False):
+    def run_order_automation(self, ignore_permissions=False):
+        """
+        Perform sales order automation process.
+
+        - Create a sales order draft
+        - Submit a sales order
+        - Create a delery note
+        - Create a sales invoice
+        """
+
+        shop = self.get_shopee_shop_instance()
+
+        if shop.is_set_to_create_draft_sales_order:
+            new_order = self.create_sales_order(ignore_permissions=ignore_permissions)
+            frappe.db.commit()
+
+        if (
+            shop.is_set_to_submit_sales_order
+            and new_order is not None
+            and new_order.docstatus == 0
+        ):
+            self.submit_sales_order(ignore_permissions=ignore_permissions)
+            frappe.db.commit()
+
+        if self.should_create_delivery_note:
+            self.create_delivery_note()
+            frappe.db.commit()
+
+        if self.should_submit_delivery_note:
+            self.submit_delivery_note()
+            frappe.db.commit()
+
+    def create_sales_order(self, ignore_permissions=False) -> sales_order.SalesOrder:
         """Create Sales Order document from Shopee Order"""
 
+        if self.sales_order:
+            return frappe.get_doc("Sales Order", self.sales_order)
+
         self.create_sales_order_validate()
+
         self.pre_create_sales_order(ignore_permissions=ignore_permissions)
 
         shop = self.get_shopee_shop_instance()
@@ -102,6 +152,18 @@ class ShopeeOrder(Document):
 
         return new_sales_order
 
+    def submit_sales_order(self, ignore_permissions=False):
+        if self.sales_order is None:
+            return
+
+        sales_order_document = frappe.get_doc("Sales Order", self.sales_order)
+
+        if sales_order_document.docstatus == 1:
+            return sales_order_document
+
+        sales_order_document.submit()
+        return sales_order_document
+
     @property
     def order_items(self) -> List[ShopeeOrderItem]:
         """Get a list of Shopee Order Items belonging to this order."""
@@ -111,16 +173,7 @@ class ShopeeOrder(Document):
     def create_sales_order_validate(self):
         """Perform validation before creating a new sales order"""
 
-        self.no_sales_order_validate()
         self.shopee_order_items_validate()
-
-    def no_sales_order_validate(self):
-        """Check if current shopee order already has a sales order"""
-
-        if self.sales_order:
-            frappe.throw(
-                msg=f"Shopee order {self.name} already has a sales order {self.sales_order} matched",
-            )
 
     def shopee_order_items_validate(self):
         """Check that all Shopee Order Items are matched with erpnext Item"""
@@ -129,11 +182,13 @@ class ShopeeOrder(Document):
             if order_item.get_shopee_product().item is None:
                 frappe.throw(
                     msg=f"Shopee product {order_item.get_shopee_product()} has not been matched with erpnext item",
+                    exc=ProductHasNoItemError,
                 )
 
             if not order_item.get_shopee_product().has_item_price():
                 frappe.throw(
                     msg=f"Could not find an Item Price belonging to the product {order_item.get_shopee_product().name}",
+                    exc=ItemHasNoPriceError,
                 )
 
     def pre_create_sales_order(self, ignore_permissions=False):
@@ -210,3 +265,80 @@ class ShopeeOrder(Document):
         payment_method = frappe.new_doc("Shopee Payment Method")
         payment_method.payment_type = self.payment_method
         payment_method.insert(ignore_permissions=True)
+
+    @property
+    def should_create_delivery_note(self) -> bool:
+
+        if self.delivery_note is not None:
+            return False
+
+        shop = self.get_shopee_shop_instance()
+
+        if (
+            shop.is_set_to_create_delivery_note
+            and self.order_status.upper() in self.STATUSES_TO_CREATE_DELIVERY_NOTE
+        ):
+            return True
+
+        return False
+
+    def create_delivery_note(self, ignore_permissions=False):
+        """Create delivery note from this order."""
+
+        if self.sales_order is None:
+            return None
+
+        if self.delivery_note:
+            return frappe.get_doc("Delivery Note", self.sales_order)
+
+        sales_order_document = self.get_sales_order_document()
+        if sales_order_document.docstatus == 0:
+            sales_order_document.docstatus == 1
+            sales_order_document.save(ignore_permissions=ignore_permissions)
+
+        delivery_note = sales_order.make_delivery_note(source_name=self.sales_order)
+        delivery_note.insert(ignore_permissions=ignore_permissions)
+
+        self.delivery_note = delivery_note.name
+        self.save(ignore_permissions=ignore_permissions)
+
+        return delivery_note
+
+    @property
+    def should_submit_delivery_note(self):
+
+        if self.delivery_note is None:
+            return False
+
+        shop = self.get_shopee_shop_instance()
+        if (
+            shop.is_set_to_create_delivery_note
+            and self.order_status.upper() not in self.STATUSES_TO_CREATE_DELIVERY_NOTE
+        ):
+            return False
+
+        delivery_note = frappe.get_doc("Delivery Note", self.delivery_note)
+        if delivery_note.docstatus == 1:
+            return False
+
+        return True
+
+    def submit_delivery_note(self, ignore_permissions=False):
+
+        if self.delivery_note is None:
+            return None
+
+        delivery_note = frappe.get_doc("Delivery Note", self.delivery_note)
+
+        if delivery_note.docstatus == 1:
+            return delivery_note
+
+        delivery_note.submit()
+
+        return delivery_note
+
+    def get_sales_order_document(self):
+        if self.sales_order is None:
+            return None
+
+        return frappe.get_doc("Sales Order", self.sales_order)

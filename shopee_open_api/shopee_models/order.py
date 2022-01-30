@@ -3,6 +3,7 @@ from .payment_escrow import PaymentEscrow
 from .order_item import OrderItem
 from .product import Product
 import frappe
+from shopee_open_api.exceptions import AlreadyHasSalesOrderError
 from shopee_open_api.utils.datetime import datetime_string_from_unix
 
 
@@ -38,32 +39,15 @@ class Order(ShopeeResponseBaseClass):
         for order_item in self.order_items:
             order_item.update_or_insert(ignore_permissions=ignore_permissions)
 
-        if frappe.db.get_single_value(
-            "Shopee API Settings",
-            "create_sales_order_after_shopee_order_has_been_created",
-        ):
-            self.create_sales_order(ignore_permissions=ignore_permissions)
-
         self.update_products_stock(ignore_permissions=ignore_permissions)
 
-        return frappe.get_doc("Shopee Order", self.make_primary_key())
+        order = frappe.get_doc("Shopee Order", self.make_primary_key())
 
-    def create_sales_order(self, ignore_permissions=False) -> None:
-        """
-        Create sales order from shopee order. It is called here instead of after_insert
-        since creating a new sales order requires order items, which are created after the order has been created
-        """
+        frappe.db.commit()
 
-        order = frappe.get_doc(self.DOCTYPE, self.make_primary_key())
+        order.run_order_automation(ignore_permissions=ignore_permissions)
 
-        try:
-            order.create_sales_order(ignore_permissions=ignore_permissions)
-        except frappe.exceptions.ValidationError as e:
-            """
-            This can happen due to shopee product not being matched with erpnext item
-            or the order is already matched with a sales order
-            """
-            return
+        return order
 
     def get_item_list_ids(self):
         """Get a list of item ids in this order"""
@@ -356,3 +340,7 @@ class Order(ShopeeResponseBaseClass):
         """Get the order income is an object within a payment escrow object"""
 
         return self.get_payment_escrow().order_income
+
+    def get_shop_document(self):
+        """Get a Shopee Shop document for this order"""
+        return frappe.get_doc("Shopee Shop", self.get_shop_id())

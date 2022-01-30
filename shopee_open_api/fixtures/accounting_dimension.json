@@ -1,0 +1,16 @@
+[
+ {
+  "dimension_defaults": [],
+  "disabled": 0,
+  "docstatus": 0,
+  "doctype": "Accounting Dimension",
+  "document_type": "Shopee Shop",
+  "fieldname": "shopee_shop",
+  "label": "Shopee Shop",
+  "modified": "2022-01-30 19:13:50.503748",
+  "name": "Shopee Shop",
+  "parent": null,
+  "parentfield": null,
+  "parenttype": null
+ }
+]
