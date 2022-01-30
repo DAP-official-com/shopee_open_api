@@ -86,6 +86,7 @@
   "seller_return_refund",
   "related_documents_section",
   "sales_order",
+  "delivery_note",
   "customer",
   "address"
  ],
@@ -600,11 +601,17 @@
    "label": "Address",
    "options": "Address",
    "read_only": 1
+  },
+  {
+   "fieldname": "delivery_note",
+   "fieldtype": "Link",
+   "label": "Delivery Note",
+   "options": "Delivery Note"
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2022-01-07 21:34:47.494207",
+ "modified": "2022-01-30 11:52:52.092517",
  "modified_by": "Administrator",
  "module": "Shopee Open API",
  "name": "Shopee Order",
@@ -623,6 +630,7 @@
    "write": 1
   },
   {
+   "create": 1,
    "email": 1,
    "export": 1,
    "print": 1,
