@@ -310,12 +310,18 @@ class ShopeeOrder(Document):
         if self.delivery_note is None:
             return False
 
+        shop = self.get_shopee_shop_instance()
+        if (
+            shop.is_set_to_create_delivery_note
+            and self.order_status.upper() not in self.STATUSES_TO_CREATE_DELIVERY_NOTE
+        ):
+            return False
+
         delivery_note = frappe.get_doc("Delivery Note", self.delivery_note)
+        if delivery_note.docstatus == 1:
+            return False
 
-        if delivery_note.docstatus == 0:
-            return True
-
-        return False
+        return True
 
     def submit_delivery_note(self, ignore_permissions=False):
 
