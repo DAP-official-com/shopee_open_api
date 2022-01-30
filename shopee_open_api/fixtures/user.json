@@ -1,0 +1,92 @@
+[
+ {
+  "allowed_in_mentions": 1,
+  "api_key": null,
+  "api_secret": null,
+  "banner_image": null,
+  "bio": null,
+  "birth_date": null,
+  "block_modules": [],
+  "bypass_restrict_ip_check_if_2fa_enabled": 0,
+  "defaults": [],
+  "desk_theme": "Light",
+  "docstatus": 0,
+  "doctype": "User",
+  "document_follow_frequency": "Daily",
+  "document_follow_notify": 0,
+  "email": "shopee@example.com",
+  "email_signature": null,
+  "enabled": 1,
+  "first_name": "Shopee",
+  "full_name": "Shopee",
+  "gender": null,
+  "home_settings": null,
+  "interest": null,
+  "language": "en",
+  "last_active": null,
+  "last_ip": null,
+  "last_known_versions": null,
+  "last_login": null,
+  "last_name": null,
+  "last_password_reset_date": null,
+  "location": null,
+  "login_after": 0,
+  "login_before": 0,
+  "logout_all_sessions": 1,
+  "middle_name": null,
+  "mobile_no": null,
+  "modified": "2022-01-30 20:27:14.899990",
+  "module_profile": null,
+  "mute_sounds": 0,
+  "name": "shopee@example.com",
+  "new_password": "",
+  "parent": null,
+  "parentfield": null,
+  "parenttype": null,
+  "phone": null,
+  "redirect_url": null,
+  "reset_password_key": "frhgXIM7znGrUyiNdYCthBblvDaGPSG6",
+  "restrict_ip": null,
+  "role_profile_name": null,
+  "roles": [
+   {
+    "parent": "shopee@example.com",
+    "parentfield": "roles",
+    "parenttype": "User",
+    "role": "System Manager"
+   },
+   {
+    "parent": "shopee@example.com",
+    "parentfield": "roles",
+    "parenttype": "User",
+    "role": "Sales User"
+   },
+   {
+    "parent": "shopee@example.com",
+    "parentfield": "roles",
+    "parenttype": "User",
+    "role": "Accounts User"
+   }
+  ],
+  "send_me_a_copy": 0,
+  "send_welcome_email": 1,
+  "simultaneous_sessions": 1,
+  "social_logins": [
+   {
+    "parent": "shopee@example.com",
+    "parentfield": "social_logins",
+    "parenttype": "User",
+    "provider": "frappe",
+    "userid": "94f77e0219330494d72480deab5baf4719c56ab",
+    "username": null
+   }
+  ],
+  "thread_notify": 1,
+  "time_zone": null,
+  "unsubscribed": 0,
+  "user_emails": [],
+  "user_image": null,
+  "user_type": "System User",
+  "username": "shopee"
+ }
+]
