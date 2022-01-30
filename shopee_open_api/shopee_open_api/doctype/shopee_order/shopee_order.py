@@ -298,6 +298,19 @@ class ShopeeOrder(Document):
 
         return delivery_note
 
+    @property
+    def should_submit_delivery_note(self):
+
+        if self.delivery_note is None:
+            return False
+
+        delivery_note = frappe.get_doc("Delivery Note", self.delivery_note)
+
+        if delivery_note.docstatus == 0:
+            return True
+
+        return False
+
     def submit_delivery_note(self, ignore_permissions=False):
 
         if self.delivery_note is None:
