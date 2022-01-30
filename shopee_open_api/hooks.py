@@ -63,6 +63,9 @@ fixtures = [
     "Shopee Return Status",
     "Shopee Cancel Reason",
     "Role Profile",
+    {"dt": "Accounting Dimension", "filters": [["name", "=", "Shopee Shop"]]},
+    "Customer Group",
+    {"dt": "User", "filters": [["first_name", "=", "Shopee"]]},
 ]
 
 # Installation
