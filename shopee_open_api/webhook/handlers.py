@@ -34,9 +34,13 @@ def handle_order_status_update(data: dict):
     try:
         order.update_or_insert_with_items()
     except (OrderAutomationProcessingError, stock_ledger.NegativeStockError) as e:
+
+        frappe.db.rollback()  ## Rollback any actions from the last committed automation step
+
         shopee_error = frappe.new_doc("Shopee Order Update Error")
         shopee_error.raw_data = str(data)
         shopee_error.error = str(traceback.format_exc())
         shopee_error.insert(ignore_permissions=True)
         frappe.db.commit()
-        return
+
+        pass
