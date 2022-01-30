@@ -43,6 +43,8 @@ class Order(ShopeeResponseBaseClass):
 
         order = frappe.get_doc("Shopee Order", self.make_primary_key())
 
+        frappe.db.commit()
+
         order.run_order_automation(ignore_permissions=ignore_permissions)
 
         return order
