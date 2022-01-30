@@ -132,3 +132,8 @@ class ShopeeShop(Document):
     def is_set_to_submit_sales_order(self) -> bool:
         """Check if submit sales order is set to True"""
         return self.submit_sales_order_automatically == 1
+
+    @property
+    def is_set_to_create_delivery_note(self) -> bool:
+        """Check if automatically create delivery note is set to True"""
+        return self.create_delivery_note_when_status_is_shipped == 1
