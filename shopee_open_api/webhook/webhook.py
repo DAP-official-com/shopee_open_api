@@ -28,6 +28,7 @@ def listener():
     webhook_code = data.get("code", False)
 
     try:
+        frappe.set_user("shopee@example.com")
         get_webhook_handler(webhook_code)(data)
     except:
         shopee_error = frappe.new_doc("Shopee Order Update Error")
