@@ -40,6 +40,23 @@ class ShopeeProduct(Document):
         item.save()
         self.create_item_price(item=item)
 
+        stock_entry = frappe.new_doc("Stock Entry")
+        stock_entry.stock_entry_type = "Material Receipt"
+        stock_entry.to_warehouse = frappe.get_all(
+            "Warehouse",
+            filters={
+                "warehouse_name": self.get_shopee_shop_document().get_warehouse_name(),
+            },
+            pluck="name",
+        )[0]
+        stock_entry_detail = stock_entry.append("items", {})
+        stock_entry_detail.item_code = self.get_item_primary_key()
+        stock_entry_detail.qty = 1000
+        stock_entry_detail.basic_rate = 20
+
+        stock_entry.insert()
+        stock_entry.submit()
+
         return item
 
     def create_item_defaults(self, item: Item) -> None:
