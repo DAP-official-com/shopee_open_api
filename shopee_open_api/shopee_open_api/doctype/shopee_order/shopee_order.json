@@ -87,6 +87,7 @@
   "related_documents_section",
   "sales_order",
   "delivery_note",
+  "sales_invoice",
   "customer",
   "address"
  ],
@@ -606,11 +607,17 @@
    "fieldtype": "Link",
    "label": "Delivery Note",
    "options": "Delivery Note"
+  },
+  {
+   "fieldname": "sales_invoice",
+   "fieldtype": "Link",
+   "label": "Sales Invoice",
+   "options": "Sales Invoice"
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2022-01-30 22:10:38.090398",
+ "modified": "2022-02-01 10:57:44.917007",
  "modified_by": "Administrator",
  "module": "Shopee Open API",
  "name": "Shopee Order",
