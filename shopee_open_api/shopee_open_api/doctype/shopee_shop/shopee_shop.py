@@ -49,6 +49,9 @@ class ShopeeShop(Document):
 
         new_warehouse.insert()
 
+    def get_receivable_account(self) -> account.Account:
+        return self.create_receivable_account()
+
     def create_receivable_account(self) -> account.Account:
         """Create new receivable account for this shop."""
 
