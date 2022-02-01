@@ -4,6 +4,8 @@
 import frappe
 
 from erpnext.selling.doctype.sales_order import sales_order
+from erpnext.accounts.doctype.sales_invoice import sales_invoice
+from erpnext.stock.doctype.delivery_note import delivery_note
 
 from frappe.model.document import Document
 from shopee_open_api.shopee_models.address import Address
@@ -12,7 +14,7 @@ from shopee_open_api.exceptions import ProductHasNoItemError, ItemHasNoPriceErro
 from shopee_open_api.shopee_open_api.doctype.shopee_order_item.shopee_order_item import (
     ShopeeOrderItem,
 )
-from typing import List
+from typing import List, Optional
 
 
 class ShopeeOrder(Document):
@@ -282,27 +284,28 @@ class ShopeeOrder(Document):
 
         return False
 
-    def create_delivery_note(self, ignore_permissions=False):
+    def create_delivery_note(
+        self, ignore_permissions=False
+    ) -> delivery_note.DeliveryNote:
         """Create delivery note from this order."""
 
         if self.sales_order is None:
             return None
 
         if self.delivery_note:
-            return frappe.get_doc("Delivery Note", self.sales_order)
+            return frappe.get_doc("Delivery Note", self.delivery_note)
 
         sales_order_document = self.get_sales_order_document()
         if sales_order_document.docstatus == 0:
-            sales_order_document.docstatus == 1
-            sales_order_document.save(ignore_permissions=ignore_permissions)
+            sales_order_document.submit()
 
-        delivery_note = sales_order.make_delivery_note(source_name=self.sales_order)
-        delivery_note.insert(ignore_permissions=ignore_permissions)
+        new_delivery_note = sales_order.make_delivery_note(source_name=self.sales_order)
+        new_delivery_note.insert(ignore_permissions=ignore_permissions)
 
-        self.delivery_note = delivery_note.name
+        self.delivery_note = new_delivery_note.name
         self.save(ignore_permissions=ignore_permissions)
 
-        return delivery_note
+        return new_delivery_note
 
     @property
     def should_submit_delivery_note(self):
@@ -317,8 +320,8 @@ class ShopeeOrder(Document):
         ):
             return False
 
-        delivery_note = frappe.get_doc("Delivery Note", self.delivery_note)
-        if delivery_note.docstatus == 1:
+        delivery_note_document = frappe.get_doc("Delivery Note", self.delivery_note)
+        if delivery_note_document.docstatus == 1:
             return False
 
         return True
