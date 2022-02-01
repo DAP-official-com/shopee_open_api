@@ -20,10 +20,11 @@ class ShopeeShop(Document):
         # make a new warehouse of this shop
         self.create_warehouse_for_this_shop()
 
+        self.warehouse = f"{self.get_warehouse_name()} - {company_abbr}"
+
+    def after_insert(self):
         # make a new receivable account for this shop
         self.create_receivable_account()
-
-        self.warehouse = f"{self.get_warehouse_name()} - {company_abbr}"
 
     def before_save(self):
         if self.submit_sales_order_automatically:
