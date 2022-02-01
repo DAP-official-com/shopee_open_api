@@ -195,3 +195,8 @@ class ShopeeShop(Document):
     def is_set_to_create_delivery_note(self) -> bool:
         """Check if automatically create delivery note is set to True"""
         return self.create_delivery_note_when_status_is_shipped == 1
+
+    @property
+    def is_set_to_create_sales_invoice(self) -> bool:
+        """Check if automatically create sales invoice is set to True."""
+        return self.create_sales_invoice_when_status_is_completed == 1
