@@ -93,6 +93,7 @@ class ShopeeShop(Document):
         new_account.account_number = next_account_number
         new_account.account_name = self.shop_name
         new_account.shopee_shop = self.name
+        new_account.account_type = "Receivable"
         new_account.insert()
 
         return new_account
