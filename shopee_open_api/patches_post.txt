@@ -1,1 +1,2 @@
 shopee_open_api.patches.v1_3_4.add_shopee_price_list
+shopee_open_api.patches.v1_10_1.add_receivable_account

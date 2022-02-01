@@ -4,6 +4,8 @@
 import frappe
 
 from erpnext.selling.doctype.sales_order import sales_order
+from erpnext.accounts.doctype.sales_invoice import sales_invoice
+from erpnext.stock.doctype.delivery_note import delivery_note
 
 from frappe.model.document import Document
 from shopee_open_api.shopee_models.address import Address
@@ -12,7 +14,7 @@ from shopee_open_api.exceptions import ProductHasNoItemError, ItemHasNoPriceErro
 from shopee_open_api.shopee_open_api.doctype.shopee_order_item.shopee_order_item import (
     ShopeeOrderItem,
 )
-from typing import List
+from typing import List, Optional
 
 
 class ShopeeOrder(Document):
@@ -109,6 +111,14 @@ class ShopeeOrder(Document):
 
         if self.should_submit_delivery_note:
             self.submit_delivery_note()
+            frappe.db.commit()
+
+        if self.should_create_sales_invoice:
+            self.create_sales_invoice()
+            frappe.db.commit()
+
+        if self.should_submit_sales_invoice:
+            self.submit_sales_invoice()
             frappe.db.commit()
 
     def create_sales_order(self, ignore_permissions=False) -> sales_order.SalesOrder:
@@ -282,27 +292,28 @@ class ShopeeOrder(Document):
 
         return False
 
-    def create_delivery_note(self, ignore_permissions=False):
+    def create_delivery_note(
+        self, ignore_permissions=False
+    ) -> delivery_note.DeliveryNote:
         """Create delivery note from this order."""
 
         if self.sales_order is None:
             return None
 
         if self.delivery_note:
-            return frappe.get_doc("Delivery Note", self.sales_order)
+            return frappe.get_doc("Delivery Note", self.delivery_note)
 
         sales_order_document = self.get_sales_order_document()
         if sales_order_document.docstatus == 0:
-            sales_order_document.docstatus == 1
-            sales_order_document.save(ignore_permissions=ignore_permissions)
+            sales_order_document.submit()
 
-        delivery_note = sales_order.make_delivery_note(source_name=self.sales_order)
-        delivery_note.insert(ignore_permissions=ignore_permissions)
+        new_delivery_note = sales_order.make_delivery_note(source_name=self.sales_order)
+        new_delivery_note.insert(ignore_permissions=ignore_permissions)
 
-        self.delivery_note = delivery_note.name
+        self.delivery_note = new_delivery_note.name
         self.save(ignore_permissions=ignore_permissions)
 
-        return delivery_note
+        return new_delivery_note
 
     @property
     def should_submit_delivery_note(self):
@@ -317,8 +328,8 @@ class ShopeeOrder(Document):
         ):
             return False
 
-        delivery_note = frappe.get_doc("Delivery Note", self.delivery_note)
-        if delivery_note.docstatus == 1:
+        delivery_note_document = frappe.get_doc("Delivery Note", self.delivery_note)
+        if delivery_note_document.docstatus == 1:
             return False
 
         return True
@@ -337,8 +348,81 @@ class ShopeeOrder(Document):
 
         return delivery_note
 
+    @property
+    def should_create_sales_invoice(self) -> bool:
+
+        if self.sales_invoice is not None:
+            return False
+
+        shop = self.get_shopee_shop_instance()
+
+        if (
+            shop.is_set_to_create_sales_invoice
+            and self.order_status.upper() in self.STATUSES_TO_CREATE_SALES_INVOICE
+        ):
+            return True
+
+        return False
+
+    def create_sales_invoice(
+        self, ignore_permissions=False
+    ) -> Optional[sales_invoice.SalesInvoice]:
+
+        if self.sales_order is None or self.delivery_note is None:
+            return None
+
+        if self.sales_invoice:
+            return frappe.get_doc("Sales Invoice", self.sales_invoice)
+
+        delivery_note_document = self.get_delivery_note_document()
+        if delivery_note_document.docstatus == 0:
+            delivery_note_document.submit()
+
+        new_sales_invoice = delivery_note.make_sales_invoice(
+            source_name=self.delivery_note
+        )
+        new_sales_invoice.debit_to = (
+            self.get_shopee_shop_instance().get_receivable_account().name
+        )
+        new_sales_invoice.insert(ignore_permissions=ignore_permissions)
+
+        self.sales_invoice = new_sales_invoice.name
+        self.save(ignore_permissions=ignore_permissions)
+
+        return new_sales_invoice
+
+    @property
+    def should_submit_sales_invoice(self) -> bool:
+        if self.sales_invoice is None:
+            return False
+
+        shop = self.get_shopee_shop_instance()
+        if (
+            shop.is_set_to_create_sales_invoice
+            and self.order_status.upper() not in self.STATUSES_TO_CREATE_SALES_INVOICE
+        ):
+            return False
+
+        sales_invoice_doc = frappe.get_doc("Sales Invoice", self.sales_invoice)
+        if sales_invoice_doc.docstatus == 1:
+            return False
+
+        return True
+
+    def submit_sales_invoice(self) -> sales_invoice.SalesInvoice:
+        new_sales_invoice = frappe.get_doc("Sales Invoice", self.sales_invoice)
+
+        if new_sales_invoice.docstatus == 0:
+            new_sales_invoice.submit()
+
+        return new_sales_invoice
+
+    def get_delivery_note_document(self):
+        if self.delivery_note is None:
+            return None
+        return frappe.get_doc("Delivery Note", self.delivery_note)
+
     def get_sales_order_document(self):
         if self.sales_order is None:
             return None
-
         return frappe.get_doc("Sales Order", self.sales_order)
