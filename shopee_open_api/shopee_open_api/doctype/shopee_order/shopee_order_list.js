@@ -19,14 +19,17 @@ frappe.listview_settings['Shopee Order'] = {
 			return doc.sales_order == null;
 		},
 		get_label: function () {
-			return __('Create Sales Order');
+			return __('Run Order Automation');
 		},
 		get_description: function (doc) {
-			return __('Create new sales order from order {0}', [doc.name]);
+			return __(
+				'Create new sales order, delivery note, and sales invoice from order {0}',
+				[doc.name]
+			);
 		},
 		action: function (doc) {
 			frappe.call({
-				method: 'shopee_open_api.apis.order.create_sales_order_from_shopee_order',
+				method: 'shopee_open_api.apis.order.run_order_automation_process',
 				args: {
 					order_sn: doc.name,
 				},
