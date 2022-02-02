@@ -64,13 +64,7 @@ class ShopeeShop(Document):
                 )[0],
             )
 
-        parent_receivable_account = frappe.get_doc(
-            "Account",
-            frappe.get_all(
-                "Account", filters={"account_name": "Accounts Receivable"}, pluck="name"
-            )[0],
-        )
-
+        parent_receivable_account = self.get_or_create_parent_receivable_account()
         next_account_number = None
 
         if parent_receivable_account.account_number:
@@ -82,12 +76,15 @@ class ShopeeShop(Document):
             )
 
             account_numbers = [
-                account_num
+                account_num.split(" - ")[1]
                 for account_num in all_receivable_accounts
-                if account_num is not None
+                if account_num is not None and " - " in account_num
             ]
 
-            next_account_number = int(max(account_numbers)) + 10
+            if not account_numbers:
+                next_account_number = f"{parent_receivable_account.account_number} - 01"
+            else:
+                next_account_number = f"{parent_receivable_account.account_number} - {int(max(account_numbers)) + 1:02d}"
 
         new_account = frappe.new_doc("Account")
         new_account.parent_account = parent_receivable_account.name
@@ -103,6 +100,61 @@ class ShopeeShop(Document):
     def has_receivable_account(self):
         """Check if this shop already has a receivable account."""
         return frappe.db.exists({"doctype": "Account", "shopee_shop": self.name})
+
+    def get_or_create_parent_receivable_account(self) -> account.Account:
+        """Create a parent receivable account named 'Shopee Receivable' if not exists."""
+
+        if self.has_parent_receivable_account:
+            return frappe.get_doc(
+                "Account",
+                frappe.get_all(
+                    "Account",
+                    filters={"account_name": "Shopee Receivable"},
+                    pluck="name",
+                )[0],
+            )
+
+        root_receivable_account = frappe.get_doc(
+            "Account",
+            frappe.get_all(
+                "Account", filters={"account_name": "Accounts Receivable"}, pluck="name"
+            )[0],
+        )
+
+        next_account_number = None
+
+        if root_receivable_account.account_number:
+
+            all_receivable_accounts = frappe.get_all(
+                "Account",
+                filters={"parent_account": root_receivable_account.name},
+                pluck="account_number",
+            )
+
+            account_numbers = [
+                account_num
+                for account_num in all_receivable_accounts
+                if account_num is not None
+            ]
+
+            next_account_number = int(max(account_numbers)) + 10
+
+        new_account = frappe.new_doc("Account")
+        new_account.parent_account = root_receivable_account.name
+        new_account.account_number = next_account_number
+        new_account.account_name = "Shopee Receivable"
+        new_account.account_type = "Receivable"
+        new_account.is_group = True
+        new_account.insert()
+
+        return new_account
+
+    @property
+    def has_parent_receivable_account(self) -> bool:
+        """Check if the parent receivable account exists"""
+        return frappe.db.exists(
+            {"doctype": "Account", "account_name": "Shopee Receivable"}
+        )
 
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
