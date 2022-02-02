@@ -88,6 +88,11 @@
   "sales_order",
   "delivery_note",
   "sales_invoice",
+  "column_break_83",
+  "sales_order_status",
+  "delivery_note_status",
+  "sales_invoice_status",
+  "section_break_87",
   "customer",
   "address"
  ],
@@ -613,11 +618,38 @@
    "fieldtype": "Link",
    "label": "Sales Invoice",
    "options": "Sales Invoice"
+  },
+  {
+   "fieldname": "column_break_83",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fetch_from": "sales_order.status",
+   "fieldname": "sales_order_status",
+   "fieldtype": "Data",
+   "label": "Sales Order Status"
+  },
+  {
+   "fetch_from": "delivery_note.status",
+   "fieldname": "delivery_note_status",
+   "fieldtype": "Data",
+   "label": "Delivery Note Status"
+  },
+  {
+   "fetch_from": "sales_invoice.status",
+   "fieldname": "sales_invoice_status",
+   "fieldtype": "Data",
+   "label": "Sales Invoice Status"
+  },
+  {
+   "fieldname": "section_break_87",
+   "fieldtype": "Section Break",
+   "label": "Customer"
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2022-02-01 10:57:44.917007",
+ "modified": "2022-02-02 07:38:19.668819",
  "modified_by": "Administrator",
  "module": "Shopee Open API",
  "name": "Shopee Order",
