@@ -33,3 +33,10 @@ def create_sales_order_from_shopee_order(order_sn: str):
     order = frappe.get_doc("Shopee Order", order_sn)
     sales_order = order.create_sales_order()
     return sales_order
+
+
+@frappe.whitelist()
+def run_order_automation_process(order_sn: str):
+    order = frappe.get_doc("Shopee Order", order_sn)
+    sales_order = order.run_order_automation()
+    return sales_order

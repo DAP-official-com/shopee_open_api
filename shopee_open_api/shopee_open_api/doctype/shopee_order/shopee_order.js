@@ -4,14 +4,14 @@
 frappe.ui.form.on('Shopee Order', {
 	refresh: function (frm) {
 		if (frm.doc.sales_order == undefined) {
-			frm.add_custom_button('Create Sales Order', () => {
+			frm.add_custom_button('Run order automation', () => {
 				frappe.call({
-					method: 'shopee_open_api.apis.order.create_sales_order_from_shopee_order',
+					method: 'shopee_open_api.apis.order.run_order_automation_process',
 					args: {
 						order_sn: frm.doc.name,
 					},
 					callback: function (r) {
-						frappe.set_route('Form', 'Sales Order', r.message.name);
+						window.location.reload();
 					},
 				});
 			});
@@ -25,7 +25,7 @@ frappe.ui.form.on('Shopee Order', {
 					order_sn: frm.doc.order_sn,
 				},
 				callback: function (r) {
-					frm.refresh();
+					window.location.reload();
 				},
 			});
 		});
