@@ -1,9 +1,13 @@
 import frappe
 import time
+import os
+
 from datetime import datetime
 from shopee_open_api.utils.client import get_shopless_client
 from shopee_open_api.scheduled_tasks.tasks import start_pulling_products
 from shopee_open_api.shopee_models.product import ITEM_STATUSES
+from urllib.request import urlopen
+from urllib.parse import urlparse
 
 PARTNER_ID = frappe.db.get_single_value("Shopee API Settings", "partner_id")
 PARTNER_KEY = frappe.db.get_single_value("Shopee API Settings", "partner_key")
@@ -47,10 +51,23 @@ def authorize_callback():
         shop.token = shop_id
 
     shop.shop_name = shop_profile["shop_name"][:30]
-    shop.logo = shop_profile["shop_logo"]
     shop.status = shop_profile["status"]
     shop.description = shop_profile["description"]
     shop.authorized = True
+
+    logo = shop_profile["shop_logo"]
+    if logo:
+        image_path = urlparse(logo)
+        file_name = os.path.basename(image_path.path)
+
+        if file_name:
+            binary_image = urlopen(logo).read()
+            file_path = frappe.get_site_path("public", "files", file_name)
+
+            with open(file_path, mode="wb") as f:
+                f.write(binary_image)
+
+            shop.shop_logo = f"/files/{file_name}"
 
     if shop_exists:
         token = frappe.get_doc("Shopee Token", shop_id)

@@ -49,6 +49,7 @@
   {
    "fieldname": "logo",
    "fieldtype": "Data",
+   "hidden": 1,
    "label": "Logo"
   },
   {
@@ -143,7 +144,7 @@
  "image_field": "shop_logo",
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2022-02-01 11:45:44.417489",
+ "modified": "2022-02-03 17:52:25.664262",
  "modified_by": "Administrator",
  "module": "Shopee Open API",
  "name": "Shopee Shop",
