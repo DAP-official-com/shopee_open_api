@@ -15,8 +15,7 @@ frappe.listview_settings['Shopee Order'] = {
 
 	button: {
 		show: function (doc) {
-			console.log(doc);
-			return doc.sales_order == null;
+			return doc.sales_invoice == null;
 		},
 		get_label: function () {
 			return __('Run Order Automation');

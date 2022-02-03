@@ -3,7 +3,7 @@
 
 frappe.ui.form.on('Shopee Order', {
 	refresh: function (frm) {
-		if (frm.doc.sales_order == undefined) {
+		if (frm.doc.sales_invoice == undefined) {
 			frm.add_custom_button('Run order automation', () => {
 				frappe.call({
 					method: 'shopee_open_api.apis.order.run_order_automation_process',
