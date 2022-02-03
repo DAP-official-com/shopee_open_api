@@ -70,13 +70,14 @@ def update_profile(shopee_shop, _):
                     shopee_image_url = image_response["response"]["image_info"][
                         "image_url_list"
                     ][0]["image_url"]
-                    shopee_shop.shop_logo = shopee_image_url
-                    # updated_fields["shop_logo"] = shopee_image_url
+                    updated_fields["shop_logo"] = shopee_image_url
 
         r = client.shop.update_profile(**updated_fields)
 
         if r.get("error"):
-            frappe.throw(f'Shopee values update failed: {r.get("message")}')
+            frappe.throw(
+                f'Shopee values update failed: <strong>{r.get("message")}</strong> <br /><br />Data:<br />{updated_fields}'
+            )
 
 
 def retrieve_all_products(branch, event_type):
