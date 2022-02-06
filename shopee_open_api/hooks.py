@@ -122,6 +122,7 @@ scheduler_events = {
     "cron": {
         "0 */4 * * *": [
             "shopee_open_api.scheduled_tasks.tasks.update_products",
+            "shopee_open_api.scheduled_tasks.tasks.process_order_queue",
         ]
     },
     # "all": [
