@@ -121,6 +121,9 @@ class ShopeeOrder(Document):
             self.submit_sales_invoice()
             frappe.db.commit()
 
+        self.save()
+        frappe.db.commit()
+
     def create_sales_order(self, ignore_permissions=False) -> sales_order.SalesOrder:
         """Create Sales Order document from Shopee Order"""
 

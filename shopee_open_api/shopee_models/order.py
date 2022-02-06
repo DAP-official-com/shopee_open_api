@@ -46,7 +46,6 @@ class Order(ShopeeResponseBaseClass):
         frappe.db.commit()
 
         order.run_order_automation(ignore_permissions=ignore_permissions)
-        order.save(ignore_permissions=ignore_permissions)
 
         return order
 
