@@ -103,26 +103,28 @@ class ShopeeOrder(Document):
             and new_order.docstatus == 0
         ):
             self.submit_sales_order(ignore_permissions=ignore_permissions)
+            self.save()
             frappe.db.commit()
 
         if self.should_create_delivery_note:
             self.create_delivery_note()
+            self.save()
             frappe.db.commit()
 
         if self.should_submit_delivery_note:
             self.submit_delivery_note()
+            self.save()
             frappe.db.commit()
 
         if self.should_create_sales_invoice:
             self.create_sales_invoice()
+            self.save()
             frappe.db.commit()
 
         if self.should_submit_sales_invoice:
             self.submit_sales_invoice()
+            self.save()
             frappe.db.commit()
-
-        self.save()
-        frappe.db.commit()
 
     def create_sales_order(self, ignore_permissions=False) -> sales_order.SalesOrder:
         """Create Sales Order document from Shopee Order"""
