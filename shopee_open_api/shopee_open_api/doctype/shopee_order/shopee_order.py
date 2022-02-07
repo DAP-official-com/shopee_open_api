@@ -391,6 +391,7 @@ class ShopeeOrder(Document):
         new_sales_invoice.debit_to = (
             self.get_shopee_shop_instance().get_receivable_account().name
         )
+        new_sales_invoice.shopee_order = self.name
         new_sales_invoice.insert(ignore_permissions=ignore_permissions)
 
         self.sales_invoice = new_sales_invoice.name
