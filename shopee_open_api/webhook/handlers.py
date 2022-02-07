@@ -31,6 +31,27 @@ def handle_order_status_update(data: dict):
 
     order = Order(order_details, shop_id=shop_id)
 
+    if order.is_before_ignore_date:
+        return
+
+    if shop.hold_order:
+
+        if frappe.db.exists(
+            {
+                "doctype": "Shopee Order Queue",
+                "shopee_shop": shop.name,
+                "order_sn": order_sn,
+            }
+        ):
+            return
+
+        new_order_queue = frappe.new_doc("Shopee Order Queue")
+        new_order_queue.shopee_shop = shop.name
+        new_order_queue.order_sn = order_sn
+        new_order_queue.insert()
+
+        return
+
     try:
         order.update_or_insert_with_items()
     except (OrderAutomationProcessingError, stock_ledger.NegativeStockError) as e:

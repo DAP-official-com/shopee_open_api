@@ -23,7 +23,10 @@
   "create_delivery_note_when_status_is_shipped",
   "create_sales_invoice_when_status_is_completed",
   "security_section",
-  "prevent_making_changes_on_shopee_portal"
+  "prevent_making_changes_on_shopee_portal",
+  "behavior_control_section",
+  "hold_order",
+  "ignore_orders_before"
  ],
  "fields": [
   {
@@ -139,12 +142,32 @@
    "fieldtype": "Check",
    "label": "Create Sales Invoice When Status is Completed",
    "reqd": 1
+  },
+  {
+   "fieldname": "behavior_control_section",
+   "fieldtype": "Section Break",
+   "label": "Behavior Control"
+  },
+  {
+   "default": "1",
+   "description": "Checking this option will hold all new orders in the queue and will be handled after it is unchecked",
+   "fieldname": "hold_order",
+   "fieldtype": "Check",
+   "label": "Hold New Order in The Queue"
+  },
+  {
+   "default": "Now",
+   "description": "All orders created before this date will be ignored and not saved to the database. Manually imported orders are not effected by this setting.",
+   "fieldname": "ignore_orders_before",
+   "fieldtype": "Date",
+   "label": "Ignore Orders Before",
+   "reqd": 1
   }
  ],
  "image_field": "shop_logo",
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2022-02-03 17:52:25.664262",
+ "modified": "2022-02-04 18:25:54.219094",
  "modified_by": "Administrator",
  "module": "Shopee Open API",
  "name": "Shopee Shop",

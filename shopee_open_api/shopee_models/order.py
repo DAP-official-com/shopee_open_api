@@ -4,7 +4,7 @@ from .order_item import OrderItem
 from .product import Product
 import frappe
 from shopee_open_api.exceptions import AlreadyHasSalesOrderError
-from shopee_open_api.utils.datetime import datetime_string_from_unix
+from shopee_open_api.utils.datetime import datetime_string_from_unix, datetime_from_unix
 
 
 class Order(ShopeeResponseBaseClass):
@@ -46,7 +46,6 @@ class Order(ShopeeResponseBaseClass):
         frappe.db.commit()
 
         order.run_order_automation(ignore_permissions=ignore_permissions)
-        order.save(ignore_permissions=ignore_permissions)
 
         return order
 
@@ -341,6 +340,12 @@ class Order(ShopeeResponseBaseClass):
         """Get the order income is an object within a payment escrow object"""
 
         return self.get_payment_escrow().order_income
+
+    @property
+    def is_before_ignore_date(self):
+        shop = self.get_shop_document()
+        order_date = datetime_from_unix(self.create_time).date()
+        return order_date < shop.ignore_orders_before
 
     def get_shop_document(self):
         """Get a Shopee Shop document for this order"""

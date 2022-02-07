@@ -103,22 +103,27 @@ class ShopeeOrder(Document):
             and new_order.docstatus == 0
         ):
             self.submit_sales_order(ignore_permissions=ignore_permissions)
+            self.save()
             frappe.db.commit()
 
         if self.should_create_delivery_note:
             self.create_delivery_note()
+            self.save()
             frappe.db.commit()
 
         if self.should_submit_delivery_note:
             self.submit_delivery_note()
+            self.save()
             frappe.db.commit()
 
         if self.should_create_sales_invoice:
             self.create_sales_invoice()
+            self.save()
             frappe.db.commit()
 
         if self.should_submit_sales_invoice:
             self.submit_sales_invoice()
+            self.save()
             frappe.db.commit()
 
     def create_sales_order(self, ignore_permissions=False) -> sales_order.SalesOrder:
@@ -141,6 +146,7 @@ class ShopeeOrder(Document):
         new_sales_order.customer_address = self.get_address_instance().get_primary_key()
         new_sales_order.set_warehouse = shop.get_warehouse().name
         new_sales_order.selling_price_list = shop.get_price_list().name
+        new_sales_order.shopee_order = self.name
 
         for order_item in self.order_items:
             shopee_product = order_item.get_shopee_product()
@@ -308,6 +314,7 @@ class ShopeeOrder(Document):
             sales_order_document.submit()
 
         new_delivery_note = sales_order.make_delivery_note(source_name=self.sales_order)
+        new_delivery_note.shopee_order = self.name
         new_delivery_note.insert(ignore_permissions=ignore_permissions)
 
         self.delivery_note = new_delivery_note.name
@@ -384,6 +391,7 @@ class ShopeeOrder(Document):
         new_sales_invoice.debit_to = (
             self.get_shopee_shop_instance().get_receivable_account().name
         )
+        new_sales_invoice.shopee_order = self.name
         new_sales_invoice.insert(ignore_permissions=ignore_permissions)
 
         self.sales_invoice = new_sales_invoice.name
