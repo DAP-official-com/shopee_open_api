@@ -314,6 +314,7 @@ class ShopeeOrder(Document):
             sales_order_document.submit()
 
         new_delivery_note = sales_order.make_delivery_note(source_name=self.sales_order)
+        new_delivery_note.shopee_order = self.name
         new_delivery_note.insert(ignore_permissions=ignore_permissions)
 
         self.delivery_note = new_delivery_note.name
