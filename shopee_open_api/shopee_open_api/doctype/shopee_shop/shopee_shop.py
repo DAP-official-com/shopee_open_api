@@ -2,6 +2,9 @@
 # For license information, please see license.txt
 
 import frappe
+import time
+
+from datetime import datetime, timedelta
 from frappe.model.document import Document
 from erpnext.accounts.doctype.account import account
 
@@ -33,6 +36,20 @@ class ShopeeShop(Document):
         if self.create_delivery_note_when_status_is_shipped:
             self.create_sales_order_after_shopee_order_has_been_created = True
             self.submit_sales_order_automatically = True
+
+        if not self.last_wallet_transaction_update_unix:
+            self.set_last_wallet_transaction_update_unix(days_in_the_past=90)
+
+        self.last_wallet_transaction_update_date = datetime.fromtimestamp(
+            self.last_wallet_transaction_update_unix
+        )
+
+    def set_last_wallet_transaction_update_unix(self, days_in_the_past: int = 90):
+        """Set last wallet tranasction update date"""
+        unix_now = int(time.time())
+        self.last_wallet_transaction_update_unix = unix_now - (
+            days_in_the_past * 60 * 60 * 24
+        )
 
     def create_warehouse_for_this_shop(self):
 

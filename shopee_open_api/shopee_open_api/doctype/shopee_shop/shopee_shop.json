@@ -26,7 +26,10 @@
   "prevent_making_changes_on_shopee_portal",
   "behavior_control_section",
   "hold_order",
-  "ignore_orders_before"
+  "ignore_orders_before",
+  "transaction_history_settings_section",
+  "last_wallet_transaction_update_date",
+  "last_wallet_transaction_update_unix"
  ],
  "fields": [
   {
@@ -162,12 +165,30 @@
    "fieldtype": "Date",
    "label": "Ignore Orders Before",
    "reqd": 1
+  },
+  {
+   "fieldname": "transaction_history_settings_section",
+   "fieldtype": "Section Break",
+   "label": "Transaction History Settings"
+  },
+  {
+   "fieldname": "last_wallet_transaction_update_date",
+   "fieldtype": "Datetime",
+   "label": "Last Wallet Transaction Update Date",
+   "read_only": 1,
+   "reqd": 1
+  },
+  {
+   "fieldname": "last_wallet_transaction_update_unix",
+   "fieldtype": "Int",
+   "label": "Last Wallet Transaction Update Unix",
+   "read_only": 1
   }
  ],
  "image_field": "shop_logo",
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2022-02-10 14:03:21.140856",
+ "modified": "2022-02-10 16:43:33.541394",
  "modified_by": "Administrator",
  "module": "Shopee Open API",
  "name": "Shopee Shop",
