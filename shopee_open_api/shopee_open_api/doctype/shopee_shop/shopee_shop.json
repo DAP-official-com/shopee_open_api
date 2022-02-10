@@ -156,7 +156,7 @@
    "label": "Hold New Order in The Queue"
   },
   {
-   "default": "Now",
+   "default": "Today",
    "description": "All orders created before this date will be ignored and not saved to the database. Manually imported orders are not effected by this setting.",
    "fieldname": "ignore_orders_before",
    "fieldtype": "Date",
@@ -167,7 +167,7 @@
  "image_field": "shop_logo",
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2022-02-04 18:25:54.219094",
+ "modified": "2022-02-10 14:03:21.140856",
  "modified_by": "Administrator",
  "module": "Shopee Open API",
  "name": "Shopee Shop",
