@@ -11,6 +11,9 @@ from shopee_open_api.python_shopee.pyshopee2.exceptions import OnlyGetMethodAllo
 import uuid
 from shopee_open_api.python_shopee.pyshopee2.client import registered_module
 
+from dateutil import relativedelta
+import datetime
+
 ignored_apis = [
     "get_item_list_and_info",
     "upload_image",
@@ -19,6 +22,30 @@ ignored_apis = [
 ignored_modules = [
     "chat",
 ]
+
+
+@frappe.whitelist()
+def test_wallet_transactions():
+
+    shop_id = "179832629"
+    client = get_client_from_shop_id(shop_id)
+
+    start_date = datetime.date(2021, 12, 1)
+
+    for date in (start_date + relativedelta.relativedelta(days=n) for n in range(50)):
+
+        end_date = date + relativedelta.relativedelta(days=1)
+        start_unixtime = time.mktime(date.timetuple())
+        end_unixtime = time.mktime(end_date.timetuple())
+
+        r = client.payment.get_wallet_transaction_list(
+            page_no=1,
+            page_size=100,
+            create_time_from=int(start_unixtime),
+            create_time_to=int(end_unixtime),
+        )
+
+        return r
 
 
 @frappe.whitelist()
