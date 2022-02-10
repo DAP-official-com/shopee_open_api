@@ -1,0 +1,182 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "field:transaction_id",
+ "creation": "2022-02-10 14:42:34.687688",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "shopee_shop",
+  "transaction_id",
+  "status",
+  "wallet_type",
+  "transaction_type",
+  "amount",
+  "current_balance",
+  "create_time",
+  "reason",
+  "order_sn",
+  "refund_sn",
+  "withdrawal_type",
+  "transaction_fee",
+  "description",
+  "buyer_name",
+  "pay_order_list"
+ ],
+ "fields": [
+  {
+   "fieldname": "transaction_id",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Transaction Id",
+   "read_only": 1,
+   "reqd": 1,
+   "unique": 1
+  },
+  {
+   "fieldname": "status",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Status",
+   "read_only": 1,
+   "reqd": 1
+  },
+  {
+   "fieldname": "wallet_type",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Wallet Type",
+   "read_only": 1,
+   "reqd": 1
+  },
+  {
+   "fieldname": "transaction_type",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Transaction Type",
+   "read_only": 1,
+   "reqd": 1
+  },
+  {
+   "fieldname": "amount",
+   "fieldtype": "Int",
+   "label": "Amount",
+   "read_only": 1,
+   "reqd": 1
+  },
+  {
+   "fieldname": "current_balance",
+   "fieldtype": "Int",
+   "label": "Current Balance",
+   "read_only": 1,
+   "reqd": 1
+  },
+  {
+   "fieldname": "create_time",
+   "fieldtype": "Int",
+   "label": "Create Time",
+   "read_only": 1,
+   "reqd": 1
+  },
+  {
+   "fieldname": "reason",
+   "fieldtype": "Data",
+   "label": "Reason",
+   "read_only": 1
+  },
+  {
+   "fieldname": "order_sn",
+   "fieldtype": "Data",
+   "label": "Order SN",
+   "read_only": 1
+  },
+  {
+   "fieldname": "refund_sn",
+   "fieldtype": "Data",
+   "label": "Refund SN",
+   "read_only": 1
+  },
+  {
+   "fieldname": "withdrawal_type",
+   "fieldtype": "Data",
+   "label": "Withdrawal Type",
+   "read_only": 1
+  },
+  {
+   "fieldname": "transaction_fee",
+   "fieldtype": "Data",
+   "label": "Transaction Fee",
+   "read_only": 1
+  },
+  {
+   "fieldname": "description",
+   "fieldtype": "Text",
+   "label": "Description",
+   "read_only": 1
+  },
+  {
+   "fieldname": "buyer_name",
+   "fieldtype": "Data",
+   "label": "Buyer Name",
+   "read_only": 1
+  },
+  {
+   "fieldname": "pay_order_list",
+   "fieldtype": "Table",
+   "label": "Pay Order List",
+   "options": "Wallet Transaction Pay Order List",
+   "read_only": 1
+  },
+  {
+   "fieldname": "shopee_shop",
+   "fieldtype": "Link",
+   "label": "Shopee Shop",
+   "options": "Shopee Shop",
+   "read_only": 1,
+   "reqd": 1
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2022-02-10 18:30:41.381859",
+ "modified_by": "Administrator",
+ "module": "Shopee Open API",
+ "name": "Shopee Wallet Transaction",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Accounts User",
+   "share": 1
+  },
+  {
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Accounts Manager",
+   "share": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "track_changes": 1
+}

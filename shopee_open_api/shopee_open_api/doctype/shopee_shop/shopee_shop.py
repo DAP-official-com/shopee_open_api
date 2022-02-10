@@ -9,6 +9,8 @@ from frappe.model.document import Document
 from erpnext.accounts.doctype.account import account
 from shopee_open_api.utils import client
 
+from shopee_open_api.exceptions import BadRequestError
+
 
 class ShopeeShop(Document):
     def before_insert(self):
@@ -275,3 +277,57 @@ class ShopeeShop(Document):
     @property
     def client(self):
         return client.get_client_from_shop_id(self.name)
+
+    def update_wallet_transactions(self) -> None:
+
+        page_size = 100
+        current_unix = int(time.time())
+
+        for start_unix in range(
+            self.last_wallet_transaction_update_unix, current_unix, 60 * 60 * 24
+        ):
+
+            end_unix = start_unix + (60 * 60 * 24)
+
+            page_no = 0
+
+            while True:
+                r = self.client.payment.get_wallet_transaction_list(
+                    page_size=page_size,
+                    page_no=page_no,
+                    create_time_from=start_unix,
+                    create_time_to=end_unix,
+                )
+
+                if r.get("error"):
+                    raise BadRequestError(
+                        f"error: {r.get('error')}. error_message: {r.get('message')}."
+                    )
+
+                transactions = r.get("response", {}).get("transaction_list", [])
+
+                ## save transactions to the database
+                for transaction in transactions:
+
+                    if frappe.db.exists(
+                        "Shopee Wallet Transaction", transaction["transaction_id"]
+                    ):
+                        continue
+
+                    new_transaction = frappe.get_doc(
+                        doctype="Shopee Wallet Transaction",
+                        shopee_shop=self.name,
+                        **transaction,
+                    )
+                    new_transaction.insert()
+                    frappe.db.commit()
+
+                has_more = r.get("response", {}).get("more")
+
+                if not has_more:
+                    self.last_wallet_transaction_update_unix = end_unix
+                    self.save()
+                    frappe.db.commit()
+                    break
+
+                page_no += 1
