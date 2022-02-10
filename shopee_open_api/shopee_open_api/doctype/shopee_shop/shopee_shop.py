@@ -7,6 +7,7 @@ import time
 from datetime import datetime, timedelta
 from frappe.model.document import Document
 from erpnext.accounts.doctype.account import account
+from shopee_open_api.utils import client
 
 
 class ShopeeShop(Document):
@@ -270,3 +271,7 @@ class ShopeeShop(Document):
     def is_set_to_create_sales_invoice(self) -> bool:
         """Check if automatically create sales invoice is set to True."""
         return self.create_sales_invoice_when_status_is_completed == 1
+
+    @property
+    def client(self):
+        return client.get_client_from_shop_id(self.name)

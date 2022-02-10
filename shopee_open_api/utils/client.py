@@ -2,7 +2,7 @@ import time
 from shopee_open_api.python_shopee.pyshopee2 import Client
 from erpnext.hr.doctype.branch.branch import Branch
 from shopee_open_api.exceptions import NotShopeeBranchError, NotAuthorizedError
-from shopee_open_api.shopee_open_api.doctype.shopee_shop.shopee_shop import ShopeeShop
+from shopee_open_api.shopee_open_api.doctype.shopee_shop import shopee_shop
 import frappe
 
 
@@ -64,7 +64,14 @@ def get_client_from_branch(branch: Branch) -> Client:
     return client
 
 
-def get_client_from_shop(shop: ShopeeShop) -> Client:
+def get_client_from_shop(shop) -> Client:
+    """
+    Get client from Shopee Shop documents
+
+    :param shopee_shop.ShopeeShop shop: An instance of Shopee Shop Doctype
+
+    :return: pyshopee2 Client object
+    """
 
     if not shop.authorized:
         raise NotAuthorizedError("This shop has been unauthorized")
