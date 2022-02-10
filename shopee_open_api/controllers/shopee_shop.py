@@ -70,7 +70,7 @@ def update_profile(shopee_shop, _):
                     shopee_image_url = image_response["response"]["image_info"][
                         "image_url_list"
                     ][0]["image_url"]
-                    updated_fields["shop_logo"] = shopee_image_url
+                    # updated_fields["shop_logo"] = shopee_image_url
 
         r = client.shop.update_profile(**updated_fields)
 
