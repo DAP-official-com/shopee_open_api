@@ -128,9 +128,9 @@ scheduler_events = {
     # "all": [
     # 	"shopee_open_api.tasks.all"
     # ],
-    # "daily": [
-    # 	"shopee_open_api.tasks.daily"
-    # ],
+    "daily": [
+        "shopee_open_api.scheduled_tasks.tasks.update_wallet_transactions",
+    ],
     # "hourly": [
     # 	"shopee_open_api.tasks.hourly"
     # ],

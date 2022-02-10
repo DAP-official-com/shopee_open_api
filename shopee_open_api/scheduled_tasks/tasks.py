@@ -26,3 +26,14 @@ def process_order_queue():
             continue
 
         queue_item.process_order()
+
+
+def update_wallet_transactions():
+
+    shops = [
+        frappe.get_doc("Shopee Shop", name)
+        for name in frappe.get_all("Shopee Shop", pluck="name")
+    ]
+
+    for shop in shops:
+        shop.update_wallet_transactions()
