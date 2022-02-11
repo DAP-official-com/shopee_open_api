@@ -8,9 +8,9 @@ from typing import List
 
 
 class TransactionType(enum.Enum):
-    ALL_WITHDRAWAL = "WITHDRAWAL%"
-    REQUEST_WITHDRAWAL = "WITHDRAWAL_CREATED"
-    COMPLETE_WITHDRAWAL = "WITHDRAWAL_COMPLETED"
+    ALL = "WITHDRAWAL%"
+    REQUESTED_WITHDRAWAL = "WITHDRAWAL_CREATED"
+    COMPLETED_WITHDRAWAL = "WITHDRAWAL_COMPLETED"
 
 
 class ShopeeWalletTransaction(Document):
@@ -35,6 +35,7 @@ class ShopeeWalletTransaction(Document):
 
     @property
     def previous_transaction(self):
+        """Get previous transaction of current transaction."""
 
         previous_transaction = frappe.get_all(
             "Shopee Wallet Transaction",
@@ -53,6 +54,7 @@ class ShopeeWalletTransaction(Document):
 
     @property
     def next_transaction(self):
+        """Get the next transaction of current transaction."""
 
         next_transaction = frappe.get_all(
             "Shopee Wallet Transaction",
