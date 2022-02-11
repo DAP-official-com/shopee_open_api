@@ -33,6 +33,72 @@ class ShopeeWalletTransaction(Document):
             for name in withdrawal_names
         ]
 
+    def get_orders_for_withdrawal(self):
+        if self.transaction_type != "WITHDRAWAL_CREATED":
+            raise ValueError(
+                "Method get_transaction_for_withdrawal can only be called with transaction type 'WITHDRAWAL_CREATED'"
+            )
+
+        amount_to_check = abs(self.amount)
+        amount_to_ignore = self.current_balance
+
+        previous_transaction = self.previous_transaction
+        result = []
+
+        # Ignore transactions contributing to current balance
+        while amount_to_ignore > 0:
+
+            if previous_transaction is None:
+                break
+
+            if "WITHDRAWAL" in previous_transaction.transaction_type:
+                previous_transaction = previous_transaction.previous_transaction
+                continue
+
+            amount_to_ignore -= previous_transaction.amount
+            previous_transaction = previous_transaction.previous_transaction
+
+            # Include the partial amount of a transaction that contributes withdrawn amount
+            if amount_to_ignore < 0:
+                amount_to_check += amount_to_ignore
+                result.append(
+                    {
+                        "transaction": previous_transaction.name,
+                        "amount": abs(amount_to_ignore),
+                    }
+                )
+
+        # Include transactions contributing withdrawn amount
+        while amount_to_check > 0:
+
+            if previous_transaction is None:
+                break
+
+            if "WITHDRAWAL" in previous_transaction.transaction_type:
+                previous_transaction = previous_transaction.previous_transaction
+                continue
+
+            amount_to_check -= previous_transaction.amount
+
+            if amount_to_check < 0:
+                result.append(
+                    {
+                        "transaction": previous_transaction.name,
+                        "amount": amount_to_check + previous_transaction.amount,
+                    }
+                )
+            else:
+                result.append(
+                    {
+                        "transaction": previous_transaction.name,
+                        "amount": previous_transaction.amount,
+                    }
+                )
+
+            previous_transaction = previous_transaction.previous_transaction
+
+        return result
+
     @property
     def previous_transaction(self):
         """Get previous transaction of current transaction."""
