@@ -41,7 +41,7 @@ class ShopeeWalletTransaction(Document):
             "Shopee Wallet Transaction",
             filters={
                 "shopee_shop": self.shopee_shop,
-                "create_time": ["<", self.create_time],
+                "name": ["<", self.name],
             },
             pluck="name",
             limit_page_length=1,
@@ -60,7 +60,7 @@ class ShopeeWalletTransaction(Document):
             "Shopee Wallet Transaction",
             filters={
                 "shopee_shop": self.shopee_shop,
-                "create_time": [">", self.create_time],
+                "name": [">", self.name],
             },
             pluck="name",
             limit_page_length=1,
