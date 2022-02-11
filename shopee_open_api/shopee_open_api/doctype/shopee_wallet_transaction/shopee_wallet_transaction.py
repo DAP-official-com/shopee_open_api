@@ -64,6 +64,7 @@ class ShopeeWalletTransaction(Document):
                     {
                         "transaction": previous_transaction.name,
                         "amount": abs(amount_to_ignore),
+                        "split": True,
                     }
                 )
 
@@ -86,6 +87,7 @@ class ShopeeWalletTransaction(Document):
                     {
                         "transaction": previous_transaction.name,
                         "amount": amount_to_check + previous_transaction.amount,
+                        "split": True,
                     }
                 )
             else:
@@ -93,6 +95,7 @@ class ShopeeWalletTransaction(Document):
                     {
                         "transaction": previous_transaction.name,
                         "amount": previous_transaction.amount,
+                        "split": False,
                     }
                 )
 
