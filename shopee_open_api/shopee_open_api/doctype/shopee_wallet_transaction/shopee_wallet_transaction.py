@@ -56,7 +56,6 @@ class ShopeeWalletTransaction(Document):
                 continue
 
             amount_to_ignore -= previous_transaction.amount
-            previous_transaction = previous_transaction.previous_transaction
 
             # Include the partial amount of a transaction that contributes withdrawn amount
             if amount_to_ignore < 0:
@@ -67,6 +66,8 @@ class ShopeeWalletTransaction(Document):
                         "amount": abs(amount_to_ignore),
                     }
                 )
+
+            previous_transaction = previous_transaction.previous_transaction
 
         # Include transactions contributing withdrawn amount
         while amount_to_check > 0:
