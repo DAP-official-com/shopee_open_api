@@ -66,6 +66,7 @@ fixtures = [
     {"dt": "Accounting Dimension", "filters": [["name", "=", "Shopee Shop"]]},
     "Customer Group",
     {"dt": "User", "filters": [["first_name", "=", "Shopee"]]},
+    {"dt": "Sales Partner", "filters": [["name", "=", "Shopee"]]},
 ]
 
 # Installation

@@ -1,0 +1,23 @@
+[
+ {
+  "commission_rate": 5.0,
+  "description": null,
+  "docstatus": 0,
+  "doctype": "Sales Partner",
+  "introduction": null,
+  "logo": null,
+  "modified": "2022-02-12 17:55:18.394577",
+  "name": "Shopee",
+  "parent": null,
+  "parentfield": null,
+  "parenttype": null,
+  "partner_name": "Shopee",
+  "partner_type": null,
+  "partner_website": null,
+  "referral_code": null,
+  "route": "partners/shopee",
+  "show_in_website": 0,
+  "targets": [],
+  "territory": "All Territories"
+ }
+]
