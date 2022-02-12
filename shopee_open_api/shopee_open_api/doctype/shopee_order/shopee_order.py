@@ -146,6 +146,10 @@ class ShopeeOrder(Document):
         new_sales_order.customer_address = self.get_address_instance().get_primary_key()
         new_sales_order.set_warehouse = shop.get_warehouse().name
         new_sales_order.selling_price_list = shop.get_price_list().name
+        new_sales_order.sales_partner = "Shopee"
+        new_sales_order.commission_rate = (
+            self.seller_transaction_fee / self.original_price
+        ) * 100
         new_sales_order.shopee_order = self.name
 
         for order_item in self.order_items:
