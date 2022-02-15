@@ -238,6 +238,70 @@ class ShopeeShop(Document):
             {"doctype": "Account", "account_name": "Shopee Direct Expenses"}
         )
 
+    def get_or_create_shipping_fee_account(self) -> account.Account:
+        """Get or create an account for shipping fee."""
+        if self.has_shipping_fee_account:
+            return frappe.get_doc(
+                "Account",
+                frappe.get_all(
+                    "Account",
+                    filters={
+                        "shopee_shop": self.name,
+                        "account_name": f"Freight and Forwarding Charges {self.shop_name}",
+                    },
+                    pluck="name",
+                )[0],
+            )
+
+        parent_indirect_expense_account = (
+            self.get_or_create_parent_indirect_expense_account()
+        )
+        next_account_number = None
+
+        if parent_indirect_expense_account.account_number:
+
+            all_shopee_indirect_expense_accounts = frappe.get_all(
+                "Account",
+                filters={"parent_account": parent_indirect_expense_account.name},
+                pluck="account_number",
+            )
+
+            account_numbers = [
+                account_num.split(" - ")[1]
+                for account_num in all_shopee_indirect_expense_accounts
+                if account_num is not None and " - " in account_num
+            ]
+
+            if not account_numbers:
+                next_account_number = (
+                    f"{parent_indirect_expense_account.account_number} - 01"
+                )
+            else:
+                next_account_number = f"{parent_indirect_expense_account.account_number} - {int(max(account_numbers)) + 1:02d}"
+
+        new_account = frappe.new_doc("Account")
+        new_account.parent_account = parent_indirect_expense_account.name
+        new_account.account_number = next_account_number
+        new_account.account_name = f"Freight and Forwarding Charges {self.shop_name}"
+        new_account.shopee_shop = self.name
+        new_account.account_type = "Expense Account"
+        new_account.insert()
+
+        return new_account
+
+    @property
+    def has_shipping_fee_account(self) -> bool:
+        """Check if this shop already has an account for shipping fee."""
+        return bool(
+            frappe.db.exists(
+                {
+                    "doctype": "Account",
+                    "shopee_shop": self.name,
+                    "account_name": f"Freight and Forwarding Charges {self.shop_name}",
+                }
+            )
+        )
+
     def get_or_create_parent_indirect_expense_account(self) -> account.Account:
         """Create a parent indirect expense account named 'Shopee Receivable' if not exists."""
 
