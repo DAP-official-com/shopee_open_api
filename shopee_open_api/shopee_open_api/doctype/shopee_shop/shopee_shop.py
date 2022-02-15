@@ -274,7 +274,7 @@ class ShopeeShop(Document):
                 if account_num is not None
             ]
 
-            next_account_number = int(max(account_numbers)) + 10
+            next_account_number = int(max(account_numbers)) + 1
 
         new_account = frappe.new_doc("Account")
         new_account.parent_account = root_indirect_expense_account.name
