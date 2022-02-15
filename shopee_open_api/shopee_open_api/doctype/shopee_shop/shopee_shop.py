@@ -235,7 +235,61 @@ class ShopeeShop(Document):
     @property
     def has_parent_direct_expense_account(self) -> bool:
         return frappe.db.exists(
-            {"doctype": "Account", "account_name": "Shopee Direct Expense"}
+            {"doctype": "Account", "account_name": "Shopee Direct Expenses"}
+        )
+
+    def get_or_create_parent_indirect_expense_account(self) -> account.Account:
+        """Create a parent indirect expense account named 'Shopee Receivable' if not exists."""
+
+        if self.has_parent_indirect_expense_account:
+            return frappe.get_doc(
+                "Account",
+                frappe.get_all(
+                    "Account",
+                    filters={"account_name": "Shopee Indirect Expenses"},
+                    pluck="name",
+                )[0],
+            )
+
+        root_indirect_expense_account = frappe.get_doc(
+            "Account",
+            frappe.get_all(
+                "Account", filters={"account_name": "Indirect Expenses"}, pluck="name"
+            )[0],
+        )
+
+        next_account_number = None
+
+        if root_indirect_expense_account.account_number:
+
+            all_indirect_expense_accounts = frappe.get_all(
+                "Account",
+                filters={"parent_account": root_indirect_expense_account.name},
+                pluck="account_number",
+            )
+
+            account_numbers = [
+                account_num
+                for account_num in all_indirect_expense_accounts
+                if account_num is not None
+            ]
+
+            next_account_number = int(max(account_numbers)) + 10
+
+        new_account = frappe.new_doc("Account")
+        new_account.parent_account = root_indirect_expense_account.name
+        new_account.account_number = next_account_number
+        new_account.account_name = "Shopee Indirect Expenses"
+        new_account.account_type = "Expense Account"
+        new_account.is_group = True
+        new_account.insert()
+
+        return new_account
+
+    @property
+    def has_parent_indirect_expense_account(self) -> bool:
+        return frappe.db.exists(
+            {"doctype": "Account", "account_name": "Shopee Indirect Expenses"}
         )
 
     def save(self, *args, **kwargs):
