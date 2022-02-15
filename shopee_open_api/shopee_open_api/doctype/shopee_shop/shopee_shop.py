@@ -80,7 +80,9 @@ class ShopeeShop(Document):
             return frappe.get_doc(
                 "Account",
                 frappe.get_all(
-                    "Account", filters={"shopee_shop": self.name}, pluck="name"
+                    "Account",
+                    filters={"shopee_shop": self.name, "account_type": "Receivable"},
+                    pluck="name",
                 )[0],
             )
 
@@ -119,7 +121,13 @@ class ShopeeShop(Document):
     @property
     def has_receivable_account(self):
         """Check if this shop already has a receivable account."""
-        return frappe.db.exists({"doctype": "Account", "shopee_shop": self.name})
+        return frappe.db.exists(
+            {
+                "doctype": "Account",
+                "account_type": "Receivable",
+                "shopee_shop": self.name,
+            }
+        )
 
     def get_or_create_parent_receivable_account(self) -> account.Account:
         """Create a parent receivable account named 'Shopee Receivable' if not exists."""
