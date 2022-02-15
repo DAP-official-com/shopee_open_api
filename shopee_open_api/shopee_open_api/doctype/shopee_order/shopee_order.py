@@ -5,6 +5,7 @@ import frappe
 
 from erpnext.selling.doctype.sales_order import sales_order
 from erpnext.accounts.doctype.sales_invoice import sales_invoice
+from erpnext.accounts.doctype.shipping_rule import shipping_rule
 from erpnext.stock.doctype.delivery_note import delivery_note
 
 from frappe.model.document import Document
@@ -233,6 +234,41 @@ class ShopeeOrder(Document):
         self.get_address_instance().update_or_insert(
             ignore_permissions=ignore_permissions
         )
+
+    def get_or_create_shipping_rule(self) -> shipping_rule.ShippingRule:
+        """Get current shipping rule if exists, or create a new one otherwise."""
+        if frappe.db.exists("Shipping Rule", self.shipping_carrier):
+            return frappe.get_doc("Shipping Rule", self.shipping_carrier)
+
+        cost_center = frappe.get_doc(
+            "Cost Center",
+            frappe.get_all(
+                "Cost Center", filters={"cost_center_name": "Main"}, pluck="name"
+            )[0],
+        )
+
+        shipping_account = frappe.get_doc(
+            "Account",
+            frappe.get_all(
+                "Account",
+                filters={
+                    "account_name": "Freight and Forwarding Charges",
+                },
+                pluck="name",
+            )[0],
+        )
+
+        shipping_rule = frappe.get_doc(
+            doctype="Shipping Rule",
+            label=self.shipping_carrier,
+            shipping_rule_type="Selling",
+            cost_center=cost_center.name,
+            account=shipping_account.name,
+        )
+
+        shipping_rule.insert()
+
+        return frappe.get_doc("Shipping Rule", self.shipping_carrier)
 
     def save(self, *args, **kwargs):
         self.create_cancel_reason()
