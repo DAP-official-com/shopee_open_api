@@ -31,6 +31,7 @@ class ShopeeShop(Document):
     def after_insert(self):
         # make a new receivable account for this shop
         self.create_receivable_account()
+        self.get_or_create_shipping_fee_account()
 
     def before_save(self):
         if self.submit_sales_order_automatically:
