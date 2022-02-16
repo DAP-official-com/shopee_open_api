@@ -259,23 +259,14 @@ class ShopeeOrder(Document):
             )[0],
         )
 
-        shipping_account = frappe.get_doc(
-            "Account",
-            frappe.get_all(
-                "Account",
-                filters={
-                    "account_name": "Freight and Forwarding Charges",
-                },
-                pluck="name",
-            )[0],
-        )
-
         shipping_rule = frappe.get_doc(
             doctype="Shipping Rule",
             label=self.shipping_carrier,
             shipping_rule_type="Selling",
             cost_center=cost_center.name,
-            account=shipping_account.name,
+            account=self.get_shopee_shop_instance()
+            .get_or_create_shipping_fee_account()
+            .name,
         )
 
         shipping_rule.insert()
