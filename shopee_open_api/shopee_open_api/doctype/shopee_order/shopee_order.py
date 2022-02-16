@@ -151,7 +151,17 @@ class ShopeeOrder(Document):
         new_sales_order.commission_rate = (
             self.seller_transaction_fee / self.original_price
         ) * 100
+        new_sales_order.shipping_rule = self.get_or_create_shipping_rule().name
         new_sales_order.shopee_order = self.name
+
+        shipping_charge = new_sales_order.append("taxes", {})
+        shipping_charge.charge_type = "Actual"
+        shipping_charge.account_head = (
+            self.get_shopee_shop_instance().get_or_create_shipping_fee_account().name
+        )
+        shipping_charge.description = "Shipping fee paid by customer"
+        shipping_charge.rate = self.buyer_paid_shipping_fee
+        shipping_charge.tax_amount = self.buyer_paid_shipping_fee
 
         for order_item in self.order_items:
             shopee_product = order_item.get_shopee_product()
@@ -220,6 +230,8 @@ class ShopeeOrder(Document):
             customer = self.get_customer_instance()
             address = self.get_address_instance()
             customer.add_address(address)
+
+        self.get_or_create_shipping_rule()
 
     def create_customer_document(self, ignore_permissions=False):
         """Create a new customer or update current customer document for the order's buyer"""
