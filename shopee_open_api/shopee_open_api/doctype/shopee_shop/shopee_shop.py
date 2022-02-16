@@ -240,14 +240,17 @@ class ShopeeShop(Document):
 
     def get_or_create_shipping_fee_account(self) -> account.Account:
         """Get or create an account for shipping fee."""
+        parent_indirect_expense_account = (
+            self.get_or_create_parent_indirect_expense_account()
+        )
         if self.has_shipping_fee_account:
             return frappe.get_doc(
                 "Account",
                 frappe.get_all(
                     "Account",
                     filters={
-                        "shopee_shop": self.name,
-                        "account_name": f"Freight and Forwarding Charges {self.shop_name}",
+                        "parent_account": parent_indirect_expense_account.name,
+                        "account_name": f"Shipping Fee",
                     },
                     pluck="name",
                 )[0],
@@ -282,8 +285,7 @@ class ShopeeShop(Document):
         new_account = frappe.new_doc("Account")
         new_account.parent_account = parent_indirect_expense_account.name
         new_account.account_number = next_account_number
-        new_account.account_name = f"Freight and Forwarding Charges {self.shop_name}"
-        new_account.shopee_shop = self.name
+        new_account.account_name = f"Shipping Fee"
         new_account.account_type = "Expense Account"
         new_account.insert()
 
@@ -292,12 +294,16 @@ class ShopeeShop(Document):
     @property
     def has_shipping_fee_account(self) -> bool:
         """Check if this shop already has an account for shipping fee."""
+        parent_indirect_expense_account = (
+            self.get_or_create_parent_indirect_expense_account()
+        )
+
         return bool(
             frappe.db.exists(
                 {
                     "doctype": "Account",
-                    "shopee_shop": self.name,
-                    "account_name": f"Freight and Forwarding Charges {self.shop_name}",
+                    "account_name": f"Shipping Fee",
+                    "parent_account": parent_indirect_expense_account.name,
                 }
             )
         )
