@@ -163,12 +163,12 @@ class ShopeeOrder(Document):
         new_sales_order.shopee_order = self.name
 
         # Shipping fee
-        shipping_charge = new_sales_order.append("taxes", {})
-        shipping_charge.charge_type = "Actual"
-        shipping_charge.account_head = self.get_or_create_shipping_rule().account
-        shipping_charge.description = "Shipping fee paid by customer"
-        shipping_charge.rate = self.buyer_paid_shipping_fee
-        shipping_charge.tax_amount = self.buyer_paid_shipping_fee
+        # shipping_charge = new_sales_order.append("taxes", {})
+        # shipping_charge.charge_type = "Actual"
+        # shipping_charge.account_head = self.get_or_create_shipping_rule().account
+        # shipping_charge.description = "Shipping fee paid by customer"
+        # shipping_charge.rate = self.buyer_paid_shipping_fee
+        # shipping_charge.tax_amount = self.buyer_paid_shipping_fee
 
         # Purchased items
         for order_item in self.order_items:
@@ -443,6 +443,15 @@ class ShopeeOrder(Document):
         new_sales_invoice.shopee_order = self.name
         new_sales_invoice.insert(ignore_permissions=ignore_permissions)
 
+        shipping_charge = new_sales_invoice.append("taxes", {})
+        shipping_charge.charge_type = "Actual"
+        shipping_charge.account_head = self.get_or_create_shipping_rule().account
+        shipping_charge.description = "Shipping fee overpaid (underpaid) by customer"
+        shipping_charge.rate = self.buyer_paid_shipping_fee - self.actual_shipping_fee
+        shipping_charge.tax_amount = (
+            self.buyer_paid_shipping_fee - self.actual_shipping_fee
+        )
+        shipping_charge.save()
         self.sales_invoice = new_sales_invoice.name
         self.save(ignore_permissions=ignore_permissions)
 
