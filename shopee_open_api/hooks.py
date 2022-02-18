@@ -67,6 +67,7 @@ fixtures = [
     "Customer Group",
     {"dt": "User", "filters": [["first_name", "=", "Shopee"]]},
     {"dt": "Sales Partner", "filters": [["name", "=", "Shopee"]]},
+    {"dt": "Notification Settings", "filters": [["name", "=", "shopee@example.com"]]},
 ]
 
 # Installation

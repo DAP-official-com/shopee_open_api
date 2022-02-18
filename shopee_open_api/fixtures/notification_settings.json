@@ -1,0 +1,20 @@
+[
+ {
+  "docstatus": 0,
+  "doctype": "Notification Settings",
+  "enable_email_assignment": 1,
+  "enable_email_energy_point": 1,
+  "enable_email_mention": 1,
+  "enable_email_notifications": 0,
+  "enable_email_share": 1,
+  "enabled": 0,
+  "modified": "2022-02-17 17:11:36.238734",
+  "name": "shopee@example.com",
+  "parent": null,
+  "parentfield": null,
+  "parenttype": null,
+  "seen": 0,
+  "subscribed_documents": [],
+  "user": "Administrator"
+ }
+]
