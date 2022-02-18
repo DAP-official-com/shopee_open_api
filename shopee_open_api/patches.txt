@@ -1,0 +1,1 @@
+shopee_open_api.patches.v1_15_0.stop_email_notification
