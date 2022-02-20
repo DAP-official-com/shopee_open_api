@@ -127,6 +127,11 @@ class ShopeeOrder(Document):
             self.save()
             frappe.db.commit()
 
+        if self.should_close_sales_order_and_delivery_note:
+            self.close_sales_order()
+            self.close_delivery_note()
+            self.save()
+
     def create_sales_order(self, ignore_permissions=False) -> sales_order.SalesOrder:
         """Create Sales Order document from Shopee Order"""
 
@@ -200,6 +205,10 @@ class ShopeeOrder(Document):
 
         sales_order_document.submit()
         return sales_order_document
+
+    def close_sales_order(self):
+        sales_order = frappe.get_doc("Sales Order", self.sales_order)
+        sales_order.update_status("Closed")
 
     @property
     def order_items(self) -> List[ShopeeOrderItem]:
@@ -413,6 +422,10 @@ class ShopeeOrder(Document):
 
         return delivery_note
 
+    def close_delivery_note(self):
+        delivery_note = frappe.get_doc("Delivery Note", self.delivery_note)
+        delivery_note.update_status("Closed")
+
     @property
     def should_create_sales_invoice(self) -> bool:
 
@@ -537,3 +550,10 @@ class ShopeeOrder(Document):
         if self.sales_order is None:
             return None
         return frappe.get_doc("Sales Order", self.sales_order)
+
+    @property
+    def should_close_sales_order_and_delivery_note(self):
+        sales_invoice_document = frappe.get_doc("Sales Invoice", self.sales_invoice)
+        if sales_invoice_document.docstatus != 0:
+            return True
+        return False
