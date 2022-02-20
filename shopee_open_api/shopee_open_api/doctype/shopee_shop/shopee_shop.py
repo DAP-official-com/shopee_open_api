@@ -185,6 +185,59 @@ class ShopeeShop(Document):
             {"doctype": "Account", "account_name": "Shopee Receivable"}
         )
 
+    def get_or_create_parent_cash_account(self) -> account.Account:
+        """Create a parent cash account named 'Shopee Cash' if not exists."""
+
+        if self.has_parent_cash_account:
+            return frappe.get_doc(
+                "Account",
+                frappe.get_all(
+                    "Account",
+                    filters={"account_name": "Shopee Cash"},
+                    pluck="name",
+                )[0],
+            )
+
+        root_cash_account = frappe.get_doc(
+            "Account",
+            frappe.get_all(
+                "Account", filters={"account_name": "Cash In Hand"}, pluck="name"
+            )[0],
+        )
+
+        next_account_number = None
+
+        if root_cash_account.account_number:
+
+            all_cash_accounts = frappe.get_all(
+                "Account",
+                filters={"parent_account": root_cash_account.name},
+                pluck="account_number",
+            )
+
+            account_numbers = [
+                account_num
+                for account_num in all_cash_accounts
+                if account_num is not None
+            ]
+
+            next_account_number = int(max(account_numbers)) + 10
+
+        new_account = frappe.new_doc("Account")
+        new_account.parent_account = root_cash_account.name
+        new_account.account_number = next_account_number
+        new_account.account_name = "Shopee Cash"
+        new_account.account_type = "Cash"
+        new_account.is_group = True
+        new_account.insert()
+
+        return new_account
+
+    @property
+    def has_parent_cash_account(self) -> bool:
+        """Check if the parent cash account exists"""
+        return frappe.db.exists({"doctype": "Account", "account_name": "Shopee Cash"})
+
     def get_or_create_parent_direct_expense_account(self) -> account.Account:
         """Create a parent direct expense account named 'Shopee Receivable' if not exists."""
 
