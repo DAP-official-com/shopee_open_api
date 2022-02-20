@@ -299,6 +299,15 @@ class ShopeeOrder(Document):
         self.customer = customer.get_primary_key()
         self.address = address.get_primary_key()
 
+        if not self.sales_order:
+            self.sales_order_status = None
+
+        if not self.delivery_note:
+            self.delivery_note_status = None
+
+        if not self.sales_invoice:
+            self.sales_invoice_status = None
+
     def before_insert(self):
         """Create linked documents if neccessary"""
 
