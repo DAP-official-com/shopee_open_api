@@ -185,6 +185,62 @@ class ShopeeShop(Document):
             {"doctype": "Account", "account_name": "Shopee Receivable"}
         )
 
+    def get_or_create_cash_account(self) -> account.Account:
+        """Get or create new cash account for this shop."""
+
+        if self.has_cash_account:
+            return frappe.get_doc(
+                "Account",
+                frappe.get_all(
+                    "Account",
+                    filters={"shopee_shop": self.name, "account_type": "Cash"},
+                    pluck="name",
+                )[0],
+            )
+
+        parent_cash_account = self.get_or_create_parent_cash_account()
+        next_account_number = None
+
+        if parent_cash_account.account_number:
+
+            all_cash_accounts = frappe.get_all(
+                "Account",
+                filters={"parent_account": parent_cash_account.name},
+                pluck="account_number",
+            )
+
+            account_numbers = [
+                account_num.split(" - ")[1]
+                for account_num in all_cash_accounts
+                if account_num is not None and " - " in account_num
+            ]
+
+            if not account_numbers:
+                next_account_number = f"{parent_cash_account.account_number} - 01"
+            else:
+                next_account_number = f"{parent_cash_account.account_number} - {int(max(account_numbers)) + 1:02d}"
+
+        new_account = frappe.new_doc("Account")
+        new_account.parent_account = parent_cash_account.name
+        new_account.account_number = next_account_number
+        new_account.account_name = self.shop_name
+        new_account.shopee_shop = self.name
+        new_account.account_type = "Cash"
+        new_account.insert()
+
+        return new_account
+
+    @property
+    def has_cash_account(self):
+        """Check if this shop already has a cash account."""
+        return frappe.db.exists(
+            {
+                "doctype": "Account",
+                "account_type": "Cash",
+                "shopee_shop": self.name,
+            }
+        )
+
     def get_or_create_parent_cash_account(self) -> account.Account:
         """Create a parent cash account named 'Shopee Cash' if not exists."""
 
