@@ -439,30 +439,66 @@ class ShopeeOrder(Document):
         if self.sales_invoice:
             return frappe.get_doc("Sales Invoice", self.sales_invoice)
 
-        delivery_note_document = self.get_delivery_note_document()
-        if delivery_note_document.docstatus == 0:
-            delivery_note_document.submit()
+        shop = self.get_shopee_shop_instance()
 
-        new_sales_invoice = delivery_note.make_sales_invoice(
-            source_name=self.delivery_note
-        )
+        new_sales_invoice = frappe.new_doc("Sales Invoice")
         new_sales_invoice.debit_to = (
             self.get_shopee_shop_instance().get_receivable_account().name
         )
-        new_sales_invoice.shopee_order = self.name
-        new_sales_invoice.insert(ignore_permissions=ignore_permissions)
 
+        new_sales_invoice.customer = self.get_customer_instance().get_primary_key()
+        new_sales_invoice.customer_address = (
+            self.get_address_instance().get_primary_key()
+        )
+        new_sales_invoice.set_warehouse = shop.get_warehouse().name
+        new_sales_invoice.selling_price_list = shop.get_price_list().name
+        new_sales_invoice.sales_partner = "Shopee"
+
+        # Transaction fee
+        new_sales_invoice.commission_rate = (
+            self.seller_transaction_fee / self.original_price
+        ) * 100
+        new_sales_invoice.shipping_rule = self.get_or_create_shipping_rule().name
+
+        # Discounts
+        new_sales_invoice.discount_amount = (
+            self.seller_discount + self.voucher_from_seller
+        )
+
+        new_sales_invoice.shopee_order = self.name
+
+        # Shipping fee
         shipping_charge = new_sales_invoice.append("taxes", {})
         shipping_charge.charge_type = "Actual"
         shipping_charge.account_head = self.get_or_create_shipping_rule().account
         shipping_charge.description = "Shipping fee overpaid (underpaid) by customer"
-        shipping_charge.rate = self.buyer_paid_shipping_fee - self.actual_shipping_fee
-        shipping_charge.tax_amount = (
-            self.buyer_paid_shipping_fee - self.actual_shipping_fee
+
+        shipping_charge.rate = (
+            self.buyer_paid_shipping_fee
+            + self.shopee_shipping_rebate
+            - self.actual_shipping_fee
         )
-        shipping_charge.save()
+
+        shipping_charge.tax_amount = shipping_charge.rate
+
+        # Purchased items
+        for order_item in self.order_items:
+            shopee_product = order_item.get_shopee_product()
+            item = shopee_product.get_item()
+
+            sales_order_item = new_sales_invoice.append("items", {})
+            sales_order_item.item_code = item.name
+            sales_order_item.qty = order_item.qty
+            sales_order_item.rate = order_item.model_discounted_price
+            sales_order_item.uom = order_item.get_shopee_product().get_item_price().uom
+
+        new_sales_invoice.insert(ignore_permissions=ignore_permissions)
+
         self.sales_invoice = new_sales_invoice.name
+
         self.save(ignore_permissions=ignore_permissions)
+        new_sales_invoice.shopee_order = self.name
+        new_sales_invoice.save(ignore_permissions=ignore_permissions)
 
         return new_sales_invoice
 
