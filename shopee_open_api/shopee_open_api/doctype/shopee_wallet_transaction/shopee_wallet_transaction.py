@@ -63,6 +63,8 @@ class ShopeeWalletTransaction(Document):
                 result.append(
                     {
                         "transaction": previous_transaction.name,
+                        "transaction_type": previous_transaction.transaction_type,
+                        "order_sn": previous_transaction.order_sn,
                         "amount": abs(amount_to_ignore),
                         "split": True,
                     }
@@ -86,6 +88,8 @@ class ShopeeWalletTransaction(Document):
                 result.append(
                     {
                         "transaction": previous_transaction.name,
+                        "transaction_type": previous_transaction.transaction_type,
+                        "order_sn": previous_transaction.order_sn,
                         "amount": amount_to_check + previous_transaction.amount,
                         "split": True,
                     }
@@ -94,6 +98,8 @@ class ShopeeWalletTransaction(Document):
                 result.append(
                     {
                         "transaction": previous_transaction.name,
+                        "transaction_type": previous_transaction.transaction_type,
+                        "order_sn": previous_transaction.order_sn,
                         "amount": previous_transaction.amount,
                         "split": False,
                     }
