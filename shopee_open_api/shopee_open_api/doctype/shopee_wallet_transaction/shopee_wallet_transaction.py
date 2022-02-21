@@ -146,3 +146,12 @@ class ShopeeWalletTransaction(Document):
         if next_transaction:
             return frappe.get_doc("Shopee Wallet Transaction", next_transaction[0])
         return None
+
+    def get_shopee_order_document(self):
+        """Get an instance of Shopee Order from attribute order_sn."""
+
+        if not self.order_sn:
+            return None
+        if not frappe.db.exists("Shopee Order", self.order_sn):
+            return None
+        return frappe.get_doc("Shopee Order", self.order_sn)
