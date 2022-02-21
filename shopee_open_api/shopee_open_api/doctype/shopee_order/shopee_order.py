@@ -553,7 +553,11 @@ class ShopeeOrder(Document):
 
     @property
     def should_close_sales_order_and_delivery_note(self):
+        if not self.sales_invoice:
+            return False
+
         sales_invoice_document = frappe.get_doc("Sales Invoice", self.sales_invoice)
+
         if sales_invoice_document.docstatus != 0:
             return True
         return False
