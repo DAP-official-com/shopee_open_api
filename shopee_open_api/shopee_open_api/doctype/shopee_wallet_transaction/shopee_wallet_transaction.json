@@ -22,7 +22,10 @@
   "transaction_fee",
   "description",
   "buyer_name",
-  "pay_order_list"
+  "pay_order_list",
+  "payment_process_section",
+  "payment_processed",
+  "payment_processed_datetime"
  ],
  "fields": [
   {
@@ -135,11 +138,28 @@
    "options": "Shopee Shop",
    "read_only": 1,
    "reqd": 1
+  },
+  {
+   "fieldname": "payment_process_section",
+   "fieldtype": "Section Break",
+   "label": "Payment Process"
+  },
+  {
+   "default": "0",
+   "fieldname": "payment_processed",
+   "fieldtype": "Check",
+   "label": "Payment Processed",
+   "reqd": 1
+  },
+  {
+   "fieldname": "payment_processed_datetime",
+   "fieldtype": "Datetime",
+   "label": "Payment Processed Datetime"
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2022-02-10 18:30:41.381859",
+ "modified": "2022-02-21 11:09:09.075674",
  "modified_by": "Administrator",
  "module": "Shopee Open API",
  "name": "Shopee Wallet Transaction",
