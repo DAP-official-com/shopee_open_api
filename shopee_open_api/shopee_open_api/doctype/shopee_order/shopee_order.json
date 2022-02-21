@@ -92,6 +92,8 @@
   "sales_order_status",
   "delivery_note_status",
   "sales_invoice_status",
+  "payments_section",
+  "shopee_order_payments",
   "section_break_87",
   "customer",
   "address"
@@ -645,11 +647,22 @@
    "fieldname": "section_break_87",
    "fieldtype": "Section Break",
    "label": "Customer"
+  },
+  {
+   "fieldname": "shopee_order_payments",
+   "fieldtype": "Table",
+   "label": "Shopee Order Payments",
+   "options": "Shopee Order Payment"
+  },
+  {
+   "fieldname": "payments_section",
+   "fieldtype": "Section Break",
+   "label": "Payments"
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2022-02-02 07:38:19.668819",
+ "modified": "2022-02-21 11:20:38.149239",
  "modified_by": "Administrator",
  "module": "Shopee Open API",
  "name": "Shopee Order",
