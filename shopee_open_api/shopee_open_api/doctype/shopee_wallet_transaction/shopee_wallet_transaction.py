@@ -120,11 +120,9 @@ class ShopeeWalletTransaction(Document):
                 amount_to_check += amount_to_ignore
                 result.append(
                     {
-                        "transaction": previous_transaction.name,
-                        "transaction_type": previous_transaction.transaction_type,
-                        "order_sn": previous_transaction.order_sn,
-                        "amount": abs(amount_to_ignore),
+                        "transaction": previous_transaction,
                         "split": True,
+                        "amount": abs(amount_to_ignore),
                     }
                 )
 
@@ -145,21 +143,17 @@ class ShopeeWalletTransaction(Document):
             if amount_to_check < 0:
                 result.append(
                     {
-                        "transaction": previous_transaction.name,
-                        "transaction_type": previous_transaction.transaction_type,
-                        "order_sn": previous_transaction.order_sn,
-                        "amount": amount_to_check + previous_transaction.amount,
+                        "transaction": previous_transaction,
                         "split": True,
+                        "amount": amount_to_check + previous_transaction.amount,
                     }
                 )
             else:
                 result.append(
                     {
-                        "transaction": previous_transaction.name,
-                        "transaction_type": previous_transaction.transaction_type,
-                        "order_sn": previous_transaction.order_sn,
-                        "amount": previous_transaction.amount,
+                        "transaction": previous_transaction,
                         "split": False,
+                        "amount": previous_transaction.amount,
                     }
                 )
 
