@@ -15,6 +15,21 @@ class TransactionType(enum.Enum):
 
 class ShopeeWalletTransaction(Document):
     @staticmethod
+    def pending_withdrawals_to_process():
+        """Get all withdrawal transactions that needs to process payment."""
+        return [
+            frappe.get_doc("Shopee Wallet Transaction", name)
+            for name in frappe.get_all(
+                "Shopee Wallet Transaction",
+                filters={
+                    "transaction_type": TransactionType.REQUESTED_WITHDRAWAL.value,
+                    "payment_processed": 0,
+                },
+                pluck="name",
+            )
+        ]
+
+    @staticmethod
     def withdrawals_from_shop(
         shop, transaction_type: TransactionType
     ) -> List["ShopeeWalletTransaction"]:
