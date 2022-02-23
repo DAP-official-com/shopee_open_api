@@ -33,6 +33,49 @@ class ShopeeWalletTransaction(Document):
             for name in withdrawal_names
         ]
 
+    def get_withdrawal_request(self):
+        """Get withdrawal request that cooresponds to withdrawal complete"""
+        if self.transaction_type != TransactionType.COMPLETED_WITHDRAWAL.value:
+            return None
+
+        previous_withdrawal_requests = frappe.get_all(
+            "Shopee Wallet Transaction",
+            filters={
+                "shopee_shop": self.shopee_shop,
+                "transaction_type": TransactionType.REQUESTED_WITHDRAWAL.value,
+                "create_time": ("<=", self.create_time),
+            },
+            pluck="name",
+        )
+
+        if previous_withdrawal_requests:
+            return frappe.get_doc(
+                "Shopee Wallet Transaction", previous_withdrawal_requests[0]
+            )
+        return None
+
+    def get_withdrawal_complete(self):
+        """Get withdrawal complete that corresponds to current withdrawal request"""
+        if self.transaction_type != TransactionType.REQUESTED_WITHDRAWAL.value:
+            return None
+
+        later_withdrawal_completes = frappe.get_all(
+            "Shopee Wallet Transaction",
+            filters={
+                "shopee_shop": self.shopee_shop,
+                "transaction_type": TransactionType.COMPLETED_WITHDRAWAL.value,
+                "create_time": (">=", self.create_time),
+            },
+            order_by="create_time asc",
+            pluck="name",
+        )
+
+        if later_withdrawal_completes:
+            return frappe.get_doc(
+                "Shopee Wallet Transaction", later_withdrawal_completes[0]
+            )
+        return None
+
     def get_orders_for_withdrawal(self):
         if self.transaction_type != "WITHDRAWAL_CREATED":
             raise ValueError(
