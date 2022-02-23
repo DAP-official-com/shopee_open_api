@@ -34,7 +34,7 @@ class ShopeeWalletTransaction(Document):
         ]
 
     def get_withdrawal_request(self):
-        """Get withdrawal request that cooresponds to withdrawal complete"""
+        """Get withdrawal request that corresponds to withdrawal complete"""
         if self.transaction_type != TransactionType.COMPLETED_WITHDRAWAL.value:
             return None
 
