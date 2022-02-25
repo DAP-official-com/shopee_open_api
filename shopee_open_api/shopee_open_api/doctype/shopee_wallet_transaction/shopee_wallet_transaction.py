@@ -222,6 +222,9 @@ class ShopeeWalletTransaction(Document):
         However, some orders can be paid partially twice, we cannot collect the transaction fee both times. Hence, the transaction fee
         paid condition was checked.
 
+        The first withdrawal may not contain all the neccessary transactions that contribute the entire amount.
+        In such case, the amount missing from total transactions is added as an indirect income.
+
         There are also some orders that do not exist in the database, or that they do not have sales invoice yet
         due to myriad reasons. We record those transactions as indirect income and ignore the transaction fee altogether.
 
@@ -268,7 +271,16 @@ class ShopeeWalletTransaction(Document):
         journal_transaction.debit_in_account_currency = abs(self.amount)
         journal_transaction.user_remark = f"""Transaction Type: {self.transaction_type}\nTransaction id: {self.name}\nOrder SN: {self.order_sn}\nTransaction reason: {self.reason}"""
 
-        total_balance["debit"] = +abs(self.amount)
+        total_balance["debit"] += abs(self.amount)
+
+        amount_from_transactions = sum([tx["amount"] for tx in transactions_to_process])
+        amount_missing = abs(self.amount) - amount_from_transactions
+        if amount_missing != 0:
+            journal_transaction = journal_entry.append("accounts", {})
+            journal_transaction.account = shops_indirect_income_account.name
+            journal_transaction.credit_in_account_currency = amount_missing
+            journal_transaction.user_remark = f"""Transaction Type: None\nTransaction id: None\nOrder SN: None\nTransaction reason: Reconciliation from missing transactions. Usually only happens with only the first withdrawal request."""
+            total_balance["credit"] += amount_missing
 
         for transaction in transactions_to_process:
             journal_transaction = journal_entry.append("accounts", {})
@@ -328,8 +340,6 @@ class ShopeeWalletTransaction(Document):
 
             journal_transaction.user_remark = f"""Transaction Type: {transaction.get("transaction").transaction_type}\nTransaction id: {transaction.get("transaction").name}\nOrder SN: {transaction.get("transaction").order_sn}\nTransaction reason: {transaction.get("transaction").reason}"""
 
-            print(total_balance)
-
         """Pay remaining amount as commission (transaction fee)"""
         balance_difference = total_balance.get("credit") - total_balance.get("debit")
         if balance_difference != 0:
@@ -341,8 +351,6 @@ class ShopeeWalletTransaction(Document):
             journal_transaction.user_remark = "Commission (Transaction fee)"
 
             total_balance["debit"] += balance_difference
-
-        print(total_balance)
 
         withdrawal_complete_transaction.payment_processed = True
         withdrawal_complete_transaction.payment_processed_datetime = frappe.utils.now()
