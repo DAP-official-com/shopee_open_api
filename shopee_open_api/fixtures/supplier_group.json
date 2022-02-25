@@ -1,0 +1,17 @@
+[
+ {
+  "accounts": [],
+  "docstatus": 0,
+  "doctype": "Supplier Group",
+  "is_group": 0,
+  "modified": "2022-02-25 10:33:46.238288",
+  "name": "Sales Partner",
+  "old_parent": "All Supplier Groups",
+  "parent": null,
+  "parent_supplier_group": "All Supplier Groups",
+  "parentfield": null,
+  "parenttype": null,
+  "payment_terms": null,
+  "supplier_group_name": "Sales Partner"
+ }
+]
