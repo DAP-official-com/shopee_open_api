@@ -31,3 +31,7 @@ class ProductHasNoItemError(OrderAutomationProcessingError):
 
 class ItemHasNoPriceError(OrderAutomationProcessingError):
     pass
+
+
+class PaymentProcessingError(Exception):
+    pass
