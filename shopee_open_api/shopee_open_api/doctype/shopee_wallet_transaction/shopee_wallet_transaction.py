@@ -34,6 +34,7 @@ class ShopeeWalletTransaction(Document):
                     "payment_processed": 0,
                 },
                 pluck="name",
+                order_by="create_time asc",
             )
         ]
 

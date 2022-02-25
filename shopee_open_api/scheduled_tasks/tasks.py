@@ -1,8 +1,8 @@
-import time
 from frappe import enqueue
 import frappe
-from shopee_open_api.utils.client import get_client_from_shop
-from shopee_open_api.shopee_models.product import Product
+from shopee_open_api.shopee_open_api.doctype.shopee_wallet_transaction.shopee_wallet_transaction import (
+    ShopeeWalletTransaction,
+)
 
 
 def update_products():
@@ -37,3 +37,10 @@ def update_wallet_transactions():
 
     for shop in shops:
         shop.update_wallet_transactions()
+
+
+def process_withdrawal_transactions():
+
+    transactions_to_process = ShopeeWalletTransaction.pending_withdrawals_to_process()
+    for transaction in transactions_to_process:
+        transaction.process_payment()
