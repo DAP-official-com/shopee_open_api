@@ -11,6 +11,10 @@ AUTHORIZE_REDIRECT_URL = (
 )
 
 
+def on_all_events(doc, method=None):
+    print(f"{doc} has been updated")
+
+
 def update_profile(shopee_shop, _):
 
     fields_to_compare = ["shop_name", "description", "shop_logo"]

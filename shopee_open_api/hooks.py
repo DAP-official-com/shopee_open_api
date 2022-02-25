@@ -111,8 +111,8 @@ override_doctype_class = {
 # << custom tricker event in form for doctype (overide/extend)>>
 doc_events = {
     # "*": {
-    #     "on_update": "shopee_open_api.controllers.test.on_all_events",
-    #     "after_insert": "shopee_open_api.controllers.test.on_all_events",
+    #     "on_update": "shopee_open_api.controllers.shopee_shop.on_all_events",
+    #     "after_insert": "shopee_open_api.controllers.shopee_shop.on_all_events",
     # },
     "Shopee Shop": {
         "before_save": "shopee_open_api.controllers.shopee_shop.update_profile",
