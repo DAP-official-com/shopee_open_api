@@ -472,6 +472,76 @@ class ShopeeShop(Document):
             {"doctype": "Account", "account_name": "Shopee Indirect Expenses"}
         )
 
+    def get_or_create_indirect_income_account(self) -> account.Account:
+        """Get or create indirect income for the shop."""
+        parent_indirect_income_account = (
+            self.get_or_create_parent_indirect_income_account()
+        )
+        if self.has_indirect_income_account:
+            return frappe.get_doc(
+                "Account",
+                frappe.get_all(
+                    "Account",
+                    filters={
+                        "parent_account": parent_indirect_income_account.name,
+                        "account_name": f"Indirect Income {self.shop_name}",
+                    },
+                    pluck="name",
+                )[0],
+            )
+
+        parent_indirect_income_account = (
+            self.get_or_create_parent_indirect_income_account()
+        )
+        next_account_number = None
+
+        if parent_indirect_income_account.account_number:
+
+            all_shopee_indirect_income_accounts = frappe.get_all(
+                "Account",
+                filters={"parent_account": parent_indirect_income_account.name},
+                pluck="account_number",
+            )
+
+            account_numbers = [
+                account_num.split(" - ")[1]
+                for account_num in all_shopee_indirect_income_accounts
+                if account_num is not None and " - " in account_num
+            ]
+
+            if not account_numbers:
+                next_account_number = (
+                    f"{parent_indirect_income_account.account_number} - 01"
+                )
+            else:
+                next_account_number = f"{parent_indirect_income_account.account_number} - {int(max(account_numbers)) + 1:02d}"
+
+        new_account = frappe.new_doc("Account")
+        new_account.parent_account = parent_indirect_income_account.name
+        new_account.account_number = next_account_number
+        new_account.account_name = f"Indirect Income {self.shop_name}"
+        new_account.account_type = "Income Account"
+        new_account.insert()
+
+        return new_account
+
+    @property
+    def has_indirect_income_account(self) -> bool:
+        """Check if this shop already has an account for indirect income."""
+        parent_indirect_income_account = (
+            self.get_or_create_parent_indirect_income_account()
+        )
+
+        return bool(
+            frappe.db.exists(
+                {
+                    "doctype": "Account",
+                    "account_name": f"Indirect Income {self.shop_name}",
+                    "parent_account": parent_indirect_income_account.name,
+                }
+            )
+        )
+
     def get_or_create_parent_indirect_income_account(self) -> account.Account:
         """Create a parent indirect income account named 'Shopee Indirect Income' if not exists."""
 
