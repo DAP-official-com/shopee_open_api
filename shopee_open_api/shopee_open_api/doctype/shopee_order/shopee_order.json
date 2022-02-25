@@ -93,7 +93,7 @@
   "delivery_note_status",
   "sales_invoice_status",
   "payments_section",
-  "shopee_order_payments",
+  "transaction_fee_paid",
   "section_break_87",
   "customer",
   "address"
@@ -649,20 +649,20 @@
    "label": "Customer"
   },
   {
-   "fieldname": "shopee_order_payments",
-   "fieldtype": "Table",
-   "label": "Shopee Order Payments",
-   "options": "Shopee Order Payment"
-  },
-  {
    "fieldname": "payments_section",
    "fieldtype": "Section Break",
    "label": "Payments"
+  },
+  {
+   "default": "0",
+   "fieldname": "transaction_fee_paid",
+   "fieldtype": "Check",
+   "label": "Transaction Fee Paid"
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2022-02-21 11:20:38.149239",
+ "modified": "2022-02-25 11:31:38.355624",
  "modified_by": "Administrator",
  "module": "Shopee Open API",
  "name": "Shopee Order",
