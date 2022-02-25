@@ -703,6 +703,18 @@ class ShopeeShop(Document):
     def client(self):
         return client.get_client_from_shop_id(self.name)
 
+    def get_sales_expenses_account(self) -> account.Account:
+        return frappe.get_doc(
+            "Account",
+            frappe.get_all(
+                "Account",
+                filters={
+                    "account_name": "Sales Expenses",
+                },
+                pluck="name",
+            )[0],
+        )
+
     def update_wallet_transactions(self) -> None:
 
         page_size = 100
